@@ -1,0 +1,9 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v_u1 = require(game.ReplicatedStorage.Shared.Import)("Shared/Utils/GamemodeLibrary")
+return {
+	["NO_SPAWNS_LEFT"] = function(arg1)
+		-- upvalues: (copy) v_u1
+		return v_u1.countSpawns(arg1) == 0
+	end
+}

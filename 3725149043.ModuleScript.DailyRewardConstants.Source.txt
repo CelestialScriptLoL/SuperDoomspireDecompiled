@@ -1,0 +1,14 @@
+-- Decompiled with Bunni.lol Decompiler
+
+return {
+	["REWARDS"] = {
+		25,
+		25,
+		50,
+		50,
+		150
+	},
+	["STREAK_INTERVAL"] = 64800,
+	["STREAK_TIMEOUT"] = 129600,
+	["CHEST_INTERVAL"] = 28800
+}

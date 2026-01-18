@@ -1,0 +1,4472 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v_u1 = {
+	["Sheet1"] = "rbxgameasset://Images/StickerSheet1",
+	["Sheet2"] = "rbxgameasset://Images/StickerSheet2",
+	["Sheet3"] = "rbxgameasset://Images/StickerSheet3",
+	["Sheet4"] = "rbxgameasset://Images/StickerSheet4",
+	["Sheet5"] = "rbxgameasset://Images/StickerSheet5",
+	["Sheet6"] = "rbxgameasset://Images/StickerSheet6",
+	["Sheet7"] = "rbxgameasset://Images/StickerSheet7",
+	["Sheet8"] = "rbxassetid://15217486834",
+	["Sheet9"] = "rbxgameasset://Images/StickerSheet9s",
+	["Sheet10"] = "rbxgameasset://Images/StickerSheet10su",
+	["Sheet11"] = "rbxgameasset://Images/StickerSheet11su",
+	["Sheet12"] = "rbxgameasset://Images/StickerSheet12s",
+	["Sheet13"] = "rbxgameasset://Images/StickerSheet13",
+	["Sheet14"] = "rbxgameasset://Images/StickerSheet14"
+}
+local v_u2 = {
+	["Smile"] = {
+		["img"] = "Sheet1",
+		["description"] = ":D",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 0,
+		["price"] = 0,
+		["by"] = "Polyhex"
+	},
+	["Heart"] = {
+		["img"] = "Sheet1",
+		["description"] = "Nothing says \'you are loved\' quite like a rocket launcher.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 0,
+		["price"] = 0,
+		["by"] = "Polyhex"
+	},
+	["Really?"] = {
+		["img"] = "Sheet1",
+		["description"] = "No, for real, really? Really, though?",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 0,
+		["price"] = 0,
+		["by"] = "Polyhex"
+	},
+	["D:"] = {
+		["img"] = "Sheet1",
+		["description"] = "that moment when your tower die...",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 2,
+		["sound"] = "SadDog",
+		["price"] = 140,
+		["by"] = "Polyhex"
+	},
+	["Angery"] = {
+		["img"] = "Sheet1",
+		["description"] = "I\'m so angry I can\'t even say \'angry\' right!",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 1,
+		["sound"] = "Anger",
+		["by"] = "Polyhex"
+	},
+	["Poggy"] = {
+		["img"] = "Sheet1",
+		["description"] = "Sometimes you can\'t hold in the excitement. You gotta pog.",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 2,
+		["by"] = "Polyhex"
+	},
+	["Hmm..."] = {
+		["img"] = "Sheet1",
+		["description"] = "Really makin\' me think here...",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 3,
+		["sound"] = "TickTock",
+		["price"] = 250,
+		["by"] = "Polyhex"
+	},
+	["Joy"] = {
+		["img"] = "Sheet1",
+		["description"] = "Somehow this is the worst one.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 3,
+		["price"] = 280,
+		["by"] = "Polyhex"
+	},
+	["Pensive"] = {
+		["img"] = "Sheet1",
+		["description"] = "Sometimes it\'s just like that, y\'know?",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 2,
+		["price"] = 230,
+		["by"] = "Polyhex"
+	},
+	["Noob"] = {
+		["img"] = "Sheet1",
+		["description"] = "Yes, it goes \'oof\' when you use it.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 3,
+		["sound"] = "Oof",
+		["price"] = 240,
+		["by"] = "Polyhex"
+	},
+	["MEGA OOF"] = {
+		["img"] = "Sheet1",
+		["description"] = "OOOOOOFFFF",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 5,
+		["sound"] = "MegaOof",
+		["price"] = 720,
+		["by"] = "Polyhex"
+	},
+	["Upset"] = {
+		["img"] = "Sheet1",
+		["description"] = "Don\'t be sad! Be that other thing that\'s not sad!",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 1,
+		["by"] = "Polyhex"
+	},
+	["Cool"] = {
+		["img"] = "Sheet1",
+		["description"] = "Sunglasses are mandatory for a sticker called \'Cool\'.",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 2,
+		["sound"] = "Cool",
+		["price"] = 210,
+		["by"] = "Polyhex"
+	},
+	["Rad Circle"] = {
+		["img"] = "Sheet1",
+		["description"] = "The radical 90s patterns surrounding this spot show just how cool it is.",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 4,
+		["sound"] = "Spot",
+		["by"] = "Polyhex"
+	},
+	["Yo!"] = {
+		["img"] = "Sheet1",
+		["description"] = "One of the best greetings out there, honestly.",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 1,
+		["price"] = 60,
+		["by"] = "Polyhex"
+	},
+	["Funny"] = {
+		["img"] = "Sheet1",
+		["description"] = "It\'s just funny, alright?",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 2,
+		["sound"] = "FunnyLaugh",
+		["by"] = "Polyhex"
+	},
+	["Polite Cat"] = {
+		["img"] = "Sheet1",
+		["description"] = "Okay, he can stay.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 2,
+		["sound"] = "Honk",
+		["price"] = 230,
+		["by"] = "Polyhex"
+	},
+	["Pwease?"] = {
+		["img"] = "Sheet1",
+		["description"] = "Yeah, it has a W in it. Because just look at it.",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 2,
+		["sound"] = "SadDog",
+		["by"] = "Polyhex"
+	},
+	["L"] = {
+		["img"] = "Sheet1",
+		["description"] = "Here\'s an L that you can give to your opponents. Treat this power well.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 4,
+		["sound"] = "Trombone",
+		["noChat"] = true,
+		["price"] = 500,
+		["by"] = "Polyhex"
+	},
+	["H"] = {
+		["img"] = "Sheet1",
+		["description"] = "The funniest letter possible. It\'s just science.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 2,
+		["sound"] = "H",
+		["noChat"] = true,
+		["price"] = 140,
+		["by"] = "Polyhex"
+	},
+	["Airhorn"] = {
+		["img"] = "Sheet1",
+		["description"] = "BWEAAAAAHHHHHH",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 3,
+		["sound"] = "Airhorn",
+		["price"] = 480,
+		["by"] = "Polyhex"
+	},
+	["Toilet"] = {
+		["img"] = "Sheet1",
+		["description"] = "Sometimes, you just gotta flush the problems away.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Toilet",
+		["price"] = 300,
+		["by"] = "Polyhex"
+	},
+	["Greenshroom"] = {
+		["img"] = "Sheet1",
+		["description"] = "You\'d think more mushrooms would be green, but they aren\'t plants!",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 2,
+		["sound"] = "Quack",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Ninja"] = {
+		["img"] = "Sheet1",
+		["description"] = "Run around with your arms up in the air behind you for full effect.",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 2,
+		["sound"] = "Ninja",
+		["price"] = 280,
+		["by"] = "Polyhex"
+	},
+	["Oh Geez"] = {
+		["img"] = "Sheet1",
+		["description"] = "Oh no. Oh dear. Ohh, my.",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 1,
+		["sound"] = "Frazzled",
+		["by"] = "Polyhex"
+	},
+	["Barn\'t"] = {
+		["img"] = "Sheet1",
+		["description"] = "It\'s an the everybody of favorite television\'s son, Barn\'t!",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 2,
+		["sound"] = "Honk",
+		["by"] = "Polyhex"
+	},
+	["X_X"] = {
+		["img"] = "Sheet1",
+		["description"] = "That\'s gonna leave a mark! Just kidding, that\'s above our age rating.",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 2,
+		["sound"] = "DeathBell",
+		["by"] = "Polyhex"
+	},
+	["Smug Cat"] = {
+		["img"] = "Sheet1",
+		["description"] = "This is the face of a cat that came out of an egg.",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 4,
+		["sound"] = "PaintCat",
+		["price"] = 420,
+		["by"] = "Wheatlies",
+		["extraInfo"] = "from Feed Your Pets"
+	},
+	["LOL"] = {
+		["img"] = "Sheet1",
+		["description"] = "Stands for \'laughing out loud\'. Huh? You already knew that? Oh.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 2,
+		["sound"] = "Laugh",
+		["by"] = "Polyhex"
+	},
+	[":)"] = {
+		["img"] = "Sheet1",
+		["description"] = "There\'s something so menacing about a sideways smiley face.",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 2,
+		["sound"] = "Quack",
+		["by"] = "Polyhex"
+	},
+	["HELP!"] = {
+		["img"] = "Sheet1",
+		["description"] = "Need help? Big letters will make it clear!",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 1,
+		["sound"] = "Whistle",
+		["by"] = "Polyhex"
+	},
+	["No."] = {
+		["img"] = "Sheet1",
+		["description"] = "Just... no.",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 2,
+		["sound"] = "Buzzer",
+		["by"] = "Polyhex"
+	},
+	["Party!"] = {
+		["img"] = "Sheet1",
+		["description"] = "Let your peers know it\'s time to let loose!",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 1,
+		["sound"] = "PartyHorn",
+		["by"] = "Polyhex"
+	},
+	["Clown"] = {
+		["img"] = "Sheet1",
+		["description"] = "How you\'d look after knocking your own spawns off the map.",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 4,
+		["sound"] = "Clown",
+		["by"] = "Polyhex"
+	},
+	["WHAT"] = {
+		["img"] = "Sheet1",
+		["description"] = "YOU WHAT?????",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 3,
+		["sound"] = "Boing",
+		["price"] = 410,
+		["by"] = "Polyhex"
+	},
+	["Huh???"] = {
+		["img"] = "Sheet1",
+		["description"] = "When you\'re too confused about something, just make this face. Always works.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 1,
+		["sound"] = "Huh",
+		["price"] = 60,
+		["by"] = "Polyhex"
+	},
+	["RIP"] = {
+		["img"] = "Sheet2",
+		["description"] = "Rest in pieces...",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 2,
+		["sound"] = "DeathBell",
+		["by"] = "Polyhex"
+	},
+	["Pride L"] = {
+		["img"] = "Sheet2",
+		["description"] = "Show your pride with a heart of warmth!",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 2,
+		["sound"] = "MagicShine",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Pride G"] = {
+		["img"] = "Sheet2",
+		["description"] = "Show your pride with a heart of love!",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 2,
+		["sound"] = "MagicShine",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Pride B"] = {
+		["img"] = "Sheet2",
+		["description"] = "Show your pride with a heart of charm!",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 2,
+		["sound"] = "MagicShine",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Pride T"] = {
+		["img"] = "Sheet2",
+		["description"] = "Show your pride with a heart of beauty!",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 2,
+		["sound"] = "MagicShine",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Angelic"] = {
+		["img"] = "Sheet2",
+		["description"] = "Did I do that? Uhhhhh no check out the halo",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 1,
+		["sound"] = "Harp",
+		["by"] = "Polyhex"
+	},
+	["Impish"] = {
+		["img"] = "Sheet2",
+		["description"] = "They\'re up to no good... or just remembered a big funny.",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 1,
+		["sound"] = "Evil",
+		["by"] = "Polyhex"
+	},
+	["Puppy"] = {
+		["img"] = "Sheet2",
+		["description"] = "bark bark! it\'s in lowercase because the dog is small, you see.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 1,
+		["sound"] = "PaintDog",
+		["by"] = "Polyhex"
+	},
+	["Kitten"] = {
+		["img"] = "Sheet2",
+		["description"] = "Meow all you want, dinner\'s not for another 30 minutes. ...Okay, fine.",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 2,
+		["sound"] = "Cat",
+		["by"] = "Polyhex"
+	},
+	["Wah Wah Wah"] = {
+		["img"] = "Sheet2",
+		["description"] = "Trombones were made for this specific purpose. Music is just bonus.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 3,
+		["sound"] = "Trombone",
+		["by"] = "Polyhex"
+	},
+	["Bomb"] = {
+		["img"] = "Sheet2",
+		["description"] = "Explosions are the bread & butter of Roblox physics games, wouldn\'t you say?",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 2,
+		["sound"] = "Boom",
+		["by"] = "Polyhex",
+		["extraInfo"] = "from Super Bomb Survival"
+	},
+	["Boss"] = {
+		["img"] = "Sheet2",
+		["description"] = "An absolute menace, this one.",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 4,
+		["sound"] = "Boss",
+		["by"] = "Polyhex",
+		["price"] = 500
+	},
+	["Warrior"] = {
+		["img"] = "Sheet2",
+		["description"] = "You\'ve fought enough battles to earn this, wow!",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 3,
+		["sound"] = "Roblox",
+		["by"] = "Roblox",
+		["price"] = 0,
+		["taskReward"] = true
+	},
+	["Bloxxer"] = {
+		["img"] = "Sheet2",
+		["description"] = "Only the strongest fighters wield this badge of honor!",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 4,
+		["sound"] = "Roblox",
+		["by"] = "Roblox",
+		["price"] = 0,
+		["taskReward"] = true
+	},
+	["Old Roblox Logo"] = {
+		["img"] = "Sheet2",
+		["description"] = "IT\'S FREEEEEEE!!",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 5,
+		["sound"] = "ItsFree",
+		["by"] = "Roblox",
+		["price"] = 500
+	},
+	["Swordfight"] = {
+		["img"] = "Sheet2",
+		["description"] = "Take to the heights, it\'s time for a fight!",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 2,
+		["sound"] = "Sword",
+		["by"] = "Polyhex"
+	},
+	["Sunny"] = {
+		["img"] = "Sheet2",
+		["description"] = "Are the sunglasses to protect it from itself? Is the sun having an identity crisis?",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 1,
+		["sound"] = "Shine",
+		["by"] = "Polyhex"
+	},
+	["Frog"] = {
+		["img"] = "Sheet2",
+		["description"] = "ribbit. ribbit. ribbit. ribbit. ribbit.",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 1,
+		["sound"] = "Frog",
+		["by"] = "Polyhex"
+	},
+	["Hype Train"] = {
+		["img"] = "Sheet2",
+		["description"] = "Let\'s face it - all trains are hype.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 1,
+		["sound"] = "ChooChoo",
+		["by"] = "Polyhex"
+	},
+	["Ta-da!"] = {
+		["img"] = "Sheet2",
+		["description"] = "A pose of appreciation. Of splendor. Of leg cramps.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 2,
+		["sound"] = "Tada",
+		["by"] = "Polyhex"
+	},
+	["Grab"] = {
+		["img"] = "Sheet2",
+		["description"] = "You think you\'re safe?",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 5,
+		["sound"] = "Scary",
+		["by"] = "Polyhex",
+		["price"] = 665
+	},
+	["Horse"] = {
+		["img"] = "Sheet2",
+		["description"] = "All horses look exactly like this. Fun fact.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Horse",
+		["by"] = "Polyhex",
+		["price"] = 240
+	},
+	["Stop"] = {
+		["img"] = "Sheet2",
+		["description"] = "Eight sides? Must be an octagon.",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 2,
+		["sound"] = "CarHorn",
+		["by"] = "Polyhex"
+	},
+	["Rat"] = {
+		["img"] = "Sheet2",
+		["description"] = "Look at this little guy. I mean, come on. What a good rat.",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 4,
+		["sound"] = "Rat",
+		["by"] = "Polyhex",
+		["price"] = 250
+	},
+	["Exclamation"] = {
+		["img"] = "Sheet2",
+		["description"] = "When regular punctuation isn\'t enough, exclamation points are there!!",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 1,
+		["sound"] = "Doorbell",
+		["by"] = "Polyhex",
+		["price"] = 150,
+		["notFeatured"] = true
+	},
+	["Dollar Sign"] = {
+		["img"] = "Sheet2",
+		["description"] = "Show off how much cheddar you\'re making with a big gold sign.",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 2,
+		["sound"] = "CashRegister",
+		["noChat"] = true,
+		["by"] = "Polyhex",
+		["price"] = 290
+	},
+	["AAAAA"] = {
+		["img"] = "Sheet2",
+		["description"] = "AAAAA AAAA AAAAAA AAAAA AAA AAAA AAAA AAAA AAAAA",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 3,
+		["sound"] = "Scream",
+		["by"] = "Polyhex",
+		["price"] = 280
+	},
+	["Burn"] = {
+		["img"] = "Sheet2",
+		["description"] = "You know what they say - where there\'s smoke...",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 1,
+		["sound"] = "Fire",
+		["by"] = "Polyhex",
+		["price"] = 60
+	},
+	["NOPE"] = {
+		["img"] = "Sheet2",
+		["description"] = "Saying nah is okay, but saying nope has a particular power to it.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 3,
+		["sound"] = "Buzzer",
+		["by"] = "Polyhex"
+	},
+	["Cute"] = {
+		["img"] = "Sheet2",
+		["description"] = "Feeling cute? Hoping for a sticker to illustrate that for you? Well BAM - there it is.",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 1,
+		["sound"] = "Sparkle",
+		["by"] = "Polyhex",
+		["price"] = 150
+	},
+	["Chicken"] = {
+		["img"] = "Sheet2",
+		["description"] = "This hen\'s flown the coop! And has also been flattened into a sticker, I guess!",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 1,
+		["sound"] = "Chicken",
+		["by"] = "Polyhex",
+		["price"] = 170
+	},
+	["I\'m Waiting"] = {
+		["img"] = "Sheet2",
+		["description"] = "Mom said we\'d be leaving ten minutes ago, but keeps talking to her friend.",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 1,
+		["sound"] = "TickTock",
+		["by"] = "Polyhex",
+		["price"] = 20
+	},
+	["Gruh"] = {
+		["img"] = "Sheet2",
+		["description"] = "I drew this one in case you needed to make this face for some reason. But... why?",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 2,
+		["sound"] = "FunnyLaugh",
+		["by"] = "Polyhex"
+	},
+	["Over Here!"] = {
+		["img"] = "Sheet2",
+		["description"] = "Call out to your buddies with this simple gesture.",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 1,
+		["sound"] = "Whistle",
+		["by"] = "Polyhex",
+		["price"] = 30
+	},
+	["Report"] = {
+		["img"] = "Sheet2",
+		["description"] = "Report, report, report, delete",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 5,
+		["sound"] = "Buzzer",
+		["by"] = "Polyhex",
+		["price"] = 640
+	},
+	["Point & Laugh"] = {
+		["img"] = "Sheet2",
+		["description"] = "Haw haw!",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 4,
+		["sound"] = "Laugh",
+		["by"] = "Polyhex",
+		["price"] = 600
+	},
+	["Music Note"] = {
+		["img"] = "Sheet3",
+		["description"] = "This sticker is surely a good note to start on!",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 1,
+		["sound"] = "MusicNote",
+		["by"] = "kijineko",
+		["notFeatured"] = true
+	},
+	["Melon"] = {
+		["img"] = "Sheet3",
+		["description"] = "Favored by green dinosaurs all across the land.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 1,
+		["sound"] = "Pluck",
+		["by"] = "kijineko",
+		["notFeatured"] = true
+	},
+	["Apple"] = {
+		["img"] = "Sheet3",
+		["description"] = "Crunch.... munch.... apel yummy....",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 1,
+		["sound"] = "Pluck",
+		["by"] = "kijineko",
+		["notFeatured"] = true
+	},
+	["Howling Wolf"] = {
+		["img"] = "Sheet3",
+		["description"] = "Wolves don\'t actually howl at the moon, but it\'s just so iconic!",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 4,
+		["sound"] = "Wolf",
+		["by"] = "Polyhex"
+	},
+	["Sparkles"] = {
+		["img"] = "Sheet3",
+		["description"] = "Can\'t... look... away... love... shiny...",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 2,
+		["sound"] = "Sparkle",
+		["by"] = "kijineko"
+	},
+	["Turnip"] = {
+		["img"] = "Sheet3",
+		["description"] = "A vegetable optimal for throwing at people.",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 1,
+		["sound"] = "Pluck",
+		["by"] = "kijineko",
+		["notFeatured"] = true
+	},
+	["Zzzz..."] = {
+		["img"] = "Sheet3",
+		["description"] = "I\'mma tired... yawn...",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 2,
+		["sound"] = "Snore",
+		["by"] = "kijineko"
+	},
+	["Cherries"] = {
+		["img"] = "Sheet3",
+		["description"] = "Hey, I asked for a milkshake with these!",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 1,
+		["sound"] = "Pluck",
+		["by"] = "kijineko",
+		["notFeatured"] = true
+	},
+	["Cactus"] = {
+		["img"] = "Sheet3",
+		["description"] = "A prickly little friend! A sharp little buddy! A pointy little pal!",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 2,
+		["sound"] = "Poke",
+		["by"] = "kijineko"
+	},
+	["Sheriff"] = {
+		["img"] = "Sheet3",
+		["description"] = "This tower ain\'t big enough for the two of us...",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 2,
+		["sound"] = "Ricochet",
+		["by"] = "kijineko"
+	},
+	["Bell"] = {
+		["img"] = "Sheet3",
+		["description"] = "Ring-a-ding-ding, this sticker\'s just the thing!",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 2,
+		["sound"] = "Bell",
+		["by"] = "kijineko"
+	},
+	["Yee-Haw!"] = {
+		["img"] = "Sheet3",
+		["description"] = "When a yippee-ki-yay is too much, a yee-haw will do.",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 2,
+		["sound"] = "Ricochet",
+		["by"] = "kijineko"
+	},
+	["Monster Face"] = {
+		["img"] = "Sheet3",
+		["description"] = "Back in 2007, this was considered extremely scary.",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 4,
+		["sound"] = "PianoSlam",
+		["by"] = "Polyhex"
+	},
+	["Car"] = {
+		["img"] = "Sheet3",
+		["description"] = "BEEP BEEP! Hey, I\'m driving here!",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 1,
+		["sound"] = "CarHorn",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Bunny"] = {
+		["img"] = "Sheet3",
+		["description"] = "Hippity hoppity ears-a-floppity, what can\'t this little rabbit do?",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 2,
+		["sound"] = "Squeak2",
+		["by"] = "Polyhex"
+	},
+	["Beetle"] = {
+		["img"] = "Sheet3",
+		["description"] = "For some reason, I feel like this is worth a lot of bells. Weird.",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 2,
+		["sound"] = "Wiggle",
+		["by"] = "Polyhex"
+	},
+	["PB&J"] = {
+		["img"] = "Sheet3",
+		["description"] = "Ingredients to the world\'s most classic- and perhaps most glorious- form of sandwich.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 1,
+		["sound"] = "Squish",
+		["by"] = "kijineko",
+		["notFeatured"] = true
+	},
+	["Banana Dance"] = {
+		["img"] = "Sheet3",
+		["description"] = "Certainly, you know what time it is, right?",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 5,
+		["sound"] = "RecordScratch",
+		["by"] = "kijineko"
+	},
+	["Watermelon"] = {
+		["img"] = "Sheet3",
+		["description"] = "One of summer\'s wonderful treats, now in sticker form!",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 2,
+		["sound"] = "Sparkle",
+		["by"] = "kijineko"
+	},
+	["Woozy"] = {
+		["img"] = "Sheet3",
+		["description"] = "This sticker is feelin\' kinda funny. It\'s lookin\' kinda funny, too.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 2,
+		["sound"] = "Huh",
+		["by"] = "kijineko"
+	},
+	["Slap"] = {
+		["img"] = "Sheet3",
+		["description"] = "You can slap a sticker on something, but can a sticker slap on its own? Whoa...",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 2,
+		["sound"] = "Smack",
+		["by"] = "kijineko"
+	},
+	["Lollipop"] = {
+		["img"] = "Sheet3",
+		["description"] = "It\'s shiny, but eating it won\'t make you invincible.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Sparkle",
+		["by"] = "kijineko"
+	},
+	[";w;"] = {
+		["img"] = "Sheet3",
+		["description"] = "Semicolons are a new development in emoticon technology.",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 3,
+		["by"] = "kijineko"
+	},
+	[":D"] = {
+		["img"] = "Sheet3",
+		["description"] = "The happiest little sideways face there is!",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 1,
+		["by"] = "kijineko"
+	},
+	[":P"] = {
+		["img"] = "Sheet3",
+		["description"] = "Time to get sillay.",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 1,
+		["sound"] = "Pick",
+		["by"] = "kijineko"
+	},
+	["Punch"] = {
+		["img"] = "Sheet3",
+		["description"] = "Or a fist-bump. Whatever you want from this sticker, y\'know.",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 2,
+		["sound"] = "Slam",
+		["by"] = "kijineko"
+	},
+	["Shooting Star"] = {
+		["img"] = "Sheet3",
+		["description"] = "Can you make a wish on a sticker? Let\'s say yes.",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 2,
+		["sound"] = "Shine",
+		["by"] = "kijineko"
+	},
+	["Eyes"] = {
+		["img"] = "Sheet3",
+		["description"] = "I am looking.....",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 2,
+		["sound"] = "Pick",
+		["by"] = "kijineko"
+	},
+	["Eye"] = {
+		["img"] = "Sheet3",
+		["description"] = "A single peeper for your oculary needs.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 1,
+		["by"] = "kijineko"
+	},
+	["Lips"] = {
+		["img"] = "Sheet3",
+		["description"] = "Mwah!",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 2,
+		["by"] = "kijineko"
+	},
+	["Question Mark"] = {
+		["img"] = "Sheet3",
+		["description"] = "??????",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 1,
+		["sound"] = "Huh",
+		["by"] = "kijineko",
+		["notFeatured"] = true
+	},
+	["Duck"] = {
+		["img"] = "Sheet3",
+		["description"] = "Quack quack! Honk honk! Splat splat!",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 2,
+		["sound"] = "Quack",
+		["by"] = "Polyhex"
+	},
+	["Planet"] = {
+		["img"] = "Sheet3",
+		["description"] = "From another place - yes, from outer space!",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 1,
+		["sound"] = "SciFi",
+		["by"] = "kijineko"
+	},
+	["Alien"] = {
+		["img"] = "Sheet3",
+		["description"] = "We come in peace! Blorp!",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 4,
+		["sound"] = "SciFi2",
+		["by"] = "kijineko"
+	},
+	["Fish"] = {
+		["img"] = "Sheet3",
+		["description"] = "Just keep swimmin\'.",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 1,
+		["sound"] = "FunnySqueak",
+		["by"] = "kijineko",
+		["notFeatured"] = true
+	},
+	["Snail"] = {
+		["img"] = "Sheet3",
+		["description"] = "Snails are just little garden babies. Think about it.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 2,
+		["sound"] = "Squeak",
+		["by"] = "kijineko"
+	},
+	["GG!"] = {
+		["img"] = "Sheet4",
+		["description"] = "Good game!!",
+		["price"] = 0,
+		["noChat"] = true,
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 0,
+		["sound"] = "Basic",
+		["by"] = "Polyhex"
+	},
+	["Wink"] = {
+		["img"] = "Sheet4",
+		["description"] = "You know what\'s up. Wink wink.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 1,
+		["sound"] = "Basic",
+		["by"] = "Polyhex"
+	},
+	["Angry"] = {
+		["img"] = "Sheet4",
+		["description"] = "When your rocket flies right past the last piece of an enemy spire...",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 4,
+		["sound"] = "Donk",
+		["by"] = "Polyhex"
+	},
+	["Bye"] = {
+		["img"] = "Sheet4",
+		["description"] = "See ya around, bub!",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 1,
+		["sound"] = "Basic",
+		["by"] = "Polyhex",
+		["price"] = 0,
+		["taskReward"] = true
+	},
+	["Hi"] = {
+		["img"] = "Sheet4",
+		["description"] = "Hi there, bub!",
+		["noChat"] = true,
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 1,
+		["sound"] = "Whistle",
+		["by"] = "Polyhex"
+	},
+	["Disgusted"] = {
+		["img"] = "Sheet4",
+		["description"] = "Sometimes words aren\'t enough - and that\'s when this face is handy.",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 3,
+		["sound"] = "Scary",
+		["by"] = "Polyhex"
+	},
+	["Yellow Spire"] = {
+		["img"] = "Sheet4",
+		["description"] = "A marching little spire!",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 1,
+		["sound"] = "Squeak",
+		["by"] = "Polyhex",
+		["price"] = 0
+	},
+	["Green Spire"] = {
+		["img"] = "Sheet4",
+		["description"] = "A sleepy little spire!",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 1,
+		["sound"] = "Squeak",
+		["by"] = "Polyhex",
+		["price"] = 0
+	},
+	["Blue Spire"] = {
+		["img"] = "Sheet4",
+		["description"] = "A studious little spire!",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 1,
+		["sound"] = "Squeak",
+		["by"] = "Polyhex",
+		["price"] = 0
+	},
+	["Red Spire"] = {
+		["img"] = "Sheet4",
+		["description"] = "A curious little spire!",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 1,
+		["sound"] = "Squeak",
+		["by"] = "Polyhex",
+		["price"] = 0
+	},
+	["Up Arrow"] = {
+		["img"] = "Sheet4",
+		["description"] = "My eyes are up here! ...Wait, no they\'re not.",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 1,
+		["sound"] = "Basic",
+		["by"] = "Polyhex"
+	},
+	["This Guy"] = {
+		["img"] = "Sheet4",
+		["description"] = "Oh great, THIS guy.",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 1,
+		["sound"] = "Boing",
+		["by"] = "Polyhex"
+	},
+	["Dab"] = {
+		["img"] = "Sheet4",
+		["description"] = "You thought I wouldn\'t dare, but I did it anyway.",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 5,
+		["sound"] = "MegaOof",
+		["by"] = "Polyhex"
+	},
+	["Panicked"] = {
+		["img"] = "Sheet4",
+		["description"] = "What is that. What is THAT. WHAT IS THAT",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 4,
+		["sound"] = "SlideDown",
+		["by"] = "Polyhex"
+	},
+	["Stay Out!"] = {
+		["img"] = "Sheet4",
+		["description"] = "Maybe this will persuade the other teams to go away...",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 2,
+		["sound"] = "Buzzer",
+		["by"] = "Polyhex"
+	},
+	["Egg"] = {
+		["img"] = "Sheet4",
+		["description"] = "Okay... this is an egg.",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 4,
+		["sound"] = "Booink",
+		["by"] = "Polyhex"
+	},
+	["Squished"] = {
+		["img"] = "Sheet4",
+		["description"] = "Squarshed, even.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 4,
+		["sound"] = "Squeak",
+		["by"] = "Polyhex"
+	},
+	["Pride Heart N"] = {
+		["img"] = "Sheet4",
+		["description"] = "Show off your pride with a heart of wonder!",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 2,
+		["sound"] = "MagicShine",
+		["notInShop"] = true,
+		["notAvailable"] = true,
+		["by"] = "Polyhex",
+		["deleteThis"] = true
+	},
+	["Pride N"] = {
+		["img"] = "Sheet4",
+		["description"] = "Show off your pride with a heart of wonder!",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 2,
+		["sound"] = "MagicShine",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Silly Cat"] = {
+		["img"] = "Sheet4",
+		["description"] = "Sundays, am I right? (insert laughtrack)",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 3,
+		["sound"] = "PaintCat",
+		["by"] = "Polyhex"
+	},
+	["Evil Flower"] = {
+		["img"] = "Sheet4",
+		["description"] = "There\'s a really obvious game to reference here, but I\'m not gonna.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 3,
+		["sound"] = "PianoSlam",
+		["by"] = "Polyhex"
+	},
+	["Old Guy"] = {
+		["img"] = "Sheet4",
+		["description"] = "Back in my day, everything was less expensive! And we never complained!",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 3,
+		["sound"] = "Cough",
+		["by"] = "Polyhex"
+	},
+	["Broccoli"] = {
+		["img"] = "Sheet4",
+		["description"] = "The coolest vegetable there\'ll ever be.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Quack",
+		["by"] = "Polyhex"
+	},
+	["Ohhh"] = {
+		["img"] = "Sheet4",
+		["description"] = "A face of utter disbelief, like when you tell a joke and it doesn\'t land.",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 2,
+		["sound"] = "Pick",
+		["by"] = "Polyhex"
+	},
+	["Blocked"] = {
+		["img"] = "Sheet4",
+		["description"] = "You\'re clearly a master of blocking!",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 4,
+		["sound"] = "Donk",
+		["by"] = "Polyhex",
+		["price"] = 0,
+		["taskReward"] = true
+	},
+	["Stinky"] = {
+		["img"] = "Sheet4",
+		["description"] = "The ultimate insult. Better graffiti this on an enemy spire.",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 2,
+		["sound"] = "Foghorn",
+		["by"] = "Polyhex"
+	},
+	["Mad Skull"] = {
+		["img"] = "Sheet4",
+		["description"] = "Something has this skeleton feeling rattled.",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 3,
+		["sound"] = "Xylophone",
+		["by"] = "Polyhex"
+	},
+	["Run Away"] = {
+		["img"] = "Sheet4",
+		["description"] = "Sometimes I feel I\'ve got to (dun dun) run away!",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 2,
+		["sound"] = "Dash",
+		["by"] = "Polyhex"
+	},
+	["Snoozing"] = {
+		["img"] = "Sheet4",
+		["description"] = "It\'s nap time all the time if you believe in yourself.",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 2,
+		["sound"] = "Snore",
+		["by"] = "Polyhex"
+	},
+	["Peace"] = {
+		["img"] = "Sheet4",
+		["description"] = "Peace out! Which is to say, please stop KO-ing me.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 2,
+		["sound"] = "MagicShine",
+		["by"] = "Polyhex"
+	},
+	["Tall Hat"] = {
+		["img"] = "Sheet4",
+		["description"] = "My chapeau will pierce the heavens!!",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 3,
+		["sound"] = "Gentleman",
+		["by"] = "Polyhex"
+	},
+	["Distinguished"] = {
+		["img"] = "Sheet4",
+		["description"] = "Everything about this dude tells me they\'re evil.",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 3,
+		["sound"] = "Gentleman",
+		["by"] = "Polyhex"
+	},
+	["Little Ghost"] = {
+		["img"] = "Sheet4",
+		["description"] = "Boo! Are you scared? Did I scare ya??",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 3,
+		["sound"] = "Ghost",
+		["by"] = "Polyhex"
+	},
+	["Burp"] = {
+		["img"] = "Sheet4",
+		["description"] = "Well... that\'s awfully rude. Yes, stickers can be rude.",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 4,
+		["sound"] = "Burp",
+		["by"] = "Polyhex"
+	},
+	["XD"] = {
+		["img"] = "Sheet4",
+		["description"] = "A form of online laugh emote that\'s survived for decades. Somehow.",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 4,
+		["sound"] = "Laugh",
+		["by"] = "Polyhex"
+	},
+	["Terrified"] = {
+		["img"] = "Sheet4",
+		["description"] = "So this is what pure terror looks like. Neat!",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 3,
+		["sound"] = "Wolf",
+		["by"] = "Polyhex"
+	},
+	["Little Penguin"] = {
+		["img"] = "Sheet4",
+		["description"] = "All penguins are little, if you compare them to like... planets.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 2,
+		["sound"] = "Squeak",
+		["by"] = "Polyhex"
+	},
+	["Chill Dog"] = {
+		["img"] = "Sheet5",
+		["description"] = "Nobody vibes quite like Chill Dog.",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 5,
+		["sound"] = "PaintDog",
+		["by"] = "Roblox"
+	},
+	["Louie"] = {
+		["img"] = "Sheet5",
+		["description"] = "Rat... rat... he\'s the rat.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 5,
+		["sound"] = "Rat",
+		["by"] = "Roblox"
+	},
+	["You"] = {
+		["img"] = "Sheet5",
+		["description"] = "Pointing is rude. Poking is double rude.",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 4,
+		["sound"] = "Poke",
+		["by"] = "Polyhex"
+	},
+	["Shrug"] = {
+		["img"] = "Sheet5",
+		["description"] = "I don\'t know, bub! I just don\'t! I\'ve never known anything!",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 2,
+		["sound"] = "Befuddled",
+		["by"] = "Polyhex"
+	},
+	["Santa"] = {
+		["img"] = "Sheet5",
+		["description"] = "Ho ho ho! Merry Doomsmas to all!",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 5,
+		["sound"] = "HoHoHo",
+		["seasonExclusive"] = "winter",
+		["by"] = "Polyhex",
+		["price"] = 900
+	},
+	["Tiny Face"] = {
+		["img"] = "Sheet5",
+		["description"] = "Mad because face tiny.",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 4,
+		["sound"] = "Anger",
+		["by"] = "Polyhex"
+	},
+	["Happy Star"] = {
+		["img"] = "Sheet5",
+		["description"] = "A friend of the cosmos!",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 2,
+		["sound"] = "Shine",
+		["by"] = "Polyhex"
+	},
+	["Burning Rage"] = {
+		["img"] = "Sheet5",
+		["description"] = "Feeling hot, hot hot.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 3,
+		["sound"] = "Burning",
+		["by"] = "Polyhex"
+	},
+	["Cool S"] = {
+		["img"] = "Sheet5",
+		["description"] = "A top staple of notebooks everywhere, next to actual staples.",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 4,
+		["sound"] = "Cool",
+		["noChat"] = true,
+		["by"] = "Polyhex"
+	},
+	["Troll"] = {
+		["img"] = "Sheet5",
+		["description"] = "The jerk from under the bridge.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 3,
+		["sound"] = "Evil",
+		["by"] = "Polyhex"
+	},
+	["Bonk"] = {
+		["img"] = "Sheet5",
+		["description"] = "A hammer to the noggin is a form of justice to some.",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 4,
+		["sound"] = "Donk",
+		["by"] = "Polyhex"
+	},
+	["Snowman"] = {
+		["img"] = "Sheet5",
+		["description"] = "Winter is here, so make yourself a snowy pal!",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 3,
+		["price"] = 110,
+		["sound"] = "Basic",
+		["seasonExclusive"] = "winter",
+		["by"] = "Polyhex"
+	},
+	["Pride P"] = {
+		["img"] = "Sheet5",
+		["description"] = "Show your pride with a heart of charm!",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 2,
+		["sound"] = "MagicShine",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Robuddy"] = {
+		["img"] = "Sheet5",
+		["description"] = "Beep beep boop. Processing existence as a sticker. Process failed.",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 2,
+		["sound"] = "SciFi3",
+		["by"] = "Polyhex"
+	},
+	["Gift Buddy"] = {
+		["img"] = "Sheet5",
+		["description"] = "Surprise! It\'s the Gift Buddy! Wait, who\'s the Gift Buddy, even?",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 3,
+		["sound"] = "PartyHorn",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Bee"] = {
+		["img"] = "Sheet5",
+		["description"] = "Save the bees! Hornets can go, though, probably.",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 3,
+		["sound"] = "Buzz",
+		["by"] = "Polyhex"
+	},
+	["Wahhh"] = {
+		["img"] = "Sheet5",
+		["description"] = "Crying for crying\'s sake.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 4,
+		["sound"] = "BabyCry",
+		["by"] = "Polyhex"
+	},
+	["Green Grin"] = {
+		["img"] = "Sheet5",
+		["description"] = "Have you ever seen a face this smug? Oh, you have? Oh.",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 1,
+		["sound"] = "Basic",
+		["by"] = "Polyhex"
+	},
+	["Friend #1"] = {
+		["img"] = "Sheet5",
+		["description"] = "They like you, but don\'t know how to say so.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 3,
+		["sound"] = "SciFi",
+		["by"] = "Wheatlies"
+	},
+	["Friend #2"] = {
+		["img"] = "Sheet5",
+		["description"] = "What kind of toothpaste do you use?",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 3,
+		["sound"] = "SciFi2",
+		["by"] = "Wheatlies"
+	},
+	["Friend #3"] = {
+		["img"] = "Sheet5",
+		["description"] = "The mouth and body are seperate, and go about their days seperately.",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 3,
+		["sound"] = "Bite",
+		["by"] = "Wheatlies"
+	},
+	["Friend #4"] = {
+		["img"] = "Sheet5",
+		["description"] = "Gib me your lunch bro",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 3,
+		["sound"] = "Bite",
+		["by"] = "Wheatlies"
+	},
+	["Friend #5"] = {
+		["img"] = "Sheet5",
+		["description"] = "Sqrsqrsqrsqr sqrqeesqre srrrrqee sqresqre!",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 3,
+		["sound"] = "Chomp",
+		["by"] = "Wheatlies"
+	},
+	["B"] = {
+		["img"] = "Sheet5",
+		["description"] = "can i get uhhhh Bloxxy Bola",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 4,
+		["sound"] = "Bass",
+		["noChat"] = true,
+		["by"] = "Wheatlies"
+	},
+	["Cronch"] = {
+		["img"] = "Sheet5",
+		["description"] = "Just one bite, come on dude.",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 4,
+		["sound"] = "Chomp",
+		["by"] = "Wheatlies"
+	},
+	["Shoop Da Whoop"] = {
+		["img"] = "Sheet5",
+		["description"] = "IMA FIRIN MA LAZ0R",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 5,
+		["sound"] = "Bass",
+		["by"] = "Wheatlies"
+	},
+	["Upset Gamer"] = {
+		["img"] = "Sheet5",
+		["description"] = "REALLY? UHG Galaxy map is BUSTED you can just jump FOREVER!!",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 5,
+		["sound"] = "CensorBeep",
+		["by"] = "Wheatlies"
+	},
+	["Little Royalty"] = {
+		["img"] = "Sheet5",
+		["description"] = "Tiny in stature, big in power.",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 4,
+		["sound"] = "Gentleman",
+		["by"] = "Polyhex",
+		["price"] = 0,
+		["taskReward"] = true
+	},
+	["Blobfish"] = {
+		["img"] = "Sheet5",
+		["description"] = "It may be ugly, but it sure is cute! Wait...",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 3,
+		["sound"] = "Squish",
+		["by"] = "Polyhex"
+	},
+	["Whale"] = {
+		["img"] = "Sheet5",
+		["description"] = "A little version of the biggest mammal!",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 2,
+		["sound"] = "Basic",
+		["by"] = "Polyhex"
+	},
+	["Coolsmas Tree"] = {
+		["img"] = "Sheet5",
+		["description"] = "\'Tis the season to be excellent!",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 3,
+		["sound"] = "Cool",
+		["seasonExclusive"] = "winter",
+		["by"] = "Polyhex",
+		["price"] = 250
+	},
+	["Spooky"] = {
+		["img"] = "Sheet5",
+		["description"] = "WHAT IS THAT AAAAAAAA",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 5,
+		["sound"] = "PianoSlam",
+		["by"] = "Polyhex"
+	},
+	["Burg"] = {
+		["img"] = "Sheet5",
+		["description"] = "What\'s the secret formula?",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 3,
+		["sound"] = "Chomp",
+		["by"] = "Polyhex"
+	},
+	["Stinky Cheese"] = {
+		["img"] = "Sheet5",
+		["description"] = "Cheese with holes in it is healthier \'cause it\'s less cheese overall.",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 3,
+		["sound"] = "Foghorn",
+		["by"] = "Polyhex"
+	},
+	["Tennis"] = {
+		["img"] = "Sheet5",
+		["description"] = "C\'mon, meet me on the court for a 1V1!",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 3,
+		["sound"] = "Tennis",
+		["by"] = "Polyhex",
+		["price"] = 0,
+		["taskReward"] = true
+	},
+	["Blehh"] = {
+		["img"] = "Sheet5",
+		["description"] = "Indifference got you down? Stick your tongue out.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 2,
+		["sound"] = "FunnySqueak",
+		["by"] = "Polyhex"
+	},
+	["Unicorn"] = {
+		["img"] = "Sheet6",
+		["description"] = "Who wants to hear a uni-corny joke?",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 3,
+		["sound"] = "Laugh",
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["Bro"] = {
+		["img"] = "Sheet6",
+		["description"] = "Bro... that\'s not very bro of you, bro...",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 3,
+		["sound"] = "SadDog",
+		["notInShop"] = true,
+		["price"] = 0,
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["I\'m Baby"] = {
+		["img"] = "Sheet6",
+		["description"] = "Aww... you most certainly are, little spud.",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 4,
+		["sound"] = "Squeak",
+		["notInShop"] = true,
+		["price"] = 400,
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["Frozen Solid"] = {
+		["img"] = "Sheet6",
+		["description"] = "Uh... anyone got a hairdryer?",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 3,
+		["sound"] = "TeethChatter",
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["Uhh... K"] = {
+		["img"] = "Sheet6",
+		["description"] = "This sticker brought to you by the letter K.",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 2,
+		["sound"] = "Basic",
+		["notInShop"] = true,
+		["price"] = 0,
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["Bee Nice"] = {
+		["img"] = "Sheet6",
+		["description"] = "Y\'all better listen to this bee!",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 3,
+		["sound"] = "Buzz",
+		["notInShop"] = true,
+		["price"] = 0,
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["What\'s Up Dog?"] = {
+		["img"] = "Sheet6",
+		["description"] = "Being more literal with this one, aren\'t we?",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 3,
+		["sound"] = "PaintDog",
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["Too Spicy"] = {
+		["img"] = "Sheet6",
+		["description"] = "Yeeeouch! Get this guy some milk!",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 2,
+		["sound"] = "Fire",
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["Cool Dog"] = {
+		["img"] = "Sheet6",
+		["description"] = "Pompadours are still considered cool, aren\'t they? This dog thinks so!",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 4,
+		["sound"] = "Boss",
+		["by"] = "Injanity",
+		["extraInfo"] = "from Adopt Me"
+	},
+	["Zombie"] = {
+		["img"] = "Sheet6",
+		["description"] = "Aaaugh!! Go for the head!!",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 3,
+		["sound"] = "Ghost",
+		["by"] = "Polyhex",
+		["notInShop"] = true,
+		["price"] = 0,
+		["taskReward"] = true
+	},
+	["Red Leader"] = {
+		["img"] = "Sheet6",
+		["description"] = "The leader of Red Team. She overlooks weapon forging & has an excellent battle record.",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 5,
+		["sound"] = "Fire",
+		["notInShop"] = true,
+		["price"] = 0,
+		["by"] = "Polyhex"
+	},
+	["Yellow King"] = {
+		["img"] = "Sheet6",
+		["description"] = "The leader of Yellow Team. He has a penchant for plantlife & likes reading.",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 5,
+		["sound"] = "Frog",
+		["notInShop"] = true,
+		["price"] = 0,
+		["by"] = "Polyhex"
+	},
+	["Green Scientist"] = {
+		["img"] = "Sheet6",
+		["description"] = "The leader of Green Team. They spend most of their time quietly doing alchemy & making explosives.",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 5,
+		["sound"] = "SciFi2",
+		["notInShop"] = true,
+		["price"] = 0,
+		["by"] = "Polyhex"
+	},
+	["Blue Executive"] = {
+		["img"] = "Sheet6",
+		["description"] = "The leader of Blue Team. He\'s a cutthroat businessman who treats everything like an office job.",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 5,
+		["sound"] = "CashRegister",
+		["notInShop"] = true,
+		["price"] = 0,
+		["by"] = "Polyhex"
+	},
+	["Possum"] = {
+		["img"] = "Sheet6",
+		["description"] = "These are the cutest little critters, aren\'t they?",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 2,
+		["sound"] = "Squeak2",
+		["by"] = "Polyhex"
+	},
+	["Pizza"] = {
+		["img"] = "Sheet6",
+		["description"] = "You can never go wrong with pizza (certain toppings nonwithstanding)!",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 1,
+		["sound"] = "Chomp",
+		["by"] = "Polyhex"
+	},
+	["Jaw Drop"] = {
+		["img"] = "Sheet6",
+		["description"] = "I got so shocked, my jaw got a great workout.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 4,
+		["sound"] = "MetalSlam",
+		["by"] = "Polyhex"
+	},
+	["Target Spotted"] = {
+		["img"] = "Sheet6",
+		["description"] = "LOCATED.",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 5,
+		["sound"] = "Bass",
+		["by"] = "Polyhex",
+		["price"] = 900
+	},
+	["Nooooo!"] = {
+		["img"] = "Sheet6",
+		["description"] = "Cue the dramatics. Annnd scene.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 2,
+		["sound"] = "PianoSlam",
+		["by"] = "Polyhex"
+	},
+	["Explosion"] = {
+		["img"] = "Sheet6",
+		["description"] = "Huh. That ain\'t a good sign.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 2,
+		["sound"] = "Boom",
+		["by"] = "Polyhex"
+	},
+	["Wizard"] = {
+		["img"] = "Sheet6",
+		["description"] = "Wizards always look like someone you\'d meet at a gas station past midnight.",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 3,
+		["sound"] = "Shine",
+		["by"] = "Polyhex"
+	},
+	["Snake"] = {
+		["img"] = "Sheet6",
+		["description"] = "Snake? Snake? Snaaaaaaake! Sorry, couldn\'t help myself.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Wiggle",
+		["by"] = "Polyhex"
+	},
+	["Bull Terrier"] = {
+		["img"] = "Sheet6",
+		["description"] = "Don\'t you just love their goofy, oblong faces?",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 3,
+		["sound"] = "PaintDog",
+		["by"] = "Polyhex"
+	},
+	["Rose"] = {
+		["img"] = "Sheet6",
+		["description"] = "A rose by any other name is... probably a rose, but with a different name.",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 2,
+		["sound"] = "Poke",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Ghost"] = {
+		["img"] = "Sheet6",
+		["description"] = "I would\'ve gotten away with it too, if it weren\'t for you meddling kids!",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 3,
+		["sound"] = "Ghost",
+		["by"] = "Polyhex"
+	},
+	["Knife"] = {
+		["img"] = "Sheet6",
+		["description"] = "Oh... oh no. Put that down!!",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 5,
+		["sound"] = "Sword",
+		["by"] = "Polyhex"
+	},
+	["Road Rage"] = {
+		["img"] = "Sheet6",
+		["description"] = "AAAARGH!! GET OUTTA DA WAY, PALOOKA!!",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 3,
+		["sound"] = "CarHorn",
+		["by"] = "Polyhex"
+	},
+	["Stronk"] = {
+		["img"] = "Sheet6",
+		["description"] = "The stronkest boy there is...",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 4,
+		["sound"] = "Boing",
+		["by"] = "Polyhex"
+	},
+	["Bluescreen"] = {
+		["img"] = "Sheet6",
+		["description"] = "Technology has failed us once again!",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 4,
+		["sound"] = "CensorBeep",
+		["by"] = "Polyhex"
+	},
+	["Baby Sprout"] = {
+		["img"] = "Sheet6",
+		["description"] = "Awww... freshly plucked from the ground, and they\'re already your friend.",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 2,
+		["sound"] = "Squeak",
+		["by"] = "Polyhex"
+	},
+	["Shark"] = {
+		["img"] = "Sheet6",
+		["description"] = "Who\'s got the biggest, baddest chompers under the ocean? This guy!",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 3,
+		["sound"] = "Bite",
+		["by"] = "Polyhex"
+	},
+	["Knight"] = {
+		["img"] = "Sheet6",
+		["description"] = "Suited up and ready to defend their kingdom!",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 3,
+		["sound"] = "Sword",
+		["by"] = "Polyhex"
+	},
+	["Polar Bear"] = {
+		["img"] = "Sheet6",
+		["description"] = "These bears are known for going with the floe.",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 3,
+		["sound"] = "TeethChatter",
+		["seasonExclusive"] = "winter",
+		["by"] = "Polyhex"
+	},
+	["Bloxy Cola"] = {
+		["img"] = "Sheet6",
+		["description"] = "Slrrrrpp...glp...huehh!",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 5,
+		["sound"] = "BloxyCola",
+		["by"] = "Polyhex",
+		["price"] = 900
+	},
+	["Splat"] = {
+		["img"] = "Sheet6",
+		["description"] = "Looks like someone blew their bubblegum up a bit too much...",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 3,
+		["sound"] = "SplatOld",
+		["by"] = "Polyhex"
+	},
+	["Dance Potion"] = {
+		["img"] = "Sheet6",
+		["description"] = "This noob\'s got dance fever! And it\'s incurable!",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 5,
+		["sound"] = "DancePotion",
+		["by"] = "Polyhex",
+		["notInShop"] = true,
+		["price"] = 0
+	},
+	["Hmmmm"] = {
+		["img"] = "Sheet7",
+		["description"] = "You sure about that?",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 3,
+		["sound"] = "TickTock",
+		["by"] = "Polyhex"
+	},
+	["Baggy Eyes"] = {
+		["img"] = "Sheet7",
+		["description"] = "I\'m so tired, the bags under my eyes have bags!",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 3,
+		["sound"] = "Fart",
+		["by"] = "Polyhex"
+	},
+	["Finger Guns"] = {
+		["img"] = "Sheet7",
+		["description"] = "Eyyyy!",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 1,
+		["sound"] = "Ricochet",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Wahoo!"] = {
+		["img"] = "Sheet7",
+		["description"] = "Let this little orange guy cheer up your day.",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 2,
+		["sound"] = "Tada",
+		["by"] = "Polyhex"
+	},
+	["FAIL"] = {
+		["img"] = "Sheet7",
+		["description"] = "What is this, 2007?",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 4,
+		["sound"] = "Buzzer",
+		["by"] = "Polyhex"
+	},
+	["OK"] = {
+		["img"] = "Sheet7",
+		["description"] = "Yeah. OK.",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 3,
+		["sound"] = "Basic",
+		["by"] = "Polyhex"
+	},
+	["OH NOOO"] = {
+		["img"] = "Sheet7",
+		["description"] = "EEAUUUUAARRRGHHH!!!",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 4,
+		["sound"] = "BigScream",
+		["by"] = "Polyhex"
+	},
+	["Told Ya So"] = {
+		["img"] = "Sheet7",
+		["description"] = "The universal facial expression of \'I knew it\'.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 4,
+		["sound"] = "Pick",
+		["by"] = "Polyhex"
+	},
+	["Eyeroll"] = {
+		["img"] = "Sheet7",
+		["description"] = "Tch! As if.",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 2,
+		["sound"] = "SlideDown",
+		["by"] = "Polyhex"
+	},
+	["Minus Two"] = {
+		["img"] = "Sheet7",
+		["description"] = "Useful when someone tells a bad joke.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 3,
+		["sound"] = "Boing",
+		["by"] = "Polyhex"
+	},
+	["Pyramid"] = {
+		["img"] = "Sheet7",
+		["description"] = "It\'s like it\'s watching my every move!!",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 4,
+		["sound"] = "SciFi2",
+		["by"] = "Polyhex"
+	},
+	["No Talk Me"] = {
+		["img"] = "Sheet7",
+		["description"] = "no talk me i angy",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 4,
+		["sound"] = "Anger",
+		["by"] = "Polyhex"
+	},
+	["Mega Poggy"] = {
+		["img"] = "Sheet7",
+		["description"] = "Poggy\'s final form.",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 5,
+		["sound"] = "Airhorn",
+		["price"] = 1000,
+		["by"] = "Polyhex"
+	},
+	["Mega Joy"] = {
+		["img"] = "Sheet7",
+		["description"] = "Oh no... this emoji is too powerful... what have we done?",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 5,
+		["sound"] = "Laugh",
+		["price"] = 1000,
+		["by"] = "Polyhex"
+	},
+	["Pig"] = {
+		["img"] = "Sheet7",
+		["description"] = "A quality hog!",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 1,
+		["sound"] = "Pig",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Bluebird"] = {
+		["img"] = "Sheet7",
+		["description"] = "All this bird does is tweet all day! I can relate.",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 1,
+		["sound"] = "Bird",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Chomper"] = {
+		["img"] = "Sheet7",
+		["description"] = "This chomper\'s an angry boy.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 2,
+		["sound"] = "Bite",
+		["by"] = "Polyhex"
+	},
+	["Prank Cushion"] = {
+		["img"] = "Sheet7",
+		["description"] = "This gag basically invented the idea of practical jokes.",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 4,
+		["sound"] = "Fart",
+		["by"] = "Polyhex"
+	},
+	["Crow"] = {
+		["img"] = "Sheet7",
+		["description"] = "Caw caw!",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 2,
+		["sound"] = "Crow",
+		["by"] = "Arch_Mage"
+	},
+	["Scroom"] = {
+		["img"] = "Sheet7",
+		["description"] = "An unfathomable evil lurks within this tiny mushroom. Probably.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 2,
+		["sound"] = "Powerup",
+		["by"] = "Arch_Mage"
+	},
+	["Ashiin"] = {
+		["img"] = "Sheet7",
+		["description"] = "EZ grip?",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 4,
+		["sound"] = "Oof",
+		["by"] = "Arch_Mage"
+	},
+	["Smug"] = {
+		["img"] = "Sheet7",
+		["description"] = "Fufufu... is that all you\'ve got?",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 3,
+		["sound"] = "Wolf",
+		["by"] = "Arch_Mage"
+	},
+	["Wowzas"] = {
+		["img"] = "Sheet7",
+		["description"] = "Wowzas",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 5,
+		["sound"] = "PaintDog",
+		["by"] = "Arch_Mage"
+	},
+	["Weh"] = {
+		["img"] = "Sheet7",
+		["description"] = "How could this have happened...?",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 3,
+		["sound"] = "SadDog",
+		["by"] = "Arch_Mage"
+	},
+	["Looking"] = {
+		["img"] = "Sheet7",
+		["description"] = "I am looking...",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 5,
+		["sound"] = "SlowMo",
+		["by"] = "Polyhex"
+	},
+	["Well Then"] = {
+		["img"] = "Sheet7",
+		["description"] = "Ain\'t that a surprise.",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 3,
+		["sound"] = "Honk",
+		["by"] = "Polyhex"
+	},
+	["Coin"] = {
+		["img"] = "Sheet7",
+		["description"] = "Yay, a number went up!",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 1,
+		["sound"] = "Coin",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Tiny Dude"] = {
+		["img"] = "Sheet7",
+		["description"] = "What are they UP to?",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 2,
+		["sound"] = "Tada",
+		["by"] = "Polyhex"
+	},
+	["Welp"] = {
+		["img"] = "Sheet7",
+		["description"] = "How disappointing.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 3,
+		["sound"] = "Fart",
+		["by"] = "Polyhex"
+	},
+	["Eep!"] = {
+		["img"] = "Sheet7",
+		["description"] = "Zoinks! Gadzooks! Jinkies! Et cetera!",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 3,
+		["sound"] = "Scream",
+		["by"] = "Polyhex"
+	},
+	["Bad Feel"] = {
+		["img"] = "Sheet7",
+		["description"] = "It\'s been one of those days...",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 4,
+		["sound"] = "SlideDown",
+		["by"] = "Polyhex"
+	},
+	["Huh What"] = {
+		["img"] = "Sheet7",
+		["description"] = "huh?????????? what????????",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 4,
+		["sound"] = "Dialup",
+		["by"] = "Polyhex"
+	},
+	["Rock"] = {
+		["img"] = "Sheet7",
+		["description"] = "Rock crushes scissors!",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 1,
+		["sound"] = "Basic",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Paper"] = {
+		["img"] = "Sheet7",
+		["description"] = "Paper covers rock!",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 1,
+		["sound"] = "Basic",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Scissors"] = {
+		["img"] = "Sheet7",
+		["description"] = "Scissors cut paper!",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 1,
+		["sound"] = "Basic",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Mega Gasp"] = {
+		["img"] = "Sheet7",
+		["description"] = "This man is over-gasped!",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 3,
+		["sound"] = "GuitarSmash",
+		["by"] = "Polyhex"
+	},
+	["Workout"] = {
+		["img"] = "Sheet8",
+		["description"] = "Midair sword flips are a good workout!",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 1,
+		["sound"] = "Dash",
+		["by"] = "Oct_alienYT",
+		["notFeatured"] = true
+	},
+	["Sad Cowboy"] = {
+		["img"] = "Sheet8",
+		["description"] = "Finally - a sticker to let everyone know you\'re a cowboy, but you\'re also sad.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 2,
+		["sound"] = "Ricochet",
+		["by"] = "Oct_alienYT"
+	},
+	["Rocket Rider"] = {
+		["img"] = "Sheet8",
+		["description"] = "The perfect situation for a \'yeehaw\'.",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 2,
+		["sound"] = "Whoosh",
+		["by"] = "Oct_alienYT"
+	},
+	["Totally OK"] = {
+		["img"] = "Sheet8",
+		["description"] = "It\'s just a flesh wound.",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 3,
+		["sound"] = "Doorbell",
+		["by"] = "Oct_alienYT"
+	},
+	["WUT"] = {
+		["img"] = "Sheet8",
+		["description"] = "When you R.I.P., but in a more confusing way.",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 2,
+		["sound"] = "DeathBell",
+		["by"] = "Oct_alienYT"
+	},
+	["We Can Do It"] = {
+		["img"] = "Sheet8",
+		["description"] = "We\'ve got this!",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 3,
+		["sound"] = "Tada",
+		["by"] = "Oct_alienYT"
+	},
+	["Log"] = {
+		["img"] = "Sheet8",
+		["description"] = "Logs have infinite fun possibilities.",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 1,
+		["sound"] = "Ninja",
+		["by"] = "Oct_alienYT",
+		["notFeatured"] = true
+	},
+	["Sneako Koneko"] = {
+		["img"] = "Sheet8",
+		["description"] = "A cheeky sneaky.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 4,
+		["sound"] = "Zip",
+		["by"] = "Oct_alienYT",
+		["notFeatured"] = true,
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Own\'d"] = {
+		["img"] = "Sheet8",
+		["description"] = "As long as the internet lives, people will be saying \'owned\' to each other.",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 3,
+		["sound"] = "Pick",
+		["by"] = "Polyhex"
+	},
+	["Drenched"] = {
+		["img"] = "Sheet8",
+		["description"] = "I JUST dried these clothes, dude.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 1,
+		["sound"] = "Ocean",
+		["by"] = "Oct_alienYT",
+		["notFeatured"] = true
+	},
+	["Surrender"] = {
+		["img"] = "Sheet8",
+		["description"] = "I give up!",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 2,
+		["sound"] = "BabyCry",
+		["by"] = "Oct_alienYT"
+	},
+	["Pathetic"] = {
+		["img"] = "Sheet8",
+		["description"] = "You think you\'re a match for ME? Hmph!",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 4,
+		["sound"] = "Evil",
+		["by"] = "Oct_alienYT"
+	},
+	["Shy Zombie"] = {
+		["img"] = "Sheet8",
+		["description"] = "Can I turn you into a zombie, pretty please?",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 3,
+		["sound"] = "Pick",
+		["by"] = "Oct_alienYT"
+	},
+	["Pufferfish"] = {
+		["img"] = "Sheet8",
+		["description"] = "Augh! These guys are sharp...",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 2,
+		["sound"] = "Poke",
+		["by"] = "Oct_alienYT"
+	},
+	["VV Cardinal"] = {
+		["img"] = "Sheet8",
+		["extraInfo"] = "from Vibrant Venture",
+		["description"] = "A seasoned adventurer with a fiery fighting style that he uses with reckless abandon.",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 4,
+		["sound"] = "VibrantVenture",
+		["by"] = "Oct_alienYT"
+	},
+	["VV Azura"] = {
+		["img"] = "Sheet8",
+		["extraInfo"] = "from Vibrant Venture",
+		["description"] = "Clumsy but intelligent, Azura seeks to learn about the world and all of its oddities.",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 4,
+		["sound"] = "VibrantVenture",
+		["by"] = "Oct_alienYT"
+	},
+	["VV Banana"] = {
+		["img"] = "Sheet8",
+		["extraInfo"] = "from Vibrant Venture",
+		["description"] = "Optimism colors his world view, and he seems like the glue that holds people together.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 4,
+		["sound"] = "VibrantVenture",
+		["by"] = "Oct_alienYT"
+	},
+	["VV Pistachio"] = {
+		["img"] = "Sheet8",
+		["extraInfo"] = "from Vibrant Venture",
+		["description"] = "Pistachio is a known adventurer and uses her elegant style to forge new paths for herself.",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 4,
+		["sound"] = "VibrantVenture",
+		["by"] = "Oct_alienYT"
+	},
+	["Breadcat"] = {
+		["img"] = "Sheet8",
+		["description"] = "Cats are known to loaf around. This one takes that more seriously.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 3,
+		["sound"] = "PaintCat",
+		["by"] = "Oct_alienYT"
+	},
+	["Rainbowcat"] = {
+		["img"] = "Sheet8",
+		["description"] = "Nya nya nya-nya nya-nyanyanya nya!",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 3,
+		["sound"] = "MagicShine",
+		["by"] = "Oct_alienYT"
+	},
+	["Spooky Pumpkin"] = {
+		["img"] = "Sheet8",
+		["description"] = "Is it Halloween yet?",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 2,
+		["sound"] = "Evil",
+		["seasonExclusive"] = "autumn",
+		["by"] = "Oct_alienYT"
+	},
+	["Noodles"] = {
+		["img"] = "Sheet8",
+		["description"] = "The only way to eat noodles is to loudly slurp \'em up.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Slurp",
+		["by"] = "Oct_alienYT"
+	},
+	["I\'m Fine"] = {
+		["img"] = "Sheet8",
+		["description"] = "Things are gonna be juuuust fine.",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 4,
+		["sound"] = "Burning",
+		["by"] = "Oct_alienYT"
+	},
+	["Duck Bomb"] = {
+		["img"] = "Sheet8",
+		["description"] = "Usually ducks are a good sign! But not these rude boys.",
+		["extraInfo"] = "from Super Bomb Survival",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 2,
+		["sound"] = "Quack",
+		["by"] = "Oct_alienYT"
+	},
+	["Batter Up"] = {
+		["img"] = "Sheet8",
+		["description"] = "When someone says the Homerunner is bad.",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 5,
+		["sound"] = "Honk",
+		["by"] = "Polyhex"
+	},
+	["Dweeb"] = {
+		["img"] = "Sheet8",
+		["description"] = "Me after solving 2+2",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 2,
+		["sound"] = "FunnySqueak",
+		["by"] = "Polyhex"
+	},
+	["Lil Gus"] = {
+		["img"] = "Sheet8",
+		["description"] = "This kid\'s always up to no good.",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 3,
+		["sound"] = "Honk",
+		["by"] = "Oct_alienYT"
+	},
+	["Douglas Duckface"] = {
+		["img"] = "Sheet8",
+		["description"] = "The coolest (and only) basketball-playing duck in the world!",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 3,
+		["sound"] = "Quack",
+		["by"] = "Oct_alienYT"
+	},
+	["Howard"] = {
+		["img"] = "Sheet8",
+		["description"] = "He\'s a bit of a prankster.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 3,
+		["sound"] = "Honk",
+		["by"] = "Oct_alienYT",
+		["notFeatured"] = true
+	},
+	["Rodney"] = {
+		["img"] = "Sheet8",
+		["description"] = "He\'s had enough of the nonsense.",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 3,
+		["sound"] = "SlideDown",
+		["by"] = "Oct_alienYT",
+		["notFeatured"] = true
+	},
+	["Wince"] = {
+		["img"] = "Sheet8",
+		["description"] = "Top 10 wince moments of (current year)",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 5,
+		["sound"] = "BigScream",
+		["by"] = "Polyhex"
+	},
+	["Gotcha!"] = {
+		["img"] = "Sheet8",
+		["description"] = "Nobody messes wit\' me!",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 4,
+		["sound"] = "Boss",
+		["by"] = "Feleanne"
+	},
+	["The Chin"] = {
+		["img"] = "Sheet8",
+		["description"] = "Fear him.",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 4,
+		["sound"] = "Evil",
+		["by"] = "Feleanne"
+	},
+	["Whimsical"] = {
+		["img"] = "Sheet8",
+		["description"] = "Believing in yourself is your own magic!",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 3,
+		["sound"] = "Sparkle",
+		["by"] = "Feleanne"
+	},
+	["Instinct"] = {
+		["img"] = "Sheet8",
+		["description"] = "What an incredible guy!",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 3,
+		["sound"] = "DeathBell",
+		["by"] = "Feleanne"
+	},
+	["BRUH"] = {
+		["img"] = "Sheet8",
+		["description"] = "BRUH",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 5,
+		["price"] = 2000,
+		["sound"] = "Bass",
+		["by"] = "Polyhex"
+	},
+	["Super Sundae"] = {
+		["img"] = "Sheet9",
+		["description"] = "All four flavors - red, yellow, green, & blue!",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 1,
+		["sound"] = "Chomp",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Idea"] = {
+		["img"] = "Sheet9",
+		["description"] = "Eureka!",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 1,
+		["sound"] = "Doorbell",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Superball Fan"] = {
+		["img"] = "Sheet9",
+		["description"] = "Gotta love ragdolling others with high-speed superballs.",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 2,
+		["sound"] = "Basic",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Traffic Cone"] = {
+		["img"] = "Sheet9",
+		["description"] = "If you place this sticker on a road, would it divert traffic?",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 1,
+		["sound"] = "CarHorn",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Robbie Round Return"] = {
+		["img"] = "Sheet9",
+		["description"] = "Pssst.... need to return to the round?",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 1,
+		["sound"] = "Doorbell",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Tix"] = {
+		["img"] = "Sheet9",
+		["description"] = "BRING BACK TIX!!!111",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 5,
+		["sound"] = "Roblox",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Shadow Clone Fan"] = {
+		["img"] = "Sheet9",
+		["description"] = "For Shadow Clone mains everywhere.",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 4,
+		["sound"] = "Ninja",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Bombardier Fan"] = {
+		["img"] = "Sheet9",
+		["description"] = "Delete this.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 3,
+		["sound"] = "Boom",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Remote Detonator Fan"] = {
+		["img"] = "Sheet9",
+		["description"] = "Toss bombs, blow \'em up, repeat!",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 3,
+		["sound"] = "Boom",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Happy Home"] = {
+		["img"] = "Sheet9",
+		["description"] = "And yes, it was beautiful...",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 4,
+		["sound"] = "Roblox",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Laggy"] = {
+		["img"] = "Sheet9",
+		["description"] = "Who put custard in my wi-fi router?",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 4,
+		["sound"] = "Dialup",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Dazed"] = {
+		["img"] = "Sheet9",
+		["description"] = "AND confused, for that matter.",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 3,
+		["sound"] = "Frazzled",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Stopsign"] = {
+		["img"] = "Sheet9",
+		["description"] = "Just... stop.",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 3,
+		["sound"] = "Buzzer",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Sly Roundcat"] = {
+		["img"] = "Sheet9",
+		["description"] = "I don\'t trust that face. What could they be up to?",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 2,
+		["sound"] = "PaintCat",
+		["by"] = "Polyhex"
+	},
+	["POW"] = {
+		["img"] = "Sheet9",
+		["description"] = "Boom boom, shake the room.",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 2,
+		["sound"] = "Bonk",
+		["by"] = "Polyhex"
+	},
+	["Fired Up"] = {
+		["img"] = "Sheet9",
+		["description"] = "The feeling of getting a bunch of KOs in a row.",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 4,
+		["sound"] = "Airhorn",
+		["by"] = "D_nkers"
+	},
+	["Fact Check"] = {
+		["img"] = "Sheet9",
+		["description"] = "If you look here, it says you\'re a stinky nerd.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 4,
+		["sound"] = "TickTock",
+		["by"] = "D_nkers"
+	},
+	["Plotting"] = {
+		["img"] = "Sheet9",
+		["description"] = "The best actions require maniacal plots!",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 4,
+		["sound"] = "Evil",
+		["by"] = "D_nkers"
+	},
+	["Sippp"] = {
+		["img"] = "Sheet9",
+		["description"] = "You see, the silliness of the straw is inversely proportionate to how much I care.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 4,
+		["sound"] = "Sip",
+		["by"] = "D_nkers"
+	},
+	["Ducked Tape"] = {
+		["img"] = "Sheet9",
+		["description"] = "You can fix anything with this.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 3,
+		["sound"] = "Quack",
+		["by"] = "D_nkers"
+	},
+	["Kick Me"] = {
+		["img"] = "Sheet9",
+		["description"] = "pls no bully",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 3,
+		["sound"] = "Smack",
+		["by"] = "D_nkers"
+	},
+	["Flyswatted"] = {
+		["img"] = "Sheet9",
+		["description"] = "Smack \'em outta the sky!",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 3,
+		["sound"] = "Smack",
+		["by"] = "D_nkers"
+	},
+	["No U"] = {
+		["img"] = "Sheet9",
+		["description"] = "The ultimate comeback.",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 4,
+		["sound"] = "Slam",
+		["by"] = "D_nkers"
+	},
+	["Get Wreckt"] = {
+		["img"] = "Sheet9",
+		["description"] = "The ultimate burn.",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 4,
+		["sound"] = "Airhorn",
+		["by"] = "D_nkers"
+	},
+	["Old Turret"] = {
+		["img"] = "Sheet9",
+		["description"] = "Ball Turrets used to look like this! They were quite charming.",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 3,
+		["sound"] = "Boom",
+		["by"] = "D_nkers"
+	},
+	["LET\'S GOOO"] = {
+		["img"] = "Sheet9",
+		["description"] = "LET\'S FLIPPING GOOOOOOO",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 5,
+		["sound"] = "CheerYeah",
+		["by"] = "Polyhex",
+		["price"] = 2000
+	},
+	["Oh Dear"] = {
+		["img"] = "Sheet9",
+		["description"] = "I did not need to see that.",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 3,
+		["sound"] = "BabyCry",
+		["by"] = "Polyhex"
+	},
+	["Crossbones"] = {
+		["img"] = "Sheet9",
+		["description"] = "Yo ho ho and a bottle of... apple juice!",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 2,
+		["sound"] = "DeathBell",
+		["by"] = "Polyhex"
+	},
+	["Evil Eyes"] = {
+		["img"] = "Sheet9",
+		["description"] = "Why did I draw this? I\'m serious this time.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 5,
+		["sound"] = "BigScream",
+		["by"] = "Polyhex"
+	},
+	["Whistle"] = {
+		["img"] = "Sheet9",
+		["description"] = "Nothin\' doin\'!",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 1,
+		["sound"] = "Whistle",
+		["by"] = "Polyhex",
+		["notFeatured"] = true
+	},
+	["Unimpressed"] = {
+		["img"] = "Sheet9",
+		["description"] = "You\'ve... disappointed me.",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 4,
+		["sound"] = "Quack",
+		["by"] = "Knighterisk"
+	},
+	["Empty"] = {
+		["img"] = "Sheet9",
+		["description"] = "The emptiness is filling my soul.",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 4,
+		["sound"] = "Wolf",
+		["by"] = "Knighterisk"
+	},
+	["Abstract Sad"] = {
+		["img"] = "Sheet9",
+		["description"] = "A BLOO HOO HOOOOOO HOOOOO",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 3,
+		["sound"] = "BabyCry",
+		["by"] = "Knighterisk"
+	},
+	["Proud"] = {
+		["img"] = "Sheet9",
+		["description"] = "Ey, that\'s a pretty good job right there!",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 2,
+		["sound"] = "Tada",
+		["by"] = "Knighterisk"
+	},
+	["Rad Friend"] = {
+		["img"] = "Sheet9",
+		["description"] = "Everyone\'s got a rad friend. And now it\'s you!",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 2,
+		["sound"] = "Spot",
+		["by"] = "Knighterisk"
+	},
+	["Abstract Angry"] = {
+		["img"] = "Sheet9",
+		["description"] = "OOOUUUGHHHHH!!!! THAT\'S IT THAT\'S THE LAST STRAW YOU ARE GROUNDED",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 4,
+		["sound"] = "Fart",
+		["by"] = "Knighterisk"
+	},
+	["Inner Sad"] = {
+		["img"] = "Sheet10",
+		["description"] = "Behind the mask, there are only tears.",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 4,
+		["sound"] = "BabyCry",
+		["by"] = "Knighterisk"
+	},
+	["Crumple"] = {
+		["img"] = "Sheet10",
+		["description"] = "If you ever feel like this, you may be the victim of a Brickbreaker.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 2,
+		["sound"] = "Quack",
+		["by"] = "Knighterisk"
+	},
+	["Not Point & Laugh"] = {
+		["img"] = "Sheet10",
+		["description"] = "When there\'s nothing to point and laugh at... why bother?",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 4,
+		["sound"] = "Wolf",
+		["by"] = "Sycne"
+	},
+	["Tacocat"] = {
+		["img"] = "Sheet10",
+		["description"] = "\'Tacocat\' is a palindrome! This description isn\'t!",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 2,
+		["sound"] = "Cat",
+		["by"] = "Oct_alienYT"
+	},
+	["Lava Burned"] = {
+		["img"] = "Sheet10",
+		["description"] = "MAAAAMA!!! HOO WA HOO, WOW-WOW!!!",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 4,
+		["sound"] = "BigScream",
+		["by"] = "Oct_alienYT"
+	},
+	["Bummed"] = {
+		["img"] = "Sheet10",
+		["description"] = "The color\'s drained from my face, dude.",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 2,
+		["sound"] = "Bork",
+		["by"] = "Oct_alienYT"
+	},
+	["Parrot"] = {
+		["img"] = "Sheet10",
+		["description"] = "Do parrots actually like crackers, or have pirate movies been lying to us?",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 2,
+		["sound"] = "Crow",
+		["by"] = "Oct_alienYT"
+	},
+	["Cola Grip"] = {
+		["img"] = "Sheet10",
+		["description"] = "It\'s partially hydrogenated!!",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 3,
+		["sound"] = "Honk",
+		["by"] = "Oct_alienYT"
+	},
+	["Leave"] = {
+		["img"] = "Sheet10",
+		["description"] = "Get outta here.",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 5,
+		["sound"] = "Bonk",
+		["by"] = "Oct_alienYT"
+	},
+	["Croaked"] = {
+		["img"] = "Sheet10",
+		["description"] = "The secret code to unlock all Tools is.....",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 4,
+		["sound"] = "DeathBell",
+		["by"] = "Oct_alienYT"
+	},
+	["Jinkies!"] = {
+		["img"] = "Sheet10",
+		["description"] = "Blue Executive when stocks are low.",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 3,
+		["sound"] = "TeethChatter",
+		["by"] = "Oct_alienYT"
+	},
+	["Green Scheme"] = {
+		["img"] = "Sheet10",
+		["description"] = "The secret formula!!!",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 3,
+		["sound"] = "Evil",
+		["by"] = "Oct_alienYT"
+	},
+	["Roundcat Toss"] = {
+		["img"] = "Sheet10",
+		["description"] = "Stop kicking the dog off the table!",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 4,
+		["sound"] = "Glass",
+		["by"] = "Oct_alienYT"
+	},
+	["Window Toss"] = {
+		["img"] = "Sheet10",
+		["description"] = "Hey, that\'s not a Superball!!",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 4,
+		["sound"] = "Glass",
+		["by"] = "Oct_alienYT"
+	},
+	["Painbow"] = {
+		["img"] = "Sheet10",
+		["description"] = "The best way to hide your pain is through pretty colors.",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 5,
+		["sound"] = "Shine",
+		["by"] = "Oct_alienYT"
+	},
+	["Big Brain"] = {
+		["img"] = "Sheet10",
+		["description"] = "when you remember what 2+2 is",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 3,
+		["sound"] = "SciFi2",
+		["by"] = "Oct_alienYT"
+	},
+	["Red Royalty"] = {
+		["img"] = "Sheet10",
+		["description"] = "Victory is all she knows! (Ignore all the defeats.)",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 4,
+		["sound"] = "Gentleman",
+		["by"] = "JKusya"
+	},
+	["Careful Planning"] = {
+		["img"] = "Sheet10",
+		["description"] = "Blue Executive with a map is either guaranteed victory or a complete disaster.",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 4,
+		["sound"] = "TickTock",
+		["by"] = "JKusya"
+	},
+	["Greensplosion"] = {
+		["img"] = "Sheet10",
+		["description"] = "Uh-oh, back to the lab again!",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 4,
+		["sound"] = "Boom",
+		["by"] = "JKusya"
+	},
+	["Red Cheer"] = {
+		["img"] = "Sheet10",
+		["description"] = "Red Leader has the pep to get the whole team going!",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 4,
+		["sound"] = "Cheer",
+		["by"] = "JKusya"
+	},
+	["Rocket Bonk"] = {
+		["img"] = "Sheet10",
+		["description"] = "This is what a spire typically goes through on a daily basis.",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 3,
+		["sound"] = "Donk",
+		["by"] = "JKusya"
+	},
+	["Swords Up!"] = {
+		["img"] = "Sheet10",
+		["description"] = "We\'re ready to fight!!",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Sword",
+		["by"] = "JKusya"
+	},
+	["Roundcat Thumbs Up"] = {
+		["img"] = "Sheet10",
+		["description"] = "Good thing real cats don\'t have thumbs, or it\'d be over for humanity.",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 3,
+		["sound"] = "PaintCat",
+		["by"] = "JKusya"
+	},
+	["Victory Spires"] = {
+		["img"] = "Sheet10",
+		["description"] = "Two Teams in a nutshell. Well... sort of.",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 3,
+		["sound"] = "PartyHorn",
+		["by"] = "JKusya"
+	},
+	["Tear Puddle"] = {
+		["img"] = "Sheet10",
+		["description"] = "Sometimes, it TRULY just be like that.",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 4,
+		["sound"] = "BabyCry",
+		["by"] = "JKusya"
+	},
+	["Radical Roundcat"] = {
+		["img"] = "Sheet10",
+		["description"] = "Now THAT\'S a cool cat.",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 3,
+		["sound"] = "Cool",
+		["by"] = "JKusya"
+	},
+	["Twinkle"] = {
+		["img"] = "Sheet10",
+		["description"] = "That\'s never a good look to see.",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 3,
+		["sound"] = "Scary",
+		["by"] = "JKusya"
+	},
+	["Trick or Treat"] = {
+		["img"] = "Sheet10",
+		["description"] = "Gimme something sweet to eat!",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 2,
+		["sound"] = "Ghost",
+		["seasonExclusive"] = "autumn",
+		["by"] = "JKusya"
+	},
+	["Earthworm"] = {
+		["img"] = "Sheet10",
+		["description"] = "Little wiggly fella.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 2,
+		["sound"] = "Wiggle",
+		["by"] = "Polyhex"
+	},
+	["Nerdface"] = {
+		["img"] = "Sheet10",
+		["description"] = "A cursed, evil cousin of the Poggy sticker.",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 5,
+		["sound"] = "Oof",
+		["by"] = "Polyhex"
+	},
+	["Jack-O-Lantern"] = {
+		["img"] = "Sheet10",
+		["description"] = "Anyone up for pumpkin pie?",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 2,
+		["sound"] = "Ghost",
+		["seasonExclusive"] = "autumn",
+		["by"] = "Polyhex"
+	},
+	["Skeleton Laugh"] = {
+		["img"] = "Sheet10",
+		["description"] = "Nyeh heh heh heh heh!!",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 4,
+		["sound"] = "Laugh",
+		["seasonExclusive"] = "autumn",
+		["by"] = "Polyhex"
+	},
+	["Pile o\' Bones"] = {
+		["img"] = "Sheet10",
+		["description"] = "These dry bones won\'t get back up again.",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 2,
+		["sound"] = "Cough",
+		["seasonExclusive"] = "autumn",
+		["by"] = "Polyhex"
+	},
+	["Greatsword Fan"] = {
+		["img"] = "Sheet10",
+		["description"] = "Get ready to be yeeted!",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 4,
+		["sound"] = "Sword",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Angry Point"] = {
+		["img"] = "Sheet10",
+		["description"] = "How DARE that little cat sit at the table!",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 3,
+		["sound"] = "Poke",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Tiny Red"] = {
+		["img"] = "Sheet10",
+		["description"] = "She\'s probably being yelled & pointed at.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 3,
+		["sound"] = "PaintCat",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Lil Daikon"] = {
+		["img"] = "Sheet11",
+		["description"] = "A tiny radish friend, plucked from the lab garden!",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 3,
+		["sound"] = "Pluck",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Blue Facepalm"] = {
+		["img"] = "Sheet11",
+		["description"] = "I can\'t bear to look.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 3,
+		["sound"] = "Smack",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Hoss Hog Fan"] = {
+		["img"] = "Sheet11",
+		["description"] = "Weeeee! But also OW!! Curse that self-burn nerf!",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 4,
+		["sound"] = "Basic",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Angry Red"] = {
+		["img"] = "Sheet11",
+		["description"] = "How dare. How DARE.",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 3,
+		["sound"] = "Fire",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Sly Sip"] = {
+		["img"] = "Sheet11",
+		["description"] = "But that\'s none of my business...",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 4,
+		["sound"] = "Sip",
+		["by"] = "r3dverty",
+		["deleteThis"] = true,
+		["notInShop"] = true
+	},
+	["Red Poggy"] = {
+		["img"] = "Sheet11",
+		["description"] = "My face when the Survivors win Infection.",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 4,
+		["sound"] = "Airhorn",
+		["by"] = "Polyhex"
+	},
+	["I\'m Not Cringe"] = {
+		["img"] = "Sheet11",
+		["description"] = "I\'M NOT!!!",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 5,
+		["sound"] = "Glass",
+		["price"] = 1000,
+		["by"] = "Oct_alienYT"
+	},
+	["Home Run"] = {
+		["img"] = "Sheet11",
+		["description"] = "So long-a, Blue Team!",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 3,
+		["sound"] = "Slam",
+		["by"] = "Oct_alienYT"
+	},
+	["Starblargh"] = {
+		["img"] = "Sheet11",
+		["description"] = "Stars vomit rainbows. It\'s science. I know science.",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 5,
+		["sound"] = "Starblargh",
+		["price"] = 2000,
+		["by"] = "Oct_alienYT"
+	},
+	["Among \'Em"] = {
+		["img"] = "Sheet11",
+		["description"] = "Seems kinda sus.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 4,
+		["sound"] = "Oof",
+		["by"] = "Oct_alienYT"
+	},
+	["Fish Poggy"] = {
+		["img"] = "Sheet11",
+		["description"] = "When the worm ISN\'T attached to a hook",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 3,
+		["sound"] = "Bubbles",
+		["by"] = "Oct_alienYT"
+	},
+	["Pidgeon Poggy"] = {
+		["img"] = "Sheet11",
+		["description"] = "When there\'s more crumbs on the pavement than usual",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 3,
+		["sound"] = "Crow",
+		["by"] = "Oct_alienYT",
+		["notInShop"] = true,
+		["deleteThis"] = true
+	},
+	["Pigeon Poggy"] = {
+		["img"] = "Sheet11",
+		["description"] = "When there\'s more crumbs on the pavement than usual",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 3,
+		["sound"] = "Crow",
+		["by"] = "Oct_alienYT"
+	},
+	["Point & Shame"] = {
+		["img"] = "Sheet11",
+		["description"] = "THIS GUY SAID \'EZ\'",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 5,
+		["sound"] = "Laugh",
+		["price"] = 3000,
+		["by"] = "Oct_alienYT"
+	},
+	["My Day Be So Fine"] = {
+		["img"] = "Sheet11",
+		["description"] = "Then boom...",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 4,
+		["sound"] = "Tada",
+		["by"] = "Oct_alienYT"
+	},
+	["Then Boom"] = {
+		["img"] = "Sheet11",
+		["description"] = "Day no longer so fine.",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 4,
+		["sound"] = "DeathBell",
+		["by"] = "Oct_alienYT"
+	},
+	["The Scrinch"] = {
+		["img"] = "Sheet11",
+		["description"] = "The greatest threat to the holidays.",
+		["seasonExclusive"] = "winter",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 4,
+		["sound"] = "Scrinch",
+		["by"] = "Oct_alienYT"
+	},
+	["Yellow Anger"] = {
+		["img"] = "Sheet11",
+		["description"] = "MMMMMMRRRGHHH!!!!",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 5,
+		["sound"] = "Twonk",
+		["by"] = "Oct_alienYT"
+	},
+	["Green Peeved"] = {
+		["img"] = "Sheet11",
+		["description"] = "When your potions explode in your face for the hundredth time",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 3,
+		["sound"] = "Bork",
+		["by"] = "Oct_alienYT"
+	},
+	["Red Tea"] = {
+		["img"] = "Sheet11",
+		["description"] = "Brewed in the highlands past the Crimson Courtyard.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 3,
+		["sound"] = "Sip",
+		["by"] = "Oct_alienYT"
+	},
+	["Stocks Low"] = {
+		["img"] = "Sheet11",
+		["description"] = "The free market will save us! No I\'m serious this time why are you laughing",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 4,
+		["sound"] = "DeathBell",
+		["by"] = "Oct_alienYT"
+	},
+	["Blasted Away"] = {
+		["img"] = "Sheet11",
+		["description"] = "N-no!! The light... it\'s... too powerful!",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 4,
+		["sound"] = "BigScream",
+		["by"] = "Oct_alienYT"
+	},
+	["Yoinky"] = {
+		["img"] = "Sheet11",
+		["description"] = "Then I buy me a smoothie.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 3,
+		["sound"] = "Splat",
+		["by"] = "Oct_alienYT"
+	},
+	["Smallest Violin"] = {
+		["img"] = "Sheet11",
+		["description"] = "Awww, boo-hoo!",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 4,
+		["sound"] = "Violin",
+		["by"] = "Oct_alienYT"
+	},
+	["Yellow Think"] = {
+		["img"] = "Sheet11",
+		["description"] = "Now who could have knocked down the yellow doomspire?",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 5,
+		["sound"] = "Dialup",
+		["by"] = "Oct_alienYT"
+	},
+	["Screams Internally"] = {
+		["img"] = "Sheet11",
+		["description"] = "How am I? Oh, you know.",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 5,
+		["sound"] = "InnerScream",
+		["price"] = 1000,
+		["by"] = "Oct_alienYT"
+	},
+	["Devestated"] = {
+		["img"] = "Sheet11",
+		["description"] = "Looks like someone just got trolled.",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 4,
+		["sound"] = "Scary",
+		["price"] = 800,
+		["by"] = "Oct_alienYT"
+	},
+	["Die"] = {
+		["img"] = "Sheet11",
+		["description"] = "Join me, and your face will be the greatest.",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 4,
+		["sound"] = "Die",
+		["by"] = "Polyhex"
+	},
+	["Froggy Poggy"] = {
+		["img"] = "Sheet11",
+		["description"] = "Frogs were naturally born to pog. Yellow King is no different.",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 4,
+		["sound"] = "Airhorn",
+		["by"] = "Polyhex"
+	},
+	["OOF"] = {
+		["img"] = "Sheet11",
+		["description"] = "Sometimes you gotta just spell it out.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 3,
+		["sound"] = "Oof",
+		["by"] = "Polyhex"
+	},
+	["Smug Egg"] = {
+		["img"] = "Sheet11",
+		["description"] = "EYYY everybody, it\'s an egg! From some northern region, for sure.",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 2,
+		["sound"] = "Twonk",
+		["by"] = "Polyhex"
+	},
+	["Caracal"] = {
+		["img"] = "Sheet11",
+		["description"] = "A big cat with ears that flop.",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 4,
+		["sound"] = "Boing",
+		["by"] = "Oct_alienYT"
+	},
+	["Dead"] = {
+		["img"] = "Sheet11",
+		["description"] = "Remember that time I got utterly destroyed?",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 4,
+		["sound"] = "DeathBell",
+		["price"] = 800,
+		["by"] = "Oct_alienYT"
+	},
+	["Go Team!"] = {
+		["img"] = "Sheet11",
+		["description"] = "Three cheers for (INSERT TEAM HERE)!",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 3,
+		["sound"] = "Cheer",
+		["by"] = "Oct_alienYT"
+	},
+	["Go Zombies!"] = {
+		["img"] = "Sheet11",
+		["description"] = "Let\'s go, apocalypse!",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 3,
+		["sound"] = "Cheer",
+		["by"] = "Oct_alienYT"
+	},
+	["Awakened"] = {
+		["img"] = "Sheet11",
+		["description"] = "When you discover the hidden Purple Team",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 4,
+		["sound"] = "Bass",
+		["by"] = "Oct_alienYT"
+	},
+	["Anxious Pigeon"] = {
+		["img"] = "Sheet11",
+		["description"] = "Must... locate... sidewalk hot dog...",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 2,
+		["sound"] = "TeethChatter",
+		["by"] = "Oct_alienYT"
+	},
+	["Fish Stare"] = {
+		["img"] = "Sheet12",
+		["description"] = "Oh no. Swim away.",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 3,
+		["sound"] = "Fart",
+		["by"] = "Oct_alienYT"
+	},
+	["Rudolph"] = {
+		["img"] = "Sheet12",
+		["description"] = "The pog-faced reindeer.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 3,
+		["sound"] = "JingleBell",
+		["by"] = "Oct_alienYT",
+		["seasonExclusive"] = "winter"
+	},
+	["Partygoer"] = {
+		["img"] = "Sheet12",
+		["description"] = "Nobody here plays Super Doomspire...",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 3,
+		["sound"] = "Wolf",
+		["by"] = "Oct_alienYT"
+	},
+	["Bingus"] = {
+		["img"] = "Sheet12",
+		["description"] = "The pink cat that stole all our hearts.",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 3,
+		["sound"] = "Pluck",
+		["by"] = "Oct_alienYT"
+	},
+	["Mega Pop"] = {
+		["img"] = "Sheet12",
+		["description"] = "POP POP POP POP POP",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 5,
+		["sound"] = "MegaPop",
+		["by"] = "Oct_alienYT"
+	},
+	["Pop"] = {
+		["img"] = "Sheet12",
+		["description"] = "pop pop pop pop pop",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 3,
+		["sound"] = "Pop",
+		["by"] = "Oct_alienYT"
+	},
+	["Weird Smile"] = {
+		["img"] = "Sheet12",
+		["description"] = ":]",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 2,
+		["sound"] = "Bork",
+		["by"] = "SkyTheFloof"
+	},
+	["Anvil"] = {
+		["img"] = "Sheet12",
+		["description"] = "Anvil is responsible for the flattening of countless coyotes.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 3,
+		["sound"] = "MetalSlam",
+		["by"] = "SkyTheFloof"
+	},
+	["Cat Blob"] = {
+		["img"] = "Sheet12",
+		["description"] = "All loafed up with nowhere to go.",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 2,
+		["sound"] = "Squeak2",
+		["by"] = "SkyTheFloof"
+	},
+	["Squashed"] = {
+		["img"] = "Sheet12",
+		["description"] = "Thank goodness this game doesn\'t have fall damage!",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 2,
+		["sound"] = "CymbalCrash",
+		["by"] = "SkyTheFloof"
+	},
+	["Harumph!"] = {
+		["img"] = "Sheet12",
+		["description"] = "Someone on the internet has the wrong opinion about my favorite show!",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 2,
+		["sound"] = "Bork",
+		["by"] = "SkyTheFloof"
+	},
+	["Guh-wha??"] = {
+		["img"] = "Sheet12",
+		["description"] = "The face of a truly flabbergasted person.",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 2,
+		["sound"] = "PianoSlam",
+		["by"] = "SkyTheFloof"
+	},
+	["OY!"] = {
+		["img"] = "Sheet12",
+		["description"] = "The funny \'shocked\' facial expressions are my favorite.",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 2,
+		["sound"] = "Bonk",
+		["by"] = "SkyTheFloof"
+	},
+	["Ugly Icecream R"] = {
+		["img"] = "Sheet12",
+		["description"] = "Red\'s team leader, now in horrifying melty ice cream form!",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 2,
+		["sound"] = "Scary",
+		["by"] = "Polyhex",
+		["seasonExclusive"] = "summer"
+	},
+	["Ugly Icecream Y"] = {
+		["img"] = "Sheet12",
+		["description"] = "Yellow\'s team leader, now in horrifying melty ice cream form!",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 2,
+		["sound"] = "Scary",
+		["by"] = "Polyhex",
+		["seasonExclusive"] = "summer"
+	},
+	["Ugly Icecream G"] = {
+		["img"] = "Sheet12",
+		["description"] = "Green\'s team leader, now in horrifying melty ice cream form!",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 2,
+		["sound"] = "Scary",
+		["by"] = "Polyhex",
+		["seasonExclusive"] = "summer"
+	},
+	["Ugly Icecream B"] = {
+		["img"] = "Sheet12",
+		["description"] = "Blue\'s team leader, now in horrifying melty ice cream form!",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 2,
+		["sound"] = "Scary",
+		["by"] = "Polyhex",
+		["seasonExclusive"] = "summer"
+	},
+	["Mouse Pointer"] = {
+		["img"] = "Sheet12",
+		["description"] = "Click here to find out more!",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 1,
+		["sound"] = "Basic",
+		["by"] = "SkyTheFloof"
+	},
+	["Miffed"] = {
+		["img"] = "Sheet12",
+		["description"] = "J-just a little miffed. Not THAT mad, totally not, no way.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 3,
+		["sound"] = "Anger",
+		["by"] = "SkyTheFloof"
+	},
+	["YEOWZA!"] = {
+		["img"] = "Sheet12",
+		["description"] = "STOP SPAWN-KILLING ME AAAAHHH",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 3,
+		["sound"] = "BigScream",
+		["by"] = "SkyTheFloof"
+	},
+	["Nya?"] = {
+		["img"] = "Sheet12",
+		["description"] = ":3",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 3,
+		["sound"] = "Squeak2",
+		["by"] = "SkyTheFloof"
+	},
+	["Buh?"] = {
+		["img"] = "Sheet12",
+		["description"] = "Buh wha huh?!?",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Boing",
+		["by"] = "SkyTheFloof"
+	},
+	["Ticket"] = {
+		["img"] = "Sheet12",
+		["description"] = "BRING BACK TIX!!!!!!!",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 3,
+		["sound"] = "Roblox",
+		["by"] = "SkyTheFloof"
+	},
+	["Chortle"] = {
+		["img"] = "Sheet12",
+		["description"] = "Chortles! I have those!",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 3,
+		["sound"] = "FunnyLaugh",
+		["by"] = "SkyTheFloof"
+	},
+	["Meditative"] = {
+		["img"] = "Sheet12",
+		["description"] = "Inner spirit: awakened. Going ham in 5... 4... 3...",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 3,
+		["sound"] = "Harp",
+		["by"] = "SkyTheFloof"
+	},
+	["Yar Har Har"] = {
+		["img"] = "Sheet12",
+		["description"] = "On a scale from chuckle to belly laugh, this rates pretty high.",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 2,
+		["sound"] = "FunnyLaugh",
+		["by"] = "SkyTheFloof"
+	},
+	["T-Pose"] = {
+		["img"] = "Sheet12",
+		["description"] = "Be assertive!",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 4,
+		["sound"] = "MegaOof",
+		["by"] = "SkyTheFloof"
+	},
+	["Pitfall"] = {
+		["img"] = "Sheet12",
+		["description"] = "This is how indie game stories begin: falling into a hole.",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 3,
+		["sound"] = "Fall",
+		["by"] = "SkyTheFloof"
+	},
+	["Big Ol\' Bomb"] = {
+		["img"] = "Sheet12",
+		["description"] = "Stand back! I\'m warnin\' ya!",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 2,
+		["sound"] = "Scary",
+		["by"] = "SkyTheFloof"
+	},
+	["Snoozecat"] = {
+		["img"] = "Sheet12",
+		["description"] = "Fun & totally real fact: Cats spend 200% of the day sleeping.",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 3,
+		["sound"] = "Lullaby",
+		["by"] = "SkyTheFloof"
+	},
+	["Enraged"] = {
+		["img"] = "Sheet12",
+		["description"] = "You ruined my dream journal!",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 2,
+		["sound"] = "GuitarSmash",
+		["by"] = "SkyTheFloof"
+	},
+	["Chilly"] = {
+		["img"] = "Sheet12",
+		["description"] = "Brrr... someone PLEASE check the thermostat.",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 2,
+		["sound"] = "TeethChatter",
+		["by"] = "SkyTheFloof"
+	},
+	["World\'s On Fire"] = {
+		["img"] = "Sheet12",
+		["description"] = "At least the oil companies are okay, right?",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 2,
+		["sound"] = "Burning",
+		["by"] = "Polyhex",
+		["seasonExclusive"] = "summer"
+	},
+	["Swimming Ape"] = {
+		["img"] = "Sheet12",
+		["description"] = "Life could be a dream...",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 5,
+		["sound"] = "SwimmingApe",
+		["price"] = 1000,
+		["by"] = "Polyhex"
+	},
+	["Mooing Fish"] = {
+		["img"] = "Sheet12",
+		["description"] = "The theory of evolution, working as intended.",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 3,
+		["sound"] = "Moo",
+		["by"] = "SkyTheFloof"
+	},
+	["Little Creature"] = {
+		["img"] = "Sheet12",
+		["description"] = "Just a cute little creacher.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 2,
+		["sound"] = "Squeak2",
+		["by"] = "SkyTheFloof"
+	},
+	["Icecream Cat"] = {
+		["img"] = "Sheet9",
+		["description"] = "How could you eat something this cute?",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 2,
+		["sound"] = "Squish",
+		["by"] = "Oct_alienYT",
+		["seasonExclusive"] = "summer"
+	},
+	["Coconut Cat"] = {
+		["img"] = "Sheet9",
+		["description"] = "This cat is ready to bonk some people on the head.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 2,
+		["sound"] = "Donk",
+		["by"] = "Oct_alienYT"
+	},
+	["Red Sheesh"] = {
+		["img"] = "Sheet9",
+		["description"] = "SHEEEEEEEESH",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 4,
+		["sound"] = "Cool",
+		["price"] = 500,
+		["by"] = "Oct_alienYT"
+	},
+	["Green Joke"] = {
+		["img"] = "Sheet9",
+		["description"] = "Haha the zombie apocalypse was just a prank bro",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 3,
+		["sound"] = "Honk",
+		["by"] = "Oct_alienYT"
+	},
+	["Icecream Splat"] = {
+		["img"] = "Sheet9",
+		["description"] = "I guess that\'s one way to cool off.",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 2,
+		["sound"] = "Splat",
+		["by"] = "Oct_alienYT",
+		["seasonExclusive"] = "summer"
+	},
+	["Surfin\'"] = {
+		["img"] = "Sheet9",
+		["description"] = "Catch a wave! Bust a move! Do a third thing!",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 3,
+		["sound"] = "Ocean",
+		["by"] = "Oct_alienYT",
+		["seasonExclusive"] = "summer"
+	},
+	["Shroomguy"] = {
+		["img"] = "Sheet9",
+		["description"] = "All things considered, not a very fungi to be around.",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 2,
+		["sound"] = "Honk",
+		["by"] = "Oct_alienYT"
+	},
+	["Alrighty Then"] = {
+		["img"] = "Sheet9",
+		["description"] = "Hopes and dreams... shattered.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 2,
+		["sound"] = "Quack",
+		["by"] = "Oct_alienYT"
+	},
+	["Yellow Boi"] = {
+		["img"] = "Sheet9",
+		["description"] = "Oh shoot waddup",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 5,
+		["sound"] = "Comedy",
+		["by"] = "Oct_alienYT"
+	},
+	["Blue Clearly"] = {
+		["img"] = "Sheet9",
+		["description"] = "CLEARLY... you don\'t own a Crystal Blaster.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 5,
+		["sound"] = "BassDrop",
+		["price"] = 1000,
+		["by"] = "Oct_alienYT"
+	},
+	["Supercharge"] = {
+		["img"] = "Sheet9",
+		["description"] = "I\'m just sayin\'!",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 3,
+		["sound"] = "ChargeUp",
+		["by"] = "Oct_alienYT"
+	},
+	["Big Sip"] = {
+		["img"] = "Sheet9",
+		["description"] = "Supercharge your day with an absolutely massive soda.",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 3,
+		["sound"] = "Sip",
+		["by"] = "Oct_alienYT"
+	},
+	["Missing Texture"] = {
+		["img"] = "Sheet9",
+		["description"] = "ERROR: TEX_sticker_424 not found",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 4,
+		["sound"] = "Dialup",
+		["by"] = "SkyTheFloof"
+	},
+	["Green Lounging"] = {
+		["img"] = "Sheet10",
+		["description"] = "Who needs test tubes when you\'ve got an inner tube?",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 3,
+		["sound"] = "Ukelele",
+		["by"] = "JKusya",
+		["seasonExclusive"] = "summer"
+	},
+	["Zombie Ukelele"] = {
+		["img"] = "Sheet10",
+		["description"] = "All they wanna do is eat your brains.",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 3,
+		["sound"] = "Ukelele",
+		["by"] = "JKusya",
+		["seasonExclusive"] = "summer",
+		["price"] = 500
+	},
+	["Blue Rose"] = {
+		["img"] = "Sheet10",
+		["description"] = "He\'s probably posing in front of a mirror.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 3,
+		["sound"] = "CashRegister",
+		["by"] = "JKusya"
+	},
+	["Angel Spire"] = {
+		["img"] = "Sheet11",
+		["description"] = "Don\'t blow it up, it\'s totally harmless!",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 3,
+		["sound"] = "Harp",
+		["by"] = "JKusya"
+	},
+	["Demon Spire"] = {
+		["img"] = "Sheet11",
+		["description"] = "Can a building be evil? Ask high-rent apartments.",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 3,
+		["sound"] = "Evil",
+		["by"] = "JKusya"
+	},
+	["Green Burning"] = {
+		["img"] = "Sheet11",
+		["description"] = "This is fine. Just another day in the lab.",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 4,
+		["sound"] = "Burning",
+		["by"] = "JKusya"
+	},
+	["Summer Spire"] = {
+		["img"] = "Sheet11",
+		["description"] = "Even doomspires need some rest, apparently.",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 2,
+		["sound"] = "Sip",
+		["by"] = "JKusya",
+		["seasonExclusive"] = "summer"
+	},
+	["Cococat"] = {
+		["img"] = "Sheet11",
+		["description"] = "It\'s a coconut! It\'s a cat! Infer the rest for yourself!",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 1,
+		["sound"] = "Donk",
+		["by"] = "JKusya",
+		["seasonExclusive"] = "summer"
+	},
+	["Beg"] = {
+		["img"] = "Sheet13",
+		["description"] = "Extra treats, please!",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 3,
+		["sound"] = "SadDog",
+		["by"] = "JKusya"
+	},
+	["Red Pumped Up"] = {
+		["img"] = "Sheet13",
+		["description"] = "Get fired up! Get loud!",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 3,
+		["sound"] = "CheerYeah",
+		["by"] = "JKusya"
+	},
+	["Red Furious"] = {
+		["img"] = "Sheet13",
+		["description"] = "DID GREEN SERIOUSLY WIN 3 TIMES IN A ROW?!",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 3,
+		["sound"] = "Anger",
+		["by"] = "JKusya"
+	},
+	["Strongcat"] = {
+		["img"] = "Sheet13",
+		["description"] = "What the heck does this cat eat?!",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 5,
+		["sound"] = "PaintCatDeep",
+		["by"] = "JKusya",
+		["price"] = 850
+	},
+	["Clueless"] = {
+		["img"] = "Sheet13",
+		["description"] = "They don\'t even know.",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 4,
+		["sound"] = "Twang",
+		["by"] = "Polyhex",
+		["price"] = 500
+	},
+	["Cereal"] = {
+		["img"] = "Sheet13",
+		["description"] = "WHAT??? PPPBBPPBBBTTTTT",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 4,
+		["sound"] = "InnerScream",
+		["by"] = "Polyhex",
+		["price"] = 500
+	},
+	["Man"] = {
+		["img"] = "Sheet13",
+		["description"] = "A simply terrifying visage.",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 3,
+		["sound"] = "Scary",
+		["by"] = "Roblox"
+	},
+	["Wideface"] = {
+		["img"] = "Sheet13",
+		["description"] = "I\'m so relaxed, I\'m stretching horizontally.",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 2,
+		["sound"] = "Bork",
+		["by"] = "Polyhex"
+	},
+	["Wisecrack"] = {
+		["img"] = "Sheet13",
+		["description"] = "Ey, wise guy!",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 2,
+		["sound"] = "GuitarSmash",
+		["by"] = "Polyhex"
+	},
+	["Peaceful"] = {
+		["img"] = "Sheet13",
+		["description"] = "This is what true inner peace looks like.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 3,
+		["sound"] = "Honk",
+		["by"] = "Polyhex"
+	},
+	["Enjoyment"] = {
+		["img"] = "Sheet13",
+		["description"] = "Simply having a great time.",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 2,
+		["sound"] = "Blink",
+		["by"] = "Polyhex"
+	},
+	["Duck Grin"] = {
+		["img"] = "Sheet13",
+		["description"] = "You quack me up, little buddy.",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 3,
+		["sound"] = "Quack",
+		["by"] = "Polyhex"
+	},
+	["What Face"] = {
+		["img"] = "Sheet13",
+		["description"] = "le what",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 4,
+		["sound"] = "Quack",
+		["by"] = "Polyhex"
+	},
+	["Real"] = {
+		["img"] = "Sheet13",
+		["description"] = "N-no... what IS that horrible thing?!",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 5,
+		["sound"] = "Hello",
+		["by"] = "Polyhex"
+	},
+	["Green Glasses"] = {
+		["img"] = "Sheet13",
+		["description"] = "Everything is going according to plan... so far.",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 4,
+		["sound"] = "SlowMo",
+		["by"] = "Polyhex"
+	},
+	["Coconut Bonk"] = {
+		["img"] = "Sheet13",
+		["description"] = "HAHAHA! THAT GUY GOT HIT IN THE HEAD WITH A COCONUT",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 3,
+		["sound"] = "Donk",
+		["by"] = "Oct_alienYT"
+	},
+	["Doomscroll"] = {
+		["img"] = "Sheet13",
+		["description"] = "Super Doomscroller",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 3,
+		["sound"] = "DeathBell",
+		["by"] = "Oct_alienYT"
+	},
+	["Snout"] = {
+		["img"] = "Sheet13",
+		["description"] = "This dog can smell a Shadow Clone user from a mile away.",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 4,
+		["sound"] = "Honk",
+		["by"] = "Oct_alienYT"
+	},
+	["Caddywhack"] = {
+		["img"] = "Sheet13",
+		["description"] = "FIVE!! Wait, I mean FORE!!",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 2,
+		["sound"] = "MetalSlam",
+		["by"] = "Oct_alienYT"
+	},
+	["Umbrellade"] = {
+		["img"] = "Sheet13",
+		["description"] = "Gracefully catching gusts is the greatest element of the Umbrellade.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 2,
+		["sound"] = "Whoosh",
+		["by"] = "Oct_alienYT"
+	},
+	["Take This"] = {
+		["img"] = "Sheet13",
+		["description"] = "A shiny L to celebrate failure!",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 4,
+		["sound"] = "Laugh",
+		["by"] = "Oct_alienYT"
+	},
+	["Mermaid Cat"] = {
+		["img"] = "Sheet13",
+		["description"] = "A meowmaid, if you will.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 2,
+		["sound"] = "Ocean",
+		["by"] = "Oct_alienYT"
+	},
+	["Astronyaut"] = {
+		["img"] = "Sheet13",
+		["description"] = "One small step for cat, one large step for catkind.",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 2,
+		["sound"] = "SciFi2",
+		["by"] = "Oct_alienYT"
+	},
+	["Spinner"] = {
+		["img"] = "Sheet13",
+		["description"] = "Check this out! It spins for AGES. Yes, they\'re still cool.",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 3,
+		["sound"] = "Cool",
+		["by"] = "Oct_alienYT"
+	},
+	["Wistful Unicorn"] = {
+		["img"] = "Sheet13",
+		["description"] = "Do airplanes in the night sky really look like anything besides airplanes?",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 4,
+		["sound"] = "SadMusic",
+		["by"] = "Oct_alienYT"
+	},
+	["Wistful Bluejay"] = {
+		["img"] = "Sheet13",
+		["description"] = "Looks like they could really use a wish right about now.",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 4,
+		["sound"] = "SadMusic",
+		["by"] = "Oct_alienYT"
+	},
+	["Ninjacat"] = {
+		["img"] = "Sheet13",
+		["description"] = "Cats use their tails to balance themselves, and also smack people in the face.",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 2,
+		["sound"] = "Ninja",
+		["by"] = "Oct_alienYT"
+	},
+	["What Is This?"] = {
+		["img"] = "Sheet13",
+		["description"] = "Is it a pigeon, maybe?",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 2,
+		["sound"] = "Huh",
+		["by"] = "Oct_alienYT"
+	},
+	["Stunned Pianist"] = {
+		["img"] = "Sheet13",
+		["description"] = "Nothing shocks a crowd like a loud DUNNNNNNNNNN echoing throughout the room.",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 3,
+		["sound"] = "PianoSlam",
+		["by"] = "Oct_alienYT"
+	},
+	["Spoon"] = {
+		["img"] = "Sheet13",
+		["description"] = "Comically angelic.",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 3,
+		["sound"] = "Harp",
+		["by"] = "Oct_alienYT"
+	},
+	["Red Suffer"] = {
+		["img"] = "Sheet13",
+		["description"] = "Only two eyes could perceive this injustice.",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 4,
+		["sound"] = "Quack",
+		["by"] = "Oct_alienYT"
+	},
+	["Green Suffer"] = {
+		["img"] = "Sheet13",
+		["description"] = "Just smile through the agony.",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 4,
+		["sound"] = "Quack",
+		["by"] = "Oct_alienYT"
+	},
+	["Blue Suffer"] = {
+		["img"] = "Sheet13",
+		["description"] = "The pain is unbelievable!",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 4,
+		["sound"] = "Quack",
+		["by"] = "Oct_alienYT"
+	},
+	["Shungic"] = {
+		["img"] = "Sheet13",
+		["description"] = "No matter how hard you try to pursue them, you\'ll never be fast enough to catch up with this elusive nuisance.",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 5,
+		["sound"] = "Boing",
+		["by"] = "Polyhex"
+	},
+	["Choccy Milk"] = {
+		["img"] = "Sheet13",
+		["description"] = "Because you\'re epic.",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 5,
+		["sound"] = "Cool",
+		["by"] = "Polyhex"
+	},
+	["Yellow Plush"] = {
+		["img"] = "Sheet13",
+		["description"] = "The most marketable frog possible.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 4,
+		["sound"] = "Squeak2",
+		["by"] = "kijineko"
+	},
+	["Grandma Cheer"] = {
+		["img"] = "Sheet14",
+		["description"] = "She\'s here for what she thought was fencing practice. Well, there\'s no point in staring from the sidelines! Goooooooo Red!",
+		["offset"] = Vector2.new(1, 1),
+		["rarity"] = 4,
+		["sound"] = "CheerYeah",
+		["by"] = "ItsOctalien"
+	},
+	["Yellow Deflated"] = {
+		["img"] = "Sheet14",
+		["description"] = "Someone\'s been tracking dirt all over my cookbooks...",
+		["offset"] = Vector2.new(2, 1),
+		["rarity"] = 3,
+		["sound"] = "Bork",
+		["by"] = "ItsOctalien"
+	},
+	["Yellow Onesie"] = {
+		["img"] = "Sheet14",
+		["description"] = "Yellow King, swaddled in fluffy bunny pajamas!",
+		["offset"] = Vector2.new(3, 1),
+		["rarity"] = 4,
+		["sound"] = "Squeak",
+		["by"] = "ItsOctalien"
+	},
+	["Red Onesie"] = {
+		["img"] = "Sheet14",
+		["description"] = "Red Leader, swaddled in fluffy bunny pajamas!",
+		["offset"] = Vector2.new(4, 1),
+		["rarity"] = 4,
+		["sound"] = "Squeak2",
+		["by"] = "ItsOctalien"
+	},
+	["Green Onesie"] = {
+		["img"] = "Sheet14",
+		["description"] = "Green Scientist, swaddled in fluffy bunny pajamas!",
+		["offset"] = Vector2.new(5, 1),
+		["rarity"] = 4,
+		["sound"] = "TickTock",
+		["by"] = "ItsOctalien"
+	},
+	["Blue Onesie"] = {
+		["img"] = "Sheet14",
+		["description"] = "Blue Executive, swaddled in fluffy bunny pajamas!",
+		["offset"] = Vector2.new(6, 1),
+		["rarity"] = 4,
+		["sound"] = "Cough",
+		["by"] = "ItsOctalien"
+	},
+	["Snapdragon Pog"] = {
+		["img"] = "Sheet14",
+		["description"] = "When your fireball composts a few zombies, you gotta pog.",
+		["offset"] = Vector2.new(1, 2),
+		["rarity"] = 2,
+		["sound"] = "Booink",
+		["by"] = "ItsOctalien"
+	},
+	["Despair"] = {
+		["img"] = "Sheet14",
+		["description"] = "He made a Shungic reference in (current year)...",
+		["offset"] = Vector2.new(2, 2),
+		["rarity"] = 3,
+		["sound"] = "Boo",
+		["by"] = "ItsOctalien"
+	},
+	["Shattered"] = {
+		["img"] = "Sheet14",
+		["description"] = "You got all the way to checkout before realizing you left your wallet at home...",
+		["offset"] = Vector2.new(3, 2),
+		["rarity"] = 4,
+		["sound"] = "Glass",
+		["by"] = "ItsOctalien"
+	},
+	["Smug Chug"] = {
+		["img"] = "Sheet14",
+		["description"] = "Winners drink water -- Sparkling water.",
+		["offset"] = Vector2.new(4, 2),
+		["rarity"] = 4,
+		["sound"] = "BassDrop",
+		["by"] = "ItsOctalien"
+	},
+	["MLG"] = {
+		["img"] = "Sheet14",
+		["description"] = "Mom, get the camera!",
+		["offset"] = Vector2.new(5, 2),
+		["rarity"] = 5,
+		["sound"] = "Airhorn",
+		["by"] = "ItsOctalien"
+	},
+	["Fisheye"] = {
+		["img"] = "Sheet14",
+		["description"] = "What did you do to his drink?!",
+		["offset"] = Vector2.new(6, 2),
+		["rarity"] = 2,
+		["sound"] = "Pick",
+		["by"] = "ItsOctalien"
+	},
+	["You Tried"] = {
+		["img"] = "Sheet14",
+		["description"] = "This must be one of those blasted \'Participation Medals\' that\'s corrupting our youth!",
+		["offset"] = Vector2.new(1, 3),
+		["rarity"] = 5,
+		["sound"] = "PartyHorn",
+		["by"] = "ItsOctalien"
+	},
+	["The Slap"] = {
+		["img"] = "Sheet14",
+		["description"] = "Great silhouette, clear line of action -- Excellent form all around!",
+		["offset"] = Vector2.new(2, 3),
+		["rarity"] = 4,
+		["sound"] = "Smack",
+		["by"] = "ItsOctalien"
+	},
+	["Pan Champ"] = {
+		["img"] = "Sheet14",
+		["description"] = "Bopped by the pan & thrown in a fire.",
+		["offset"] = Vector2.new(3, 3),
+		["rarity"] = 4,
+		["sound"] = "MetalSlam",
+		["by"] = "ItsOctalien"
+	},
+	["Sticky Note"] = {
+		["img"] = "Sheet14",
+		["description"] = "Sticky notes let you slap a bit of \'environmental storytelling\' around the office.",
+		["offset"] = Vector2.new(4, 3),
+		["rarity"] = 3,
+		["sound"] = "Evil",
+		["by"] = "popstarpiranhas"
+	},
+	["Tiny Victory"] = {
+		["img"] = "Sheet14",
+		["description"] = "Doing a sick victory pose rakes in some extra Crowns, obviously.",
+		["offset"] = Vector2.new(5, 3),
+		["rarity"] = 4,
+		["sound"] = "PaintCat",
+		["by"] = "ItsOctalien & popstarpiranhas"
+	},
+	["Pickled Onion"] = {
+		["img"] = "Sheet14",
+		["description"] = "Onion here seems to be in quite the pickle...",
+		["offset"] = Vector2.new(6, 3),
+		["rarity"] = 3,
+		["sound"] = "Pluck",
+		["by"] = "ItsOctalien & popstarpiranhas"
+	},
+	["Peace Out"] = {
+		["img"] = "Sheet14",
+		["description"] = "Peace, I\'m out.",
+		["offset"] = Vector2.new(1, 4),
+		["rarity"] = 5,
+		["sound"] = "Ghost",
+		["by"] = "ItsOctalien"
+	},
+	["Brickbashed"] = {
+		["img"] = "Sheet14",
+		["description"] = "Call in the demolition crew! Brickbreaker users are empowered by their hatred for bricks.",
+		["offset"] = Vector2.new(2, 4),
+		["rarity"] = 4,
+		["sound"] = "Slam",
+		["by"] = "ItsOctalien"
+	},
+	["Point & Yell"] = {
+		["img"] = "Sheet14",
+		["description"] = "How DARE that Roundcat dine at this table!",
+		["offset"] = Vector2.new(3, 4),
+		["rarity"] = 3,
+		["sound"] = "BigScream",
+		["by"] = "ItsOctalien"
+	},
+	["Dining Roundcat"] = {
+		["img"] = "Sheet14",
+		["description"] = "He\'s probably being pointed & yelled at.",
+		["offset"] = Vector2.new(4, 4),
+		["rarity"] = 3,
+		["sound"] = "PaintCatDeep",
+		["by"] = "ItsOctalien"
+	},
+	["Pastel Pwnage"] = {
+		["img"] = "Sheet14",
+		["description"] = "The olivine-haired anime heroine! There are a few Pastel stickers pasted across Green\'s old university laptop.",
+		["offset"] = Vector2.new(5, 4),
+		["rarity"] = 5,
+		["sound"] = "Splat",
+		["by"] = "popstarpiranhas"
+	},
+	["Bamboo"] = {
+		["img"] = "Sheet14",
+		["description"] = "Yes, they\'re stuck.",
+		["offset"] = Vector2.new(6, 4),
+		["rarity"] = 2,
+		["sound"] = "Ninja",
+		["by"] = "ItsOctalien"
+	},
+	["Wingseeker Rider"] = {
+		["img"] = "Sheet14",
+		["description"] = "Across the night, I saw your face! You disappeared without a trace! You brought me here, but can you take me back?",
+		["offset"] = Vector2.new(1, 5),
+		["rarity"] = 4,
+		["sound"] = "Cool",
+		["by"] = "ItsOctalien"
+	},
+	["Dark Future"] = {
+		["img"] = "Sheet14",
+		["description"] = "This wasn\'t what the Snowfall Witches had in mind for the girl they plucked from the steppes...",
+		["offset"] = Vector2.new(2, 5),
+		["rarity"] = 5,
+		["sound"] = "Burning",
+		["by"] = "ItsOctalien"
+	},
+	["Astonished"] = {
+		["img"] = "Sheet14",
+		["description"] = "People default to this face when dogs pass them on the sidewalk.",
+		["offset"] = Vector2.new(3, 5),
+		["rarity"] = 4,
+		["sound"] = "RecordScratch",
+		["by"] = "ItsOctalien"
+	},
+	["Starry Gardener"] = {
+		["img"] = "Sheet14",
+		["description"] = "He\'s a \'Star-dener\' by trade. Wait, I got another one! He\'s watering some... \'Star-denias\'!",
+		["offset"] = Vector2.new(4, 5),
+		["rarity"] = 5,
+		["sound"] = "MagicShine",
+		["by"] = "ItsOctalien"
+	},
+	["Starry Stare"] = {
+		["img"] = "Sheet14",
+		["description"] = "Could you spectate a little less, please?",
+		["offset"] = Vector2.new(5, 5),
+		["rarity"] = 4,
+		["sound"] = "Boing",
+		["by"] = "ItsOctalien"
+	},
+	["Starry Squish"] = {
+		["img"] = "Sheet14",
+		["description"] = "This is how black holes form, right?",
+		["offset"] = Vector2.new(6, 5),
+		["rarity"] = 4,
+		["sound"] = "FunnySqueak",
+		["by"] = "ItsOctalien"
+	},
+	["Jobless"] = {
+		["img"] = "Sheet14",
+		["description"] = "They were laid off for failing to meet their Survivors Infected quota...",
+		["offset"] = Vector2.new(1, 6),
+		["rarity"] = 3,
+		["sound"] = "Trombone",
+		["by"] = "popstarpiranhas"
+	},
+	["Red Toy"] = {
+		["img"] = "Sheet14",
+		["description"] = "Red Leader, immortalized in plastic.",
+		["offset"] = Vector2.new(2, 6),
+		["rarity"] = 2,
+		["sound"] = "Sword",
+		["by"] = "Roblox"
+	},
+	["Green Toy"] = {
+		["img"] = "Sheet14",
+		["description"] = "Green Scientist, immortalized in plastic.",
+		["offset"] = Vector2.new(3, 6),
+		["rarity"] = 2,
+		["sound"] = "Bubbles",
+		["by"] = "Roblox"
+	},
+	["Blue Toy"] = {
+		["img"] = "Sheet14",
+		["description"] = "Blue Executive, immortalized in plastic.",
+		["offset"] = Vector2.new(4, 6),
+		["rarity"] = 2,
+		["sound"] = "CashRegister",
+		["by"] = "Roblox"
+	},
+	["Yellow Toy"] = {
+		["img"] = "Sheet14",
+		["description"] = "Yellow King, immortalized in plastic.",
+		["offset"] = Vector2.new(5, 6),
+		["rarity"] = 2,
+		["sound"] = "Frog",
+		["by"] = "Roblox"
+	},
+	["Yellow Manga"] = {
+		["img"] = "Sheet14",
+		["description"] = "Chapter 8 has Yellow King all croaked up.",
+		["offset"] = Vector2.new(6, 6),
+		["rarity"] = 3,
+		["sound"] = "Violin",
+		["by"] = "popstarpiranhas"
+	}
+}
+local v_u3 = {
+	25,
+	50,
+	120,
+	280,
+	420,
+	640
+}
+(function()
+	-- upvalues: (copy) v_u2, (copy) v_u3, (copy) v_u1
+	for v1, v2 in pairs(v_u2) do
+		if v2.price == nil then
+			v_u2[v1].price = v_u3[v2.rarity + 1]
+		end
+		v_u2[v1].img = v_u1[v2.img]
+		if not v_u2[v1].name then
+			v_u2[v1].name = v1
+		end
+		if v2.sound == nil or v2.sound == "" then
+			v2.sound = "Basic"
+		end
+		local _ = v2.deleteThis
+	end
+end)()
+return v_u2

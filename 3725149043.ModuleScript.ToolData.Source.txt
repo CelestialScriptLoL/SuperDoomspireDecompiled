@@ -1,0 +1,2527 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u3 = v1("Shared/PlayerData")
+local v_u_collection = game:GetService("CollectionService")
+local v4 = v1("Shared/Utils/MakePart")
+local v5 = v1("Shared/Utils/MakeBridge")
+local v6 = v1("Shared/Utils/MakeTruss")
+local v7 = v1("Shared/Utils/MakeCage")
+local v8 = v1("Shared/Utils/MakeShadow")
+local v9 = v1("Shared/Data/WeaponConstants")
+local v_u10 = v1("Shared/Data/TeamData")
+local v11 = v1("Shared/Data/Prices")
+local v12 = v1("Shared/Data/BrickCosts")
+local v_u13 = v1("Shared/Utils/FastSpawn")
+local v_u_tween = game:GetService("TweenService")
+local v_u14 = {}
+local v15 = {
+	["name"] = "Sword",
+	["model"] = "Assets/Tools/Sword",
+	["serverBehavior"] = "ServerTools/Sword",
+	["clientBehavior"] = "ClientTools/Sword",
+	["description"] = "Use Lunge for a quick charge forwards, or attack in midair for a spinning flip!",
+	["slot"] = "SWORD",
+	["rarity"] = 0,
+	["lungeTime"] = 0.66,
+	["previewRotation"] = Vector3.new(45, 90, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SwordRed",
+		["Yellow"] = "rbxgameasset://Images/SwordYellow",
+		["Green"] = "rbxgameasset://Images/SwordGreen",
+		["Blue"] = "rbxgameasset://Images/SwordBlue",
+		["Spectators"] = "rbxgameasset://Images/SwordSpectators"
+	},
+	["sounds"] = {
+		["Slash"] = "SwordSlash",
+		["Strike"] = "SwordStrike",
+		["Lunge"] = "SwordLunge",
+		["Spin"] = "SwordSpin",
+		["Charged"] = "SwordCharged",
+		["Draw"] = "SwordDraw"
+	},
+	["spin"] = true,
+	["initFunc"] = function(arg1, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(0.5, arg1.TeamColor.Color), ColorSequenceKeypoint.new(1, arg1.TeamColor.Color) })
+	end,
+	["MESH_SCALE"] = Vector3.new(0.3, 0.3, 0.3),
+	["MESH_SCALE_SMEAR"] = Vector3.new(0.7, 0.3, 0.3),
+	["specialAttack"] = "Lunge",
+	["swingSpeed"] = 1,
+	["stats"] = {
+		["neutral"] = { "Special move: Lunge" }
+	},
+	["visualEvent"] = true
+}
+v_u14.Sword = v15
+local v16 = {
+	["name"] = "Rocket Launcher",
+	["model"] = "Assets/Tools/Rocket Launcher",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Low-impact explosives for long-range kaboom.",
+	["slot"] = "ROCKET",
+	["rarity"] = 0,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "Rocket",
+	["explodeParticle"] = "Explosions",
+	["sounds"] = {
+		["Fire"] = "RocketFire",
+		["Reload"] = "RocketLoad",
+		["Explode"] = "ExplosionRocket"
+	}
+}
+v_u14["Rocket Launcher"] = v16
+local v17 = {
+	["name"] = "Bomb",
+	["model"] = "Assets/Tools/Bomb",
+	["serverBehavior"] = "ServerTools/Bomb",
+	["clientBehavior"] = "ClientTools/Bomb",
+	["description"] = "Useful for blowing up enemy towers, or jumping high using your own explosions. Use the Plant special attack to stick it to the ground.",
+	["slot"] = "BOMB",
+	["rarity"] = 0,
+	["ticks"] = 8,
+	["previewRotation"] = Vector3.new(30, 0, 15),
+	["reloadTime"] = v9.BOMB_RELOAD_TIME,
+	["sounds"] = {
+		["Tick"] = "BombTick",
+		["PlantedTick"] = "BombTick2",
+		["explode"] = "Explosion"
+	},
+	["stats"] = {
+		["neutral"] = { "\'Plant\' move details:", "Smaller explosion, better bomb jump" }
+	}
+}
+v_u14.Bomb = v17
+local v18 = {
+	["name"] = "Superball",
+	["model"] = "Assets/Tools/Superball",
+	["knockbackModifier"] = 1.25,
+	["serverBehavior"] = "ServerTools/Ball",
+	["clientBehavior"] = "ClientTools/Ball",
+	["description"] = "Toss it to knock people over. Hold the fire button down for more throwing speed.",
+	["slot"] = "BALL",
+	["rarity"] = 0,
+	["reload"] = 1.6,
+	["previewRotation"] = Vector3.new(0, 0, 0),
+	["sounds"] = {
+		["Throw"] = "BallThrow",
+		["Reload"] = "BallReload"
+	}
+}
+v_u14.Superball = v18
+local v19 = {
+	["name"] = "Trowel",
+	["model"] = "Assets/Tools/Trowel",
+	["serverBehavior"] = "ServerTools/Trowel",
+	["clientBehavior"] = "ClientTools/Trowel",
+	["description"] = "Builds a brick wall wherever you fire it. Reinforce your base or protect yourself!",
+	["slot"] = "TROWEL",
+	["rarity"] = 0,
+	["reload"] = v9.TROWEL_RELOAD,
+	["previewRotation"] = Vector3.new(0, 0, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SwordRed",
+		["Yellow"] = "rbxgameasset://Images/SwordYellow",
+		["Green"] = "rbxgameasset://Images/SwordGreen",
+		["Blue"] = "rbxgameasset://Images/SwordBlue",
+		["Spectators"] = "rbxgameasset://Images/SwordSpectators"
+	},
+	["trowelOffset"] = CFrame.Angles(-1.5707963267948966, 0, 0),
+	["constructionMessage"] = "MakeBrickConstruction",
+	["partCreationFunction"] = v4,
+	["propSize"] = Vector3.new(8, 7, 2),
+	["brickCost"] = v12.Brick,
+	["previewBuilding"] = "Wall",
+	["noPatches"] = true
+}
+v_u14.Trowel = v19
+local v20 = {
+	["name"] = "Sticky Bomb",
+	["model"] = "Assets/Tools/Sticky Bomb",
+	["serverBehavior"] = "ServerTools/Sticky Bomb",
+	["clientBehavior"] = "ClientTools/Sticky Bomb",
+	["description"] = "A throwable bomb. Sticks to surfaces, then explodes. How tricky and/or sneaky!",
+	["slot"] = "BOMB",
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(30, 0, 15),
+	["recolorParts"] = {
+		["Bomb"] = "explosives"
+	},
+	["stats"] = {
+		["positive"] = { "Can be thrown", "Sticks to surfaces & players" },
+		["negative"] = { "-10% blast radius & damage" }
+	},
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "BombReload",
+		["Explode"] = "Explosion"
+	}
+}
+v_u14["Sticky Bomb"] = v20
+local v21 = {
+	["name"] = "Ball Turret",
+	["model"] = "Assets/Tools/Wrench",
+	["serverBehavior"] = "ServerTools/Ball Turret",
+	["clientBehavior"] = "ClientTools/Ball Turret",
+	["description"] = "*swedish voice* build them up! haha",
+	["slot"] = "TROWEL",
+	["rarity"] = 4,
+	["constructionMessage"] = "MakeBallTurret",
+	["prefab"] = "BallTurret",
+	["noRoundcat"] = true,
+	["reloadTime"] = 8,
+	["knockback"] = false,
+	["projectile"] = "TurretBall",
+	["previewRotation"] = Vector3.new(0, 0, 0),
+	["trowelOffset"] = CFrame.Angles(-1.5707963267948966, 0, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	},
+	["buildLimit"] = 2,
+	["brickCost"] = v12["Ball Turret"],
+	["previewBuilding"] = "BallTurret",
+	["noPatches"] = false
+}
+v_u14["Ball Turret"] = v21
+local v22 = {
+	["name"] = "Paintball Gun",
+	["model"] = "Assets/Tools/Paintball Gun",
+	["serverBehavior"] = "ServerTools/Gun",
+	["clientBehavior"] = "ClientTools/Gun",
+	["gun"] = true,
+	["description"] = "Paint the town red! Or whatever color, really.",
+	["slot"] = "BALL",
+	["particle"] = "Paint",
+	["projectile"] = "Paintball",
+	["reflectAccuracy"] = 6,
+	["projectileGravity"] = 1,
+	["rarity"] = 1,
+	["reload"] = 0.4,
+	["damage"] = 14,
+	["speed"] = 300,
+	["fireSound"] = "PaintShoot",
+	["impactSound"] = "Splat",
+	["previewRotation"] = Vector3.new(-20, -70, 0),
+	["stats"] = {
+		["negative"] = { "Can be reflected" }
+	}
+}
+v_u14["Paintball Gun"] = v22
+local v23 = {
+	["name"] = "Slingshot",
+	["model"] = "Assets/Tools/Slingshot",
+	["serverBehavior"] = "ServerTools/Gun",
+	["clientBehavior"] = "ClientTools/Gun",
+	["gun"] = true,
+	["description"] = "This trusty old slingshot is good for medium-range combat.",
+	["slot"] = "BALL",
+	["projectile"] = "Pellet",
+	["projectileGravity"] = 3,
+	["projectileOffset"] = Vector3.new(0, 1.5, 0),
+	["rarity"] = 2,
+	["reload"] = 0.7,
+	["damage"] = 22,
+	["speed"] = 140,
+	["fireSound"] = "SlingshotFire",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SlingshotRed",
+		["Yellow"] = "rbxgameasset://Images/SlingshotYellow",
+		["Green"] = "rbxgameasset://Images/SlingshotGreen",
+		["Blue"] = "rbxgameasset://Images/SlingshotBlue",
+		["Spectators"] = "rbxgameasset://Images/SlingshotSpectators"
+	},
+	["impactSound"] = "HitPellet",
+	["particle"] = "TinyImpact",
+	["previewRotation"] = Vector3.new(-20, -10, 0),
+	["stats"] = {
+		["positive"] = { "Can\'t be reflected" }
+	},
+	["fireFunction"] = function(arg1)
+		-- upvalues: (copy) v_u_tween
+		if not arg1.tween then
+			arg1.tween = v_u_tween:Create(arg1.tool.RubberBand.Mesh, TweenInfo.new(0.35, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {
+				["Scale"] = Vector3.new(2, 2, 0),
+				["Offset"] = Vector3.new(0, 0, 0)
+			})
+		end
+		arg1.tool.RubberBand.Mesh.Scale = Vector3.new(2, 2, 3)
+		arg1.tween:Play()
+		arg1.tool.Pellet.Transparency = 1
+	end,
+	["reloadFunction"] = function(arg1)
+		arg1.tool.Pellet.Transparency = 0
+		arg1.tool.RubberBand.Mesh.Scale = Vector3.new(2, 2, 2)
+		arg1.tool.RubberBand.Mesh.Offset = Vector3.new(0, 0, 0.3)
+	end
+}
+v_u14.Slingshot = v23
+local function v24(arg1, arg2, arg3)
+	-- upvalues: (copy) v_u14
+	local v1 = {}
+	for v2, v3 in pairs(v_u14[arg1]) do
+		v1[v2] = v3
+	end
+	for v4, v5 in pairs(arg3) do
+		v1[v4] = v5
+	end
+	v1.name = arg2
+	if not (v1.partCreationFunction or v1.notASkin) then
+		v1.baseTool = v_u14[arg1].name
+	end
+	v_u14[arg2] = v1
+end
+local v25 = {
+	["name"] = "Remote Detonator",
+	["model"] = "Assets/Tools/Remote Detonator",
+	["clientBehavior"] = "ClientTools/Remote Detonator",
+	["serverBehavior"] = "ServerTools/Remote Detonator",
+	["description"] = "Now you can bomb enemies, towers, and yourself! All without ever leaving the house!",
+	["slot"] = "BOMB",
+	["notASkin"] = true,
+	["rarity"] = 4,
+	["reloadModifier"] = 1,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["startAnimation"] = "ThrowStart",
+	["loopAnimation"] = "ThrowLoop",
+	["throwAnimation"] = "Throw",
+	["textures"] = {
+		["Red"] = "rbxassetid://4516643634",
+		["Yellow"] = "rbxassetid://4516997419",
+		["Green"] = "rbxassetid://4516995841",
+		["Blue"] = "rbxassetid://4516997143",
+		["Spectators"] = "rbxassetid://4520193992"
+	},
+	["stats"] = {
+		["neutral"] = { "Charge to decrease arming time" },
+		["positive"] = { "Throw multiple bombs", "Detonate from anywhere" },
+		["negative"] = { "-20% blast radius" }
+	}
+}
+v24("Sticky Bomb", "Remote Detonator", v25)
+local v26 = {
+	["name"] = "Firework Launcher",
+	["model"] = "Assets/Tools/Firework Launcher",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "These fireworks will make you go \'oooh, aaah! AAAAAAHHH!!\'",
+	["slot"] = "ROCKET",
+	["rarity"] = 2,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "RocketFirework",
+	["explodeParticle"] = "Fireworks",
+	["sounds"] = {
+		["Fire"] = "FireworkFire",
+		["Reload"] = "RocketLoad",
+		["Explode"] = "ExplosionFireworks"
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/FireworkRed",
+		["Yellow"] = "rbxgameasset://Images/FireworkYellow",
+		["Green"] = "rbxgameasset://Images/FireworkGreen",
+		["Blue"] = "rbxgameasset://Images/FireworkBlue",
+		["Spectators"] = "rbxgameasset://Images/FireworkSpectator"
+	}
+}
+v24("Rocket Launcher", "Firework Launcher", v26)
+local v27 = {
+	["name"] = "Eggveloper Cannon 9001",
+	["model"] = "Assets/Tools/Eggveloper Cannon 9001",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Get out there & launch some eggs! Happy Egg Hunt!",
+	["slot"] = "ROCKET",
+	["rarity"] = 6,
+	["notASkin"] = true,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "EggDev",
+	["notAvailable"] = true,
+	["notInShop"] = true,
+	["reloadFunc"] = v9.EGGHUNT_RELOAD_TIME,
+	["explodeParticle"] = "Fireworks",
+	["sounds"] = {
+		["Explode"] = "ExplosionFireworks"
+	}
+}
+v24("Rocket Launcher", "Eggveloper Cannon 9001", v27)
+local v28 = {
+	["name"] = "Eggmin Cannon 9000",
+	["model"] = "Assets/Tools/Eggmin Cannon 9000",
+	["description"] = "Get out there & launch some eggs! Happy Egg Hunt!",
+	["slot"] = "ROCKET",
+	["rarity"] = 6,
+	["notASkin"] = true,
+	["notAvailable"] = true,
+	["notInShop"] = true,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "EggAdmin",
+	["sounds"] = {
+		["Explode"] = "ExplosionFireworks"
+	}
+}
+v24("Eggveloper Cannon 9001", "Eggmin Cannon 9000", v28)
+local v29 = {
+	["name"] = "Star Creaeggtor Cannon 9002",
+	["model"] = "Assets/Tools/Star Creaeggtor Cannon 9002",
+	["description"] = "Get out there & launch some eggs! Happy Egg Hunt!",
+	["slot"] = "ROCKET",
+	["rarity"] = 6,
+	["notASkin"] = true,
+	["notAvailable"] = true,
+	["notInShop"] = true,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "EggStars",
+	["sounds"] = {
+		["Explode"] = "ExplosionFireworks"
+	}
+}
+v24("Eggveloper Cannon 9001", "Star Creaeggtor Cannon 9002", v29)
+local v30 = {
+	["name"] = "Scope Shot",
+	["model"] = "Assets/Tools/Scope Shot",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "A heavily modified telescope. Make your opponents see stars with your rockets!",
+	["slot"] = "ROCKET",
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["reloadFunc"] = v9.DIRECT_RELOAD_TIME,
+	["projectile"] = "SpaceRocket",
+	["explodeParticle"] = "Explosions",
+	["sounds"] = {
+		["Fire"] = "ScopeShotFire",
+		["Reload"] = "RocketLoad",
+		["Explode"] = "ExplosionRocket"
+	},
+	["notASkin"] = true,
+	["stats"] = {
+		["positive"] = { "+80% rocket speed", "+80% damage dealt" },
+		["negative"] = { "-30% blast radius" }
+	}
+}
+v24("Rocket Launcher", "Scope Shot", v30)
+local v31 = {
+	["name"] = "Bombardier",
+	["model"] = "Assets/Tools/Bombardier",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "It\'s raining rockets! Aim high with this launcher- its projectiles travel in an arc.",
+	["slot"] = "ROCKET",
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["reloadFunc"] = v9.BOMBARDIER_RELOAD_TIME,
+	["projectile"] = "BombRocket",
+	["explodeParticle"] = "Explosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionRocket"
+	},
+	["notASkin"] = true,
+	["stats"] = {
+		["neutral"] = { "Rockets travel in an arc" },
+		["positive"] = { "+30% blast radius", "Damage increases as it flies" },
+		["negative"] = { "+20% reload time", "-15% walkspeed while holding" }
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	}
+}
+v24("Rocket Launcher", "Bombardier", v31)
+local v32 = {
+	["name"] = "Starblaster",
+	["model"] = "Assets/Tools/Starblaster",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "You\'ve heard of shooting stars, but have you ever tried SHOOTING stars?",
+	["rarity"] = 5,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "StarRocket",
+	["baseTool"] = "Bombardier",
+	["explodeParticle"] = "StarExplosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionRocket"
+	},
+	["notASkin"] = false,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/starshooterRed",
+		["Yellow"] = "rbxgameasset://Images/starshooterYellow",
+		["Green"] = "rbxgameasset://Images/starshooterGreen",
+		["Blue"] = "rbxgameasset://Images/starshooterBlue",
+		["Spectators"] = "rbxgameasset://Images/starshooterSpectators"
+	}
+}
+v24("Bombardier", "Starblaster", v32)
+local v33 = {
+	["name"] = "Kitty Launcher",
+	["model"] = "Assets/Tools/Kitty Launcher",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Cats always land on their feet. Rockets always land in my face. C\'est la vie.",
+	["slot"] = "ROCKET",
+	["baseTool"] = "Scope Shot",
+	["notASkin"] = false,
+	["rarity"] = 5,
+	["previewRotation"] = Vector3.new(-15, -35, 0),
+	["projectile"] = "CatRocket",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/CatLauncherRed",
+		["Yellow"] = "rbxgameasset://Images/CatLauncherYellow",
+		["Green"] = "rbxgameasset://Images/CatLauncherGreen",
+		["Blue"] = "rbxgameasset://Images/CatLauncherBlue",
+		["Spectators"] = "rbxgameasset://Images/CatLauncherSpectators"
+	}
+}
+v24("Scope Shot", "Kitty Launcher", v33)
+local v34 = {
+	["name"] = "Hoss Hog",
+	["model"] = "Assets/Tools/Hoss Hog",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Once a motorcycle, now a rocket launcher. Rev it up and show your foes a highway to pain!",
+	["slot"] = "ROCKET",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "EngineRocket",
+	["explodeParticle"] = "Explosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionHog"
+	},
+	["notASkin"] = true,
+	["reloadFunc"] = v9.HOTROD_RELOAD_TIME,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/HotRodRed",
+		["Yellow"] = "rbxgameasset://Images/HotRodYellow",
+		["Green"] = "rbxgameasset://Images/HotRodGreen",
+		["Blue"] = "rbxgameasset://Images/HotRodBlue",
+		["Spectators"] = "rbxgameasset://Images/HotRodSpectators"
+	},
+	["stats"] = {
+		["positive"] = { "-15% reload time", "+25% bomb jump & rocket speed" },
+		["negative"] = { "Explosions deal self-damage", "-15% blast radius & damage", "Cannot stagger enemies" }
+	},
+	["visualEvent"] = true
+}
+v24("Rocket Launcher", "Hoss Hog", v34)
+local v35 = {
+	["name"] = "Spooky Staff",
+	["model"] = "Assets/Tools/Spooky Staff",
+	["noAmmoDummy"] = true,
+	["ammoDoesAppear"] = true,
+	["rarity"] = 5,
+	["seasonExclusive"] = "autumn",
+	["projectile"] = "SkullRocket",
+	["notASkin"] = false,
+	["previewRotation"] = Vector3.new(25, 0, 10),
+	["description"] = "This staff has a curse on it! It doesn\'t SAY curses, though, because then Roblox would delete our game.",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/skullstaffRed",
+		["Yellow"] = "rbxgameasset://Images/skullstaffYellow",
+		["Green"] = "rbxgameasset://Images/skullstaffGreen",
+		["Blue"] = "rbxgameasset://Images/skullstaffBlue",
+		["Spectators"] = "rbxgameasset://Images/skullstaffSpectators"
+	}
+}
+v24("Hoss Hog", "Spooky Staff", v35)
+local v36 = {
+	["name"] = "Frost Staff",
+	["model"] = "Assets/Tools/Frost Staff",
+	["notASkin"] = true,
+	["noAmmoDummy"] = true,
+	["ammoDoesAppear"] = true,
+	["seasonExclusive"] = false,
+	["rarity"] = 2,
+	["projectile"] = "IceRocket",
+	["explodeParticle"] = "SnowExplosions",
+	["sounds"] = {
+		["Explode"] = "IceRocketBoom"
+	},
+	["previewRotation"] = Vector3.new(25, 0, 10),
+	["reloadFunc"] = v9.ROCKET_RELOAD_TIME,
+	["description"] = "Witches of the Snowfall Coven imbued this staff with the power of ice. Wield it responsibly!",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/FrostStaffRed",
+		["Yellow"] = "rbxgameasset://Images/FrostStaffYellow",
+		["Green"] = "rbxgameasset://Images/FrostStaffGreen",
+		["Blue"] = "rbxgameasset://Images/FrostStaffBlue",
+		["Spectators"] = "rbxgameasset://Images/FrostStaffSpectators"
+	},
+	["stats"] = {
+		["positive"] = { "Chills enemies" },
+		["negative"] = { "-40% explosion damage" }
+	}
+}
+v24("Spooky Staff", "Frost Staff", v36)
+local v37 = {
+	["name"] = "Ice Cream Launcher",
+	["model"] = "Assets/Tools/Ice Cream Launcher",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Send \'em straight to the dentist with this destructive dairy treat!",
+	["seasonExclusive"] = "summer",
+	["notASkin"] = false,
+	["noAmmoDummy"] = false,
+	["ammoDoesAppear"] = false,
+	["slot"] = "ROCKET",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "IceCreamRocket",
+	["explodeParticle"] = "IceCreamExplosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionIceCream"
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/IceCreamLauncherRed",
+		["Yellow"] = "rbxgameasset://Images/IceCreamLauncherYellow",
+		["Green"] = "rbxgameasset://Images/IceCreamLauncherGreen",
+		["Blue"] = "rbxgameasset://Images/IceCreamLauncherBlue",
+		["Spectators"] = "rbxgameasset://Images/IceCreamLauncherSpectators"
+	}
+}
+v24("Frost Staff", "Ice Cream Launcher", v37)
+local v38 = {
+	["name"] = "Shadow Dragon",
+	["model"] = "Assets/Tools/Shadow Dragon",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "\227\130\185\227\131\188\227\131\145\227\131\188 \227\130\183\227\131\163\227\131\137\227\130\166",
+	["slot"] = "ROCKET",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "ShadowRocket",
+	["explodeParticle"] = "ShadowExplosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionHog"
+	},
+	["notASkin"] = true,
+	["reloadFunc"] = v9.SHADOW_RELOAD_TIME,
+	["textures"] = {
+		["Red"] = "rbxassetid://4504394559",
+		["Yellow"] = "rbxassetid://4504394603",
+		["Green"] = "rbxassetid://4504394537",
+		["Blue"] = "rbxassetid://4504394505",
+		["Spectators"] = "rbxassetid://4508444879"
+	},
+	["stats"] = {
+		["positive"] = { "Can cause burning", "+25% blast radius", "+50% blast damage" },
+		["negative"] = { "+30% reload time" }
+	}
+}
+v24("Rocket Launcher", "Shadow Dragon", v38)
+local v39 = {
+	["name"] = "Lunar Dragon",
+	["model"] = "Assets/Tools/Lunar Dragon",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Fireworks are a great way to commemorate the Lunar New Year. They\'re also a great way to destroy doomspires!",
+	["slot"] = "ROCKET",
+	["rarity"] = 5,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "LunarRocket",
+	["explodeParticle"] = "Fireworks",
+	["sounds"] = {
+		["Explode"] = "ExplosionFireworks"
+	},
+	["notASkin"] = false,
+	["baseTool"] = "Shadow Dragon",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/DragonRed",
+		["Yellow"] = "rbxgameasset://Images/DragonYellow",
+		["Green"] = "rbxgameasset://Images/DragonGreen",
+		["Blue"] = "rbxgameasset://Images/DragonBlue",
+		["Spectators"] = "rbxgameasset://Images/DragonSpectators"
+	},
+	["stats"] = {
+		["positive"] = { "Can cause burning", "+25% blast radius", "+50% blast damage" },
+		["negative"] = { "+30% reload time" }
+	}
+}
+v24("Shadow Dragon", "Lunar Dragon", v39)
+local v40 = {
+	["name"] = "Arm Cannon",
+	["model"] = "Assets/Tools/Arm Cannon",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Usually, these are used by robots, but bounty hunters & cyborgs don\'t mind. And neither should you!",
+	["slot"] = "ROCKET",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["noAmmoDummy"] = true,
+	["projectile"] = "BusterShot",
+	["chargeTime"] = 3,
+	["chargeProjectile"] = "BusterShotBig",
+	["explodeParticle"] = "BusterExplosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionBuster"
+	},
+	["notASkin"] = true,
+	["reloadFunc"] = v9.BUSTER_RELOAD_TIME,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BusterCannonRed",
+		["Yellow"] = "rbxgameasset://Images/BusterCannonYellow",
+		["Green"] = "rbxgameasset://Images/BusterCannonGreen",
+		["Blue"] = "rbxgameasset://Images/BusterCannonBlue",
+		["Spectators"] = "rbxgameasset://Images/BusterCannonSpectators"
+	},
+	["stats"] = {
+		["positive"] = { "-400% reload time", "+30% bomb jump" },
+		["negative"] = { "Only explodes if charged" }
+	}
+}
+v24("Rocket Launcher", "Arm Cannon", v40)
+local v41 = {
+	["name"] = "Bow",
+	["model"] = "Assets/Tools/Bow",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Let arrows fly, like a majestic elf would. Charge for a stronger, truer shot.",
+	["slot"] = "BALL",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "Arrow",
+	["chargeTime"] = 1,
+	["chargeProjectile"] = "ArrowBig",
+	["explodeParticle"] = "BusterExplosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionBuster"
+	},
+	["impactSound"] = "HitPellet",
+	["particle"] = "TinyImpact",
+	["notASkin"] = true,
+	["reloadFunc"] = v9.BOW_RELOAD_TIME,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SwordDarkRed",
+		["Yellow"] = "rbxgameasset://Images/SwordDarkYellow",
+		["Green"] = "rbxgameasset://Images/SwordDarkGreen",
+		["Blue"] = "rbxgameasset://Images/SwordDarkBlue",
+		["Spectators"] = "rbxgameasset://Images/SwordDarkSpectators"
+	},
+	["stats"] = {
+		["positive"] = { "" },
+		["negative"] = { "" }
+	},
+	["visualEvent"] = true
+}
+v24("Rocket Launcher", "Bow", v41)
+local v42 = {
+	["name"] = "Tennis Racket",
+	["model"] = "Assets/Tools/Tennis Racket",
+	["description"] = "Knocks back rockets at double the speed! Can also fire tennis balls. Serve up some pain!",
+	["slot"] = "SWORD",
+	["rarity"] = 1,
+	["previewRotation"] = Vector3.new(0, 20, 30),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SwordRed",
+		["Yellow"] = "rbxgameasset://Images/SwordYellow",
+		["Green"] = "rbxgameasset://Images/SwordGreen",
+		["Blue"] = "rbxgameasset://Images/SwordBlue",
+		["Spectators"] = "rbxgameasset://Images/SwordSpectators"
+	},
+	["sounds"] = {
+		["Slash"] = "FireSlash",
+		["Strike"] = "FireStrike",
+		["Lunge"] = "FireProjectile",
+		["Spin"] = "FireSpin",
+		["Charged"] = "SwordCharged",
+		["Draw"] = "SwordDraw"
+	},
+	["MESH_SCALE"] = Vector3.new(1, 1, 1),
+	["MESH_SCALE_SMEAR"] = Vector3.new(1, 1, 1.6),
+	["projectile"] = "TennisBall",
+	["specialAttack"] = "Serve",
+	["reflectSound"] = "RacketSmack",
+	["noStrike"] = true,
+	["StrongSwing"] = true,
+	["notASkin"] = true,
+	["swingSpeed"] = 0.67,
+	["reloadModifier"] = 0.83,
+	["stats"] = {
+		["neutral"] = { "Special move: Serve" },
+		["positive"] = { "+150% reflect power", "+10% swing speed & range", "+50% knockback" },
+		["negative"] = { "No strike attack" }
+	}
+}
+v24("Sword", "Tennis Racket", v42)
+local v43 = {
+	["name"] = "Greatsword",
+	["model"] = "Assets/Tools/Greatsword",
+	["description"] = "Sometimes a regular-sized sword just isn\'t enough. You need a greatsword!",
+	["slot"] = "SWORD",
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(45, 90, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SwordRed",
+		["Yellow"] = "rbxgameasset://Images/SwordYellow",
+		["Green"] = "rbxgameasset://Images/SwordGreen",
+		["Blue"] = "rbxgameasset://Images/SwordBlue",
+		["Spectators"] = "rbxgameasset://Images/SwordSpectators"
+	},
+	["MESH_SCALE"] = Vector3.new(2.2, 2.2, 2.2),
+	["MESH_SCALE_SMEAR"] = Vector3.new(2.2, 2.2, 3.6),
+	["specialAttack"] = "Great Spin",
+	["noStrike"] = true,
+	["notASkin"] = true,
+	["swingSpeed"] = 2.4,
+	["midairSpeedModifier"] = 0.19,
+	["reloadModifier"] = 1.4,
+	["lungeTime"] = 0.8,
+	["ragdollResist"] = true,
+	["stats"] = {
+		["neutral"] = { "Special move: Great Spin" },
+		["positive"] = { "+60% damage & range", "+25% ragdoll resist while holding" },
+		["negative"] = { "-100% swing speed", "-20% walkspeed while holding" }
+	}
+}
+v24("Sword", "Greatsword", v43)
+local v44 = {
+	["name"] = "Homerunner",
+	["model"] = "Assets/Tools/Homerunner",
+	["description"] = "Hey, batter batter, swing! Use Home Run to send enemies into the outfield!",
+	["slot"] = "SWORD",
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(45, 90, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BatRed",
+		["Yellow"] = "rbxgameasset://Images/BatYellow",
+		["Green"] = "rbxgameasset://Images/BatGreen",
+		["Blue"] = "rbxgameasset://Images/BatBlue",
+		["Spectators"] = "rbxgameasset://Images/BatSpectators"
+	},
+	["MESH_SCALE"] = Vector3.new(1.5, 1.5, 1.5),
+	["MESH_SCALE_SMEAR"] = Vector3.new(3, 1.5, 1.5),
+	["specialAttack"] = "Home Run",
+	["noStrike"] = true,
+	["notASkin"] = true,
+	["swingSpeed"] = 1.15,
+	["midairSpeedModifier"] = 0.85,
+	["reloadModifier"] = 0.8,
+	["reflectSound"] = "BatSmack",
+	["stats"] = {
+		["neutral"] = { "Special move: Home Run" },
+		["positive"] = { "+100% reflect power & knockback" },
+		["negative"] = { "-15% swing speed", "No strike attack" }
+	}
+}
+v24("Sword", "Homerunner", v44)
+local v45 = {
+	["name"] = "Frying Pan",
+	["model"] = "Assets/Tools/Frying Pan",
+	["description"] = "Out of the frying pan, into the doomspire!",
+	["slot"] = "SWORD",
+	["rarity"] = 4,
+	["notASkin"] = true,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	},
+	["MESH_SCALE"] = Vector3.new(1.5, 1.5, 1.5),
+	["MESH_SCALE_SMEAR"] = Vector3.new(1.5, 1.5, 3),
+	["previewRotation"] = Vector3.new(25, 140, 0),
+	["taskReward"] = true,
+	["swingSpeed"] = 1.2,
+	["midairSpeedModifier"] = 0.8,
+	["reloadModifier"] = 0.75,
+	["specialAttack"] = "Mega Smack",
+	["stats"] = {
+		["neutral"] = { "Special move: Mega Smack" },
+		["positive"] = { "+50% knockback", "+20% swing damage" },
+		["negative"] = { "-20% swing speed", "No strike attack" }
+	}
+}
+v24("Homerunner", "Frying Pan", v45)
+local v46 = {
+	["name"] = "Stop Sign",
+	["model"] = "Assets/Tools/Stop Sign",
+	["description"] = "I can\'t stop at the stop sign right now, I\'m busy looking for an octagon.",
+	["baseTool"] = "Frying Pan",
+	["rarity"] = 3,
+	["taskReward"] = false,
+	["notASkin"] = false,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/stopsignRed",
+		["Yellow"] = "rbxgameasset://Images/stopsignYellow",
+		["Green"] = "rbxgameasset://Images/stopsignGreen",
+		["Blue"] = "rbxgameasset://Images/stopsignBlue",
+		["Spectators"] = "rbxgameasset://Images/stopsignSpectators"
+	},
+	["previewRotation"] = Vector3.new(5, 10, 0)
+}
+v24("Frying Pan", "Stop Sign", v46)
+local v47 = {
+	["name"] = "Brickbreaker",
+	["model"] = "Assets/Tools/Brickbreaker",
+	["description"] = "A tool of construction can also be used for destruction! Really makes you think...",
+	["rarity"] = 2,
+	["notASkin"] = true,
+	["taskReward"] = false,
+	["baseTool"] = "Frying Pan",
+	["loopSpinAttack"] = true,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/starshooterRed",
+		["Yellow"] = "rbxgameasset://Images/starshooterYellow",
+		["Green"] = "rbxgameasset://Images/starshooterGreen",
+		["Blue"] = "rbxgameasset://Images/starshooterBlue",
+		["Spectators"] = "rbxgameasset://Images/starshooterSpectators"
+	},
+	["MESH_SCALE"] = Vector3.new(0.8, 0.8, 0.8),
+	["MESH_SCALE_SMEAR"] = Vector3.new(0.8, 0.8, 1.1),
+	["previewRotation"] = Vector3.new(25, 140, 0),
+	["swingSpeed"] = 0.85,
+	["midairSpeedModifier"] = 0.85,
+	["reloadModifier"] = 2.25,
+	["specialAttack"] = "Brick Smash",
+	["brickCost"] = 50,
+	["koFunc"] = function(arg1, arg2)
+		-- upvalues: (copy) v_u13, (copy) v_u_collection, (copy) v_u2
+		v_u13(function()
+			-- upvalues: (copy) arg2, (copy) arg1, (ref) v_u_collection, (ref) v_u2
+			if arg2 and (arg2.Character and arg2.Character.PrimaryPart) then
+				local v_humanoid = arg2.Character:FindFirstChild("Humanoid")
+				v_u2:send("SpawnBrickPickup", arg2.Character.PrimaryPart.Position + Vector3.new(0, 1.5, 0), arg1 and (arg1.Character and v_u_collection:HasTag(arg1.Character, "Infected")) and 5 or (v_humanoid and v_humanoid.MaxHealth < 100 and 5 or 25), arg1.Team, arg2)
+			end
+		end)
+	end,
+	["whileEquippedFunc"] = function(arg1, arg2)
+		-- upvalues: (copy) v_u3
+		local v_get = v_u3:get(arg1, "bricks")
+		arg2.Sword.Particles.FullCharge.Enabled = v_get >= 50
+		arg2.Sword.Particles.ChargeSmoke.Enabled = v_get >= 50
+	end,
+	["stats"] = {
+		["neutral"] = { "Special move: Brick Smash" },
+		["positive"] = { "KO\'d enemies drop bricks", "+50% construction damage" },
+		["negative"] = { "-15% swing speed", "No strike attack", "-100% reload speed" }
+	}
+}
+v24("Frying Pan", "Brickbreaker", v47)
+local v48 = {
+	["name"] = "Batty Basher",
+	["model"] = "Assets/Tools/Batty Basher",
+	["description"] = "Who would do this to another living being? Someone who wanted a cool-looking weapon, I suppose...",
+	["slot"] = "SWORD",
+	["rarity"] = 5,
+	["explodeSound"] = "BattyExplosion",
+	["explodeParticle"] = "BattyExplosions",
+	["notASkin"] = false,
+	["textures"] = {
+		["Red"] = "rbxassetid://7419119335",
+		["Yellow"] = "rbxassetid://7419117405",
+		["Green"] = "rbxassetid://7419189518",
+		["Blue"] = "rbxassetid://7419177865",
+		["Spectators"] = "rbxassetid://7419117783"
+	},
+	["MESH_SCALE"] = Vector3.new(0.85, 0.85, 0.85),
+	["MESH_SCALE_SMEAR"] = Vector3.new(0.85, 0.85, 0.85)
+}
+v24("Brickbreaker", "Batty Basher", v48)
+local v49 = {
+	["name"] = "Nail Bat",
+	["model"] = "Assets/Tools/Nail Bat",
+	["description"] = "If you open the dictionary and look up \'painful\', you\'ll see this pictured.",
+	["slot"] = "SWORD",
+	["rarity"] = 3,
+	["notASkin"] = false,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	},
+	["MESH_SCALE"] = Vector3.new(1.5, 1.5, 1.5),
+	["MESH_SCALE_SMEAR"] = Vector3.new(3, 1.5, 1.5),
+	["taskReward"] = true
+}
+v24("Homerunner", "Nail Bat", v49)
+local v50 = {
+	["name"] = "Shadow Blade",
+	["model"] = "Assets/Tools/Shadow Blade",
+	["description"] = "\231\156\159\227\129\163\233\187\146\227\129\174\229\136\128",
+	["slot"] = "SWORD",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(0, 20, 30),
+	["textures"] = {
+		["Red"] = "rbxassetid://4504394559",
+		["Yellow"] = "rbxassetid://4504394603",
+		["Green"] = "rbxassetid://4504394537",
+		["Blue"] = "rbxassetid://4504394505",
+		["Spectators"] = "rbxassetid://4508444879"
+	},
+	["sounds"] = {
+		["Slash"] = "FireSlash",
+		["Strike"] = "FireStrike",
+		["Lunge"] = "FireProjectile",
+		["Spin"] = "FireSpin",
+		["Charged"] = "SwordCharged",
+		["Draw"] = "SwordDraw"
+	},
+	["StrongSwing"] = true,
+	["notASkin"] = true,
+	["midairSpeedModifier"] = 0.5,
+	["reloadModifier"] = 1.5,
+	["lungeTime"] = 0.7,
+	["noStrike"] = true,
+	["stats"] = {
+		["positive"] = { "+50% reflect power", "+50% lunge speed & distance" },
+		["negative"] = { "-15% sword damage", "+50% recharge time", "No strike attack" }
+	},
+	["initFunc"] = function(_, _) end
+}
+v24("Sword", "Shadow Blade", v50)
+local v51 = {
+	["name"] = "Fire Sword",
+	["model"] = "Assets/Tools/Fire Sword",
+	["description"] = "Is this safe? I feel like this isn\'t safe...",
+	["slot"] = "SWORD",
+	["notASkin"] = true,
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(45, 90, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SwordRed",
+		["Yellow"] = "rbxgameasset://Images/SwordYellow",
+		["Green"] = "rbxgameasset://Images/SwordGreen",
+		["Blue"] = "rbxgameasset://Images/SwordBlue",
+		["Spectators"] = "rbxgameasset://Images/SwordSpectators"
+	},
+	["sounds"] = {
+		["Slash"] = "FireSlash",
+		["Strike"] = "FireStrike",
+		["Lunge"] = "FireProjectile",
+		["Spin"] = "FireSpin",
+		["Charged"] = "SwordCharged",
+		["Draw"] = "SwordDraw"
+	},
+	["MESH_SCALE"] = Vector3.new(6, 6, 6),
+	["MESH_SCALE_SMEAR"] = Vector3.new(12, 6, 6),
+	["projectile"] = "FireWave",
+	["projectileSpeed"] = 25,
+	["specialAttack"] = "Flame Cutter",
+	["reloadModifier"] = 0.9,
+	["swingSpeed"] = 1.1,
+	["midairSpeedModifier"] = 0.9,
+	["stats"] = {
+		["neutral"] = { "Special move: Flame Cutter" },
+		["positive"] = { "Can cause burning", "-10% recharge time" },
+		["negative"] = { "-10% swing speed" }
+	}
+}
+v24("Sword", "Fire Sword", v51)
+local v52 = {
+	["name"] = "Ice Sword",
+	["model"] = "Assets/Tools/Ice Sword",
+	["description"] = "Send shivers down your enemy\'s spine with this frosty blade.",
+	["slot"] = "SWORD",
+	["rarity"] = 3,
+	["baseTool"] = "Sword",
+	["notASkin"] = true,
+	["spin"] = false,
+	["previewRotation"] = Vector3.new(45, 90, 0),
+	["projectile"] = "IceWave",
+	["specialAttack"] = "Frost Cutter",
+	["reloadModifier"] = 0.9,
+	["stats"] = {
+		["neutral"] = { "Special move: Frost Cutter" },
+		["positive"] = { "-10% recharge time" }
+	}
+}
+v24("Sword", "Ice Sword", v52)
+local v53 = {
+	["name"] = "Darkheart",
+	["model"] = "Assets/Tools/Darkheart",
+	["description"] = "A sword forged in a pitch-black keep. It can steal the life from enemies.",
+	["slot"] = "SWORD",
+	["rarity"] = 4,
+	["baseTool"] = "Sword",
+	["notASkin"] = true,
+	["reloadModifier"] = 1.33,
+	["swingSpeed"] = 1.1,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/darkheartRed",
+		["Yellow"] = "rbxgameasset://Images/darkheartYellow",
+		["Green"] = "rbxgameasset://Images/darkheartGreen",
+		["Blue"] = "rbxgameasset://Images/darkheartBlue",
+		["Spectators"] = "rbxgameasset://Images/darkheart"
+	},
+	["koFunc"] = function(arg1, arg2)
+		if arg1 and (arg1.Character and (arg2 and arg2.Character)) then
+			local v_humanoid = arg1.Character:FindFirstChildOfClass("Humanoid")
+			local v_humanoid = arg2.Character:FindFirstChildOfClass("Humanoid")
+			if v_humanoid and v_humanoid.Health > 0 then
+				v_humanoid.Health = v_humanoid.Health + v_humanoid.MaxHealth * 0.25
+			end
+		end
+	end,
+	["previewRotation"] = Vector3.new(55, -65, 0),
+	["MESH_SCALE"] = Vector3.new(1, 1, 1),
+	["MESH_SCALE_SMEAR"] = Vector3.new(2.6, 1, 1),
+	["initFunc"] = function(_, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.new(0.1, 0.1, 0.1)) })
+	end,
+	["stats"] = {
+		["positive"] = { "Steals health from enemies", "KOs restore 25% of user\'s health" },
+		["negative"] = { "+33% recharge time", "-10% swing speed" }
+	}
+}
+v24("Sword", "Darkheart", v53)
+local v54 = {
+	["name"] = "Firebrand",
+	["model"] = "Assets/Tools/Firebrand",
+	["description"] = "The burning fury of sword fights on heights is contained within this blade...",
+	["slot"] = "SWORD",
+	["rarity"] = 3,
+	["baseTool"] = "Fire Sword",
+	["notASkin"] = false,
+	["previewRotation"] = Vector3.new(45, 90, 0),
+	["MESH_SCALE"] = Vector3.new(0.4, 0.4, 0.4),
+	["MESH_SCALE_SMEAR"] = Vector3.new(0.4, 0.4, 0.8),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/FirebrandRed",
+		["Yellow"] = "rbxgameasset://Images/FirebrandYellow",
+		["Green"] = "rbxgameasset://Images/FirebrandGreen",
+		["Blue"] = "rbxgameasset://Images/FirebrandBlue",
+		["Spectators"] = "rbxgameasset://Images/FirebrandSpectators"
+	}
+}
+v24("Fire Sword", "Firebrand", v54)
+local v55 = {
+	["model"] = "Assets/Tools/Lightsword",
+	["description"] = "A saber made out of light? Don\'t tell on us.",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	},
+	["sounds"] = {
+		["Slash"] = "LightsaberSlash",
+		["Strike"] = "LightsaberStrike",
+		["Lunge"] = "LightsaberLunge",
+		["Spin"] = "LightsaberSpin",
+		["Charged"] = "SwordCharged",
+		["Draw"] = "SwordDraw"
+	},
+	["rarity"] = 3,
+	["spin"] = false,
+	["previewRotation"] = Vector3.new(20, 90, 0),
+	["initFunc"] = function(arg1, arg2)
+		-- upvalues: (copy) v_u10
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, v_u10[arg1.Team.Name].colors.light), ColorSequenceKeypoint.new(1, v_u10[arg1.Team.Name].colors.light) })
+	end
+}
+v24("Sword", "Lightsword", v55)
+local v56 = {
+	["model"] = "Assets/Tools/Glowblade",
+	["description"] = "Intergalactic beings crafted this sword using a cursory knowledge of lava lamps, glowsticks, and scripting languages.",
+	["rarity"] = 5,
+	["spin"] = false,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["initFunc"] = function(_, _) end,
+	["koFunc"] = function(_, arg2)
+		-- upvalues: (copy) v_u13
+		v_u13(function()
+			-- upvalues: (copy) arg2
+			if arg2 and arg2.Character then
+				local _ = arg2.Character.PrimaryPart
+			end
+		end)
+	end
+}
+v24("Sword", "Glowblade", v56)
+local v57 = {
+	["model"] = "Assets/Tools/Dogeball",
+	["description"] = "le dogeball has arrived",
+	["rarity"] = 5,
+	["previewRotation"] = Vector3.new(13, -11, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/dogeballRed",
+		["Yellow"] = "rbxgameasset://Images/dogeballYellow",
+		["Green"] = "rbxgameasset://Images/dogeballGreen",
+		["Blue"] = "rbxgameasset://Images/dogeballBlue",
+		["Spectators"] = "rbxgameasset://Images/dogeballSpectators"
+	}
+}
+v24("Superball", "Dogeball", v57)
+local v58 = {
+	["model"] = "Assets/Tools/Ultra Soaker",
+	["description"] = "Don\'t be fooled... it\'s filled with paint, not water.",
+	["rarity"] = 3,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SoakerRed",
+		["Yellow"] = "rbxgameasset://Images/SoakerYellow",
+		["Green"] = "rbxgameasset://Images/SoakerGreen",
+		["Blue"] = "rbxgameasset://Images/SoakerBlue",
+		["Spectators"] = "rbxgameasset://Images/SoakerSpectators"
+	}
+}
+v24("Paintball Gun", "Ultra Soaker", v58)
+local v59 = {
+	["model"] = "Assets/Tools/Snowball",
+	["description"] = "Deck the halls? I\'m decking everything in sight.",
+	["rarity"] = 2,
+	["previewRotation"] = Vector3.new(13, -11, 0),
+	["chilly"] = 4,
+	["knockbackModifier"] = 0,
+	["notASkin"] = true,
+	["knockback"] = false,
+	["speedModifier"] = 0.8,
+	["reload"] = 1.2000000000000002,
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "SnowGrab"
+	},
+	["stats"] = {
+		["positive"] = { "Causes chill for 6 seconds", "-25% reload time" },
+		["negative"] = { "No knockback", "-20% throw speed" }
+	}
+}
+v24("Superball", "Snowball", v59)
+local v60 = {
+	["model"] = "Assets/Tools/Pokey Ball",
+	["description"] = "These things probably aren\'t meant for throwing, but that can\'t stop you here!",
+	["rarity"] = 2,
+	["previewRotation"] = Vector3.new(0, -15, 0),
+	["notASkin"] = true,
+	["knockback"] = false,
+	["speedModifier"] = 0.4,
+	["damageModifier"] = 1.3,
+	["chargeDamageModifier"] = 1.3,
+	["knockbackModifier"] = 0,
+	["reload"] = 1.92,
+	["stats"] = {
+		["positive"] = { "+30% size & damage" },
+		["negative"] = { "No knockback", "-60% throw speed", "+20% reload time" }
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	}
+}
+v24("Superball", "Pokey Ball", v60)
+local v61 = {
+	["name"] = "Square bomb",
+	["model"] = "Assets/Tools/Square Bomb",
+	["description"] = "This bomb will stay where it\'s dropped! Mostly!",
+	["slot"] = "BOMB",
+	["rarity"] = 1,
+	["previewRotation"] = Vector3.new(20, -35, 0),
+	["ticks"] = 10,
+	["notASkin"] = true,
+	["stats"] = {
+		["positive"] = { "Doesn\'t roll around" },
+		["negative"] = { "5% longer detonation time" }
+	}
+}
+v24("Bomb", "Square Bomb", v61)
+local v62 = {
+	["name"] = "Super Bomb",
+	["model"] = "Assets/Tools/Super Bomb",
+	["description"] = "Hey, this game isn\'t Super Bomb Survival! Oh, well. I won\'t tell anyone if you don\'t.",
+	["slot"] = "BOMB",
+	["sounds"] = {
+		["Tick"] = "BombTickSbs",
+		["PlantedTick"] = "BombTickSbs2",
+		["Explode"] = "BoomSbs"
+	},
+	["rarity"] = 3,
+	["particle"] = "SbsExplosions",
+	["notFeatured"] = true,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/sbsbombRed",
+		["Yellow"] = "rbxgameasset://Images/sbsbombYellow",
+		["Green"] = "rbxgameasset://Images/sbsbombGreen",
+		["Blue"] = "rbxgameasset://Images/sbsbombBlue",
+		["Spectators"] = "rbxgameasset://Images/sbsbombSpectators"
+	}
+}
+v24("Bomb", "Super Bomb", v62)
+local v63 = {
+	["name"] = "Gift Bomb",
+	["model"] = "Assets/Tools/Gift Bomb",
+	["description"] = "If you\'re naughty, you get a lump of coal. If you\'re REALLY naughty, you get kaboom.",
+	["seasonExclusive"] = "winter",
+	["slot"] = "BOMB",
+	["rarity"] = 2,
+	["previewRotation"] = Vector3.new(8, -35, 0),
+	["particle"] = "SnowExplosions",
+	["notASkin"] = false,
+	["sounds"] = {
+		["Tick"] = "BombTickJingle",
+		["PlantedTick"] = "BombTickJingle2"
+	}
+}
+v24("Square Bomb", "Gift Bomb", v63)
+local v64 = {
+	["name"] = "Shadow bomb",
+	["model"] = "Assets/Tools/Shadow Bomb",
+	["description"] = "\229\191\141\232\128\133\227\129\174\231\133\153\231\142\137",
+	["slot"] = "BOMB",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(20, -35, 0),
+	["ticks"] = 16,
+	["notASkin"] = true,
+	["invisible"] = 8,
+	["reloadModifier"] = 1.3,
+	["jumpMultiplier"] = v9.SHADOW_BOMB_JUMPMULTIPLIER,
+	["noPlant"] = true,
+	["stats"] = {
+		["positive"] = { "Turns things invisible" },
+		["negative"] = { "+30% reload time", "-10% bomb jump", "Cannot be planted" }
+	},
+	["textures"] = {
+		["Red"] = "rbxassetid://4504394559",
+		["Yellow"] = "rbxassetid://4504394603",
+		["Green"] = "rbxassetid://4504394537",
+		["Blue"] = "rbxassetid://4504394505",
+		["Spectators"] = "rbxassetid://4508444879"
+	},
+	["particle"] = "ShadowBombExplosion"
+}
+v24("Bomb", "Shadow Bomb", v64)
+local v65 = {
+	["model"] = "Assets/Tools/Noob Ball",
+	["description"] = "OOF",
+	["rarity"] = 4,
+	["sounds"] = {
+		["Throw"] = "OofThrow",
+		["Reload"] = "OofReload"
+	}
+}
+v24("Superball", "Noob Ball", v65)
+local v66 = {
+	["model"] = "Assets/Tools/Egg Ball",
+	["description"] = "Offer your enemies a nice egg in this trying time.",
+	["rarity"] = 2,
+	["seasonExclusive"] = "spring",
+	["sounds"] = {
+		["Throw"] = "BallThrow",
+		["Reload"] = "EggReload"
+	},
+	["textures"] = {
+		["Red"] = "rbxassetid://200655622",
+		["Yellow"] = "rbxassetid://1529457",
+		["Green"] = "rbxassetid://1529456",
+		["Blue"] = "rbxassetid://1527556",
+		["Spectators"] = "rbxassetid://100504965"
+	}
+}
+v24("Superball", "Egg Ball", v66)
+local v67 = {
+	["model"] = "Assets/Tools/Coconut",
+	["description"] = "A true master of comedy isn\'t afraid of a little slapstick humor.",
+	["rarity"] = 3,
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "BallReload"
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/CoconutRed",
+		["Yellow"] = "rbxgameasset://Images/CoconutYellow",
+		["Green"] = "rbxgameasset://Images/CoconutGreen",
+		["Blue"] = "rbxgameasset://Images/CoconutBlue",
+		["Spectators"] = "rbxgameasset://Images/CoconutSpectators"
+	},
+	["speedModifier"] = 0.9,
+	["reload"] = 2.2399999999999998,
+	["chargeRagdollModifier"] = 1.3,
+	["knockbackModifier"] = 1.5,
+	["constructionDamage"] = 1.5,
+	["chargedConstructionDamage"] = 3,
+	["previewRotation"] = Vector3.new(20, -90, 0),
+	["notASkin"] = true,
+	["stats"] = {
+		["positive"] = { "+30% ragdoll time when charged", "+25% knockback force", "+50% construction damage" },
+		["negative"] = { "-10% throw speed", "+40% reload time" }
+	}
+}
+v24("Superball", "Coconut", v67)
+local v68 = {
+	["model"] = "Assets/Tools/Boomerang",
+	["description"] = "Toss it and it\'ll come right back! Can damage enemies on both the departure & return trip.",
+	["rarity"] = 2,
+	["createMessage"] = "CreateBoomerang",
+	["projectile"] = "Boomerang",
+	["throwDistance"] = 40,
+	["chargeThrowDistance"] = 55,
+	["flightTime"] = 1.3,
+	["speed"] = 75,
+	["chargeSpeedModifier"] = 1.75,
+	["returnSpeedModifier"] = 2.25,
+	["reload"] = 4.8,
+	["chargeTime"] = 0.8,
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "BombReload"
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	},
+	["previewRotation"] = Vector3.new(20, -90, 0),
+	["notASkin"] = true,
+	["stats"] = {
+		["neutral"] = { "Hovers in place, then returns" },
+		["positive"] = { "Can hit twice" }
+	}
+}
+v24("Superball", "Boomerang", v68)
+local v69 = {
+	["model"] = "Assets/Tools/Bananarang",
+	["description"] = "Delicious & full of potassium. It\'s also surprisingly aerodynamic.",
+	["rarity"] = 4,
+	["createMessage"] = "CreateBoomerang",
+	["projectile"] = "Bananarang",
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "BombReload"
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BananaRed",
+		["Yellow"] = "rbxgameasset://Images/BananaYellow",
+		["Green"] = "rbxgameasset://Images/BananaGreen",
+		["Blue"] = "rbxgameasset://Images/BananaBlue",
+		["Spectators"] = "rbxgameasset://Images/BananaSpectators"
+	},
+	["previewRotation"] = Vector3.new(45, -95, 0),
+	["notASkin"] = false
+}
+v24("Boomerang", "Bananarang", v69)
+local v70 = {
+	["model"] = "Assets/Tools/Mega Spinner",
+	["description"] = "This fidget toy is large enough to throw like a boomerang! Hey, that gives me an idea...",
+	["rarity"] = 4,
+	["createMessage"] = "CreateBoomerang",
+	["projectile"] = "Mega Spinner",
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "BombReload"
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/fidgetRed",
+		["Yellow"] = "rbxgameasset://Images/fidgetYellow",
+		["Green"] = "rbxgameasset://Images/fidgetGreen",
+		["Blue"] = "rbxgameasset://Images/fidgetBlue",
+		["Spectators"] = "rbxgameasset://Images/fidgetSpectators"
+	},
+	["previewRotation"] = Vector3.new(0, -70, 0),
+	["notASkin"] = false
+}
+v24("Boomerang", "Mega Spinner", v70)
+local v71 = {
+	["model"] = "Assets/Tools/Bloomerang",
+	["description"] = "The rare Bloomerang tree creates these spinning flowers. Jump on it after throwing for a bounce!",
+	["rarity"] = 3,
+	["createMessage"] = "CreateBoomerang",
+	["projectile"] = "Bloomerang",
+	["doesBounce"] = true,
+	["hitsOnce"] = true,
+	["throwDistance"] = 35,
+	["chargeThrowDistance"] = 50,
+	["flightTime"] = 2.2,
+	["speed"] = 56,
+	["chargeSpeedModifier"] = 1.5,
+	["returnSpeedModifier"] = 2,
+	["reload"] = 6.8,
+	["chargeTime"] = 1,
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "BombReload"
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BloomerangRed",
+		["Yellow"] = "rbxgameasset://Images/BloomerangYellow",
+		["Green"] = "rbxgameasset://Images/BloomerangGreen",
+		["Blue"] = "rbxgameasset://Images/BloomerangBlue",
+		["Spectators"] = "rbxgameasset://Images/BloomerangSpectators"
+	},
+	["previewRotation"] = Vector3.new(85, 0, 0),
+	["notASkin"] = true,
+	["stats"] = {
+		["neutral"] = { "Hovers in place, then returns" },
+		["positive"] = { "Can be used as a trampoline" },
+		["negative"] = { "Only hits once", "-20% throw speed" }
+	}
+}
+v24("Boomerang", "Bloomerang", v71)
+local v72 = {
+	["model"] = "Assets/Tools/Hat-a-rang",
+	["description"] = "Although it seems like an odd job, using your hat as a trampoline is a lot of fun.",
+	["rarity"] = 4,
+	["createMessage"] = "CreateBoomerang",
+	["projectile"] = "Hat-a-rang",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	},
+	["previewRotation"] = Vector3.new(0, 0, 0),
+	["notASkin"] = false
+}
+v24("Bloomerang", "Hat-a-rang", v72)
+local v73 = {
+	["model"] = "Assets/Tools/Duck Floatie",
+	["description"] = "Quack quack quack! This inflatable duck is so bouncy it\'s almost despicable.",
+	["rarity"] = 5,
+	["createMessage"] = "CreateBoomerang",
+	["projectile"] = "Duck Floatie",
+	["seasonExclusive"] = "summer",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/DuckRingRed",
+		["Yellow"] = "rbxgameasset://Images/DuckRingYellow",
+		["Green"] = "rbxgameasset://Images/DuckRingGreen",
+		["Blue"] = "rbxgameasset://Images/DuckRingBlue",
+		["Spectators"] = "rbxgameasset://Images/DuckRingSpectators"
+	},
+	["previewRotation"] = Vector3.new(0, 30, 15),
+	["notASkin"] = false
+}
+v24("Bloomerang", "Duck Floatie", v73)
+local v74 = {
+	["model"] = "Assets/Tools/Giant Rat",
+	["description"] = "This rat is so giant, it definitely makes all of the rules.",
+	["rarity"] = 3,
+	["notASkin"] = false,
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "BallReload"
+	},
+	["previewRotation"] = Vector3.new(10, 35, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/RatRed",
+		["Yellow"] = "rbxgameasset://Images/RatYellow",
+		["Green"] = "rbxgameasset://Images/RatGreen",
+		["Blue"] = "rbxgameasset://Images/RatBlue",
+		["Spectators"] = "rbxgameasset://Images/RatSpectators"
+	}
+}
+v24("Superball", "Giant Rat", v74)
+local v75 = {
+	["model"] = "Assets/Tools/Smug Cat",
+	["description"] = "Cats have a certain smugness to them. This one is the blueprint that inspires them all.",
+	["rarity"] = 4,
+	["notASkin"] = false,
+	["sounds"] = {
+		["Throw"] = "Throw",
+		["Reload"] = "BallReload"
+	},
+	["previewRotation"] = Vector3.new(0, 15, 0),
+	["textures"] = {
+		["Red"] = "rbxassetid://7143379850",
+		["Yellow"] = "rbxassetid://7143410466",
+		["Green"] = "rbxassetid://7143388783",
+		["Blue"] = "rbxassetid://7143372121",
+		["Spectators"] = "rbxassetid://7143366811"
+	}
+}
+v24("Superball", "Smug Cat", v75)
+local v76 = {
+	["model"] = "Assets/Tools/Roundcat",
+	["description"] = "Roundcats are super bouncy, immune to explosions, & enjoy being launched around! This is just a superball based on one, though.",
+	["rarity"] = 3,
+	["notASkin"] = false,
+	["taskReward"] = true,
+	["sounds"] = {
+		["Throw"] = "CatThrow",
+		["Reload"] = "CatReload"
+	},
+	["previewRotation"] = Vector3.new(0, 185, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/FatCatRed",
+		["Yellow"] = "rbxgameasset://Images/FatCatYellow",
+		["Green"] = "rbxgameasset://Images/FatCatGreen",
+		["Blue"] = "rbxgameasset://Images/FatCatBlue",
+		["Spectators"] = "rbxgameasset://Images/FatCatSpectators"
+	}
+}
+v24("Coconut", "Roundcat", v76)
+local v77 = {
+	["model"] = "Assets/Tools/Roundcat Egg",
+	["description"] = "Eggs are still considered round, right? Hmmmm... (Egg Hunt 2020 reward)",
+	["rarity"] = 6,
+	["notASkin"] = false,
+	["notInShop"] = true,
+	["notAvailable"] = true,
+	["textures"] = nil,
+	["sounds"] = {
+		["Throw"] = "CatThrow",
+		["Reload"] = "CatReload"
+	},
+	["previewRotation"] = Vector3.new(0, 15, 0)
+}
+v24("Coconut", "Roundcat Egg", v77)
+v24("Superball", "Crystal Ball", {
+	["model"] = "Assets/Tools/Crystal Ball",
+	["price"] = 0,
+	["description"] = "Unfortunately, this isn\'t able to tell your future.",
+	["rarity"] = 4,
+	["taskReward"] = true
+})
+local v78 = {
+	["model"] = "Assets/Tools/Novaball",
+	["price"] = 0,
+	["description"] = "Although pulled straight from the core of a comet, it somehow has the exact properties of a superball.",
+	["rarity"] = 5,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["taskReward"] = true
+}
+v24("Superball", "Novaball", v78)
+local v79 = {
+	["model"] = "Assets/Tools/Shadow Shuriken",
+	["description"] = "\228\188\157\232\170\172\227\129\174\229\191\141\232\128\133\227\129\174\230\137\139\232\163\143\229\137\163",
+	["projectile"] = "Shadow Shuriken",
+	["rarity"] = 4,
+	["notASkin"] = true,
+	["previewRotation"] = Vector3.new(0, 70, 0),
+	["stats"] = {
+		["positive"] = { "+100% damage when charged", "-25% reload time" },
+		["negative"] = { "Cannot stagger players", "+100% charged reload time", "-15% throw speed" }
+	},
+	["speedModifier"] = 0.85,
+	["textures"] = {
+		["Red"] = "rbxassetid://4504394559",
+		["Yellow"] = "rbxassetid://4504394603",
+		["Green"] = "rbxassetid://4504394537",
+		["Blue"] = "rbxassetid://4504394505",
+		["Spectators"] = "rbxassetid://4508444879"
+	},
+	["reload"] = 1.5,
+	["reloadCharge"] = 3,
+	["damageModifier"] = 1,
+	["chargeDamageModifier"] = 2,
+	["knockbackModifier"] = 0,
+	["knockback"] = false,
+	["startAnimation"] = "ShurikenThrowStart",
+	["loopAnimation"] = "ShurikenLoop",
+	["throwAnimation"] = "ShurikenFollowthrough",
+	["sounds"] = {
+		["Throw"] = "ShurikenThrow",
+		["Reload"] = "ShurikenReload"
+	}
+}
+v24("Superball", "Shadow Shuriken", v79)
+local v80 = {
+	["model"] = "Assets/Tools/Jingle Ball",
+	["rarity"] = 1,
+	["previewRotation"] = Vector3.new(5, -25, 0),
+	["description"] = "When the song says \'making spirits fly\', this is what it means.",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	}
+}
+v24("Superball", "Jingle Ball", v80)
+local v81 = {
+	["model"] = "Assets/Tools/Pumpkin",
+	["rarity"] = 2,
+	["seasonExclusive"] = "autumn",
+	["previewRotation"] = Vector3.new(5, -15, 0),
+	["description"] = "Why make pumpkin pie when you can make your opponents pumpkin die?",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/pumpkinRed",
+		["Yellow"] = "rbxgameasset://Images/pumpkinYellow",
+		["Green"] = "rbxgameasset://Images/pumpkinGreen",
+		["Blue"] = "rbxgameasset://Images/pumpkinBlue",
+		["Spectators"] = "rbxgameasset://Images/pumpkinSpectators"
+	}
+}
+v24("Superball", "Pumpkin", v81)
+local v82 = {
+	["model"] = "Assets/Tools/Lava Ball",
+	["projectile"] = "Lava Ball",
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(5, -25, 0),
+	["notASkin"] = true,
+	["knockback"] = false,
+	["speedModifier"] = 0.75,
+	["reload"] = 2.2399999999999998,
+	["fire"] = 8,
+	["damageModifier"] = 0.75,
+	["sounds"] = {
+		["Throw"] = "LavaBallThrow",
+		["Reload"] = "LavaBallReload"
+	},
+	["description"] = "It\'s getting hot, hot, hot! Like... seriously hot. Hope you brought protective gloves.",
+	["stats"] = {
+		["positive"] = { "Causes burning" },
+		["negative"] = { "-25% throw speed", "+40% reload time", "Cannot stagger enemies" }
+	}
+}
+v24("Superball", "Lava Ball", v82)
+local v83 = {
+	["model"] = "Assets/Tools/Jack-O-Lantern",
+	["projectile"] = "Jack-O-Lantern",
+	["rarity"] = 4,
+	["notASkin"] = false,
+	["seasonExclusive"] = "autumn",
+	["previewRotation"] = Vector3.new(5, -10, 0),
+	["description"] = "Kept alight by the burning fury of every pumpkin that\'s rotted on a porch after Halloween.",
+	["textures2"] = {
+		["Red"] = "rbxgameasset://Images/jackyRed",
+		["Yellow"] = "rbxgameasset://Images/jackyYellow",
+		["Green"] = "rbxgameasset://Images/jackyGreen",
+		["Blue"] = "rbxgameasset://Images/jackyBlue",
+		["Spectators"] = "rbxgameasset://Images/jackySpectators"
+	},
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/JackolanternRed",
+		["Yellow"] = "rbxgameasset://Images/JackolanternYellow",
+		["Green"] = "rbxgameasset://Images/JackolanternGreen",
+		["Blue"] = "rbxgameasset://Images/JackolanternBlue",
+		["Spectators"] = "rbxgameasset://Images/JackolanternSpectators"
+	}
+}
+v24("Lava Ball", "Jack-O-Lantern", v83)
+local v84 = {
+	["model"] = "Assets/Tools/Cool Sun",
+	["projectile"] = false,
+	["rarity"] = 3,
+	["notASkin"] = false,
+	["seasonExclusive"] = "summer",
+	["previewRotation"] = Vector3.new(5, -10, 0),
+	["description"] = "What does the sun even need sunglasses for? Style, I guess.",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SunBallRed",
+		["Yellow"] = "rbxgameasset://Images/SunBallYellow",
+		["Green"] = "rbxgameasset://Images/SunBallGreen",
+		["Blue"] = "rbxgameasset://Images/SunBallBlue",
+		["Spectators"] = "rbxgameasset://Images/SunBallSpectators"
+	}
+}
+v24("Lava Ball", "Cool Sun", v84)
+local v85 = {
+	["model"] = "Assets/Tools/Stacked Markers",
+	["description"] = "Truly a fearsome weapon. It\'s a lot of fun until it falls apart and you have to pick them up...",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/MarkerRed",
+		["Yellow"] = "rbxgameasset://Images/MarkerYellow",
+		["Green"] = "rbxgameasset://Images/MarkerGreen",
+		["Blue"] = "rbxgameasset://Images/MarkerBlue",
+		["Spectators"] = "rbxgameasset://Images/MarkerSpectators"
+	},
+	["rarity"] = 2,
+	["spin"] = true,
+	["previewRotation"] = Vector3.new(50, -40, 0),
+	["MESH_SCALE"] = Vector3.new(1.5, 1, 1.5),
+	["MESH_SCALE_SMEAR"] = Vector3.new(4, 1, 1)
+}
+v24("Sword", "Stacked Markers", v85)
+local v86 = {
+	["model"] = "Assets/Tools/Sword",
+	["description"] = "The good old Sword, now available in dark mode!",
+	["previewRotation"] = Vector3.new(45, 90, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/SwordDarkRed",
+		["Yellow"] = "rbxgameasset://Images/SwordDarkYellow",
+		["Green"] = "rbxgameasset://Images/SwordDarkGreen",
+		["Blue"] = "rbxassetid://4524691543",
+		["Spectators"] = "rbxgameasset://Images/SwordDarkSpectators"
+	},
+	["rarity"] = 3,
+	["spin"] = true,
+	["initFunc"] = function(arg1, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)), ColorSequenceKeypoint.new(0.5, arg1.TeamColor.Color), ColorSequenceKeypoint.new(1, arg1.TeamColor.Color) })
+	end,
+	["taskReward"] = true
+}
+v24("Sword", "Sword (Dark)", v86)
+v24("Scope Shot", "Scope Shot (Dark)", {
+	["model"] = "Assets/Tools/Scope Shot (Dark)",
+	["rarity"] = 4,
+	["notASkin"] = false,
+	["baseTool"] = "Scope Shot"
+})
+local v87 = {
+	["model"] = "Assets/Tools/Candy Cane",
+	["description"] = "Sweet tooths beware - this candy cane brings heavy pain!",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/CandyCaneRed",
+		["Yellow"] = "rbxgameasset://Images/CandyCaneYellow",
+		["Green"] = "rbxgameasset://Images/CandyCaneGreen",
+		["Blue"] = "rbxgameasset://Images/CandyCaneBlue",
+		["Spectators"] = "rbxgameasset://Images/CandyCaneSpectators"
+	},
+	["rarity"] = 3,
+	["seasonExclusive"] = "winter",
+	["previewRotation"] = Vector3.new(50, -40, 0),
+	["MESH_SCALE"] = Vector3.new(2, 2, 2),
+	["MESH_SCALE_SMEAR"] = Vector3.new(2, 2, 3)
+}
+v24("Sword", "Candy Cane", v87)
+local v88 = {
+	["price"] = 0,
+	["model"] = "Assets/Tools/Alphablade",
+	["description"] = "Thanks for playing during the alpha phase!",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/AlphaSwordRed",
+		["Yellow"] = "rbxgameasset://Images/AlphaSwordYellow",
+		["Green"] = "rbxgameasset://Images/AlphaSwordGreen",
+		["Blue"] = "rbxgameasset://Images/AlphaSwordBlue",
+		["Spectators"] = "rbxgameasset://Images/AlphaSwordSpectators"
+	},
+	["rarity"] = 6,
+	["initFunc"] = function(_, _) end,
+	["spin"] = true,
+	["notAvailable"] = true,
+	["previewRotation"] = Vector3.new(55, -65, 0),
+	["MESH_SCALE"] = Vector3.new(2.8, 2.8, 2.8),
+	["MESH_SCALE_SMEAR"] = Vector3.new(5.6, 2.8, 2)
+}
+v24("Sword", "Alphablade", v88)
+local v89 = {
+	["model"] = "Assets/Tools/Gammablade",
+	["description"] = "Although it\'s a simple replica of the extremely rare Alphablade, it still looks almost as cool!",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/AlphaSwordRed",
+		["Yellow"] = "rbxgameasset://Images/AlphaSwordYellow",
+		["Green"] = "rbxgameasset://Images/AlphaSwordGreen",
+		["Blue"] = "rbxgameasset://Images/AlphaSwordBlue",
+		["Spectators"] = "rbxgameasset://Images/AlphaSwordSpectators"
+	},
+	["rarity"] = 5,
+	["spin"] = true,
+	["previewRotation"] = Vector3.new(55, -65, 0),
+	["MESH_SCALE"] = Vector3.new(2.8, 2.8, 2.8),
+	["MESH_SCALE_SMEAR"] = Vector3.new(5.6, 2.8, 2)
+}
+v24("Sword", "Gammablade", v89)
+local v90 = {
+	["price"] = 0,
+	["model"] = "Assets/Tools/Golden Sword",
+	["description"] = "A glimmering gold reminder of your victories in battle.",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["initFunc"] = function(arg1, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, arg1.TeamColor.Color), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 233, 110)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 217, 0)) })
+	end,
+	["koFunc"] = function(_, arg2)
+		task.spawn(function()
+			-- upvalues: (copy) arg2
+			if arg2 and arg2.Character then
+				local _ = arg2.Character.PrimaryPart
+			end
+		end)
+	end,
+	["rarity"] = 5,
+	["spin"] = true,
+	["notInShop"] = true,
+	["taskReward"] = true
+}
+v24("Sword", "Golden Sword", v90)
+local v91 = {
+	["price"] = 0,
+	["model"] = "Assets/Tools/Golden Greatsword",
+	["baseTool"] = "Greatsword",
+	["notASkin"] = false,
+	["description"] = "Gold is REALLY heavy, so you gotta be jacked to carry this.",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["initFunc"] = function(arg1, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, arg1.TeamColor.Color), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 233, 110)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 217, 0)) })
+	end,
+	["rarity"] = 5,
+	["notInShop"] = true,
+	["taskReward"] = true
+}
+v24("Greatsword", "Golden Greatsword", v91)
+local v92 = {
+	["model"] = "Assets/Tools/Candy Claymore",
+	["baseTool"] = "Greatsword",
+	["notASkin"] = false,
+	["MESH_SCALE"] = Vector3.new(2, 2, 2),
+	["MESH_SCALE_SMEAR"] = Vector3.new(3, 2, 2),
+	["description"] = "Some people say candy corn tastes stale. This candy corn, however, tastes like justice.",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/candycornRed",
+		["Yellow"] = "rbxgameasset://Images/candycornYellow",
+		["Green"] = "rbxgameasset://Images/candycornGreen",
+		["Blue"] = "rbxgameasset://Images/candycornBlue",
+		["Spectators"] = "rbxgameasset://Images/candycornSpectators"
+	},
+	["rarity"] = 4,
+	["seasonExclusive"] = "autumn",
+	["initFunc"] = function(_, arg2)
+		arg2.Trail.Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+			ColorSequenceKeypoint.new(0.25, Color3.fromRGB(255, 112, 68)),
+			ColorSequenceKeypoint.new(0.75, Color3.fromRGB(255, 112, 68)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 217, 0))
+		})
+	end
+}
+v24("Greatsword", "Candy Claymore", v92)
+local v93 = {
+	["model"] = "Assets/Tools/Great Windforce",
+	["baseTool"] = "Greatsword",
+	["notASkin"] = true,
+	["description"] = "Within this massive blade lies the strength of a tornado!",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["rarity"] = 4,
+	["notAvailable"] = true,
+	["notInShop"] = true
+}
+v24("Greatsword", "Great Windforce", v93)
+local v94 = {
+	["name"] = "Laser Cannon",
+	["model"] = "Assets/Tools/Laser Cannon",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Lasers are like the rockets of the future. Next to future-rockets, that is.",
+	["slot"] = "ROCKET",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(-25, -40, 0),
+	["projectile"] = "LaserRocket",
+	["projectile2"] = "LaserRocket2",
+	["explodeParticle"] = "Explosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionRocket"
+	},
+	["notASkin"] = true,
+	["reloadFunc"] = v9.LASER_RELOAD_TIME,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/lasercannonRed",
+		["Yellow"] = "rbxgameasset://Images/lasercannonYellow",
+		["Green"] = "rbxgameasset://Images/lasercannonGreen",
+		["Blue"] = "rbxgameasset://Images/lasercannonBlue",
+		["Spectators"] = "rbxgameasset://Images/lasercannonSpectators"
+	},
+	["stats"] = {
+		["positive"] = { "Fires two shots", "+25% projectile speed" },
+		["negative"] = { "-15% blast damage", "-20% blast radius", "+15% reload time" }
+	}
+}
+v24("Rocket Launcher", "Laser Cannon", v94)
+local v95 = {
+	["name"] = "Crystal Blaster",
+	["model"] = "Assets/Tools/Crystal Blaster",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "A short-range rocket launcher that explodes quickly.",
+	["slot"] = "ROCKET",
+	["rarity"] = 4,
+	["previewRotation"] = Vector3.new(-25, -40, 0),
+	["projectile"] = "CrystalRocket",
+	["explodeParticle"] = "CrystalExplosions",
+	["noAmmoDummy"] = true,
+	["sounds"] = {
+		["Explode"] = "ExplosionCrystal"
+	},
+	["notASkin"] = true,
+	["reloadFunc"] = v9.CRYSTAL_RELOAD_TIME,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/crystalboomRed",
+		["Yellow"] = "rbxgameasset://Images/crystalboomYellow",
+		["Green"] = "rbxgameasset://Images/crystalboomGreen",
+		["Blue"] = "rbxgameasset://Images/crystalboomBlue",
+		["Spectators"] = "rbxgameasset://Images/crystalboomSpectators"
+	},
+	["stats"] = {
+		["positive"] = { "+100% blast damage", "+50% projectile speed", "-10% reload time" },
+		["negative"] = { "-10% blast radius", "Short projectile range" }
+	}
+}
+v24("Rocket Launcher", "Crystal Blaster", v95)
+local v96 = {
+	["name"] = "Rock Star",
+	["model"] = "Assets/Tools/Rock Star",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "Feel a jam coming on? Fire musical missiles, or use Power Chord to send nearby opponents away!",
+	["slot"] = "ROCKET",
+	["rarity"] = 5,
+	["previewRotation"] = Vector3.new(-25, 55, 0),
+	["projectile"] = "MusicRocket",
+	["explodeParticle"] = "MusicExplosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionMusic"
+	},
+	["notASkin"] = true,
+	["noAmmoDummy"] = true,
+	["fireAnim"] = "GuitarFire",
+	["specialMove"] = "Power Chord",
+	["specialMoveFunc"] = "powerChord",
+	["reloadFunc"] = v9.ROCKSTAR_RELOAD_TIME,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/guitarRed",
+		["Yellow"] = "rbxgameasset://Images/guitarYellow",
+		["Green"] = "rbxgameasset://Images/guitarGreen",
+		["Blue"] = "rbxgameasset://Images/guitarBlue",
+		["Spectators"] = "rbxgameasset://Images/guitarSpectators"
+	},
+	["stats"] = {
+		["neutral"] = { "Special move: Power Chord" },
+		["positive"] = { "-10% reload time" },
+		["negative"] = { "-50% projectile speed" }
+	}
+}
+v24("Rocket Launcher", "Rock Star", v96)
+v24("Greatsword", "Colossal Blade", {
+	["model"] = "Assets/Tools/Colossal Blade",
+	["baseTool"] = "Greatsword",
+	["notASkin"] = false,
+	["description"] = "You can\'t help but carry this with one arm just to be extra cool.",
+	["initFunc"] = function(arg1, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, arg1.TeamColor.Color), ColorSequenceKeypoint.new(0.5, arg1.TeamColor.Color), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)) })
+	end,
+	["rarity"] = 3,
+	["MESH_SCALE"] = Vector3.new(1, 1, 1),
+	["MESH_SCALE_SMEAR"] = Vector3.new(1.8, 1, 1)
+})
+v24("Greatsword", "Greatspoon", {
+	["model"] = "Assets/Tools/Greatspoon",
+	["baseTool"] = "Greatsword",
+	["notASkin"] = false,
+	["description"] = "This spoon is humorously large! Dish out pain to your enemies - but only a spoonful.",
+	["initFunc"] = function(arg1, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, arg1.TeamColor.Color), ColorSequenceKeypoint.new(0.5, arg1.TeamColor.Color), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)) })
+	end,
+	["rarity"] = 5,
+	["MESH_SCALE"] = Vector3.new(2.2, 2.2, 2.2),
+	["MESH_SCALE_SMEAR"] = Vector3.new(2.2, 2.2, 2.2)
+})
+local v97 = {
+	["model"] = "Assets/Tools/Bamboo Buster",
+	["notASkin"] = true,
+	["description"] = "A big bamboo stick for whacking, plus an explosive bamboo shoot for blasting! What\'s not to love?",
+	["initFunc"] = function(arg1, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, arg1.TeamColor.Color), ColorSequenceKeypoint.new(0.5, arg1.TeamColor.Color), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)) })
+	end,
+	["rarity"] = 3,
+	["MESH_SCALE"] = Vector3.new(1, 1, 1),
+	["MESH_SCALE_SMEAR"] = Vector3.new(1.8, 1, 1),
+	["reloadModifier"] = 2,
+	["explodeParticle"] = "Fireworks",
+	["sounds"] = {
+		["Fire"] = "FireworkFire",
+		["Reload"] = "RocketLoad",
+		["Explode"] = "ExplosionFireworks",
+		["Slash"] = "SwordSlash",
+		["Strike"] = "SwordStrike",
+		["Lunge"] = "SwordLunge",
+		["Spin"] = "SwordSpin",
+		["Charged"] = "SwordCharged",
+		["Draw"] = "SwordDraw"
+	},
+	["specialAttack"] = "Bamboo Shoot",
+	["stats"] = {
+		["neutral"] = { "Special move: Bamboo Shoot" },
+		["positive"] = { "+60% damage & range", "+25% ragdoll resist while holding" },
+		["negative"] = { "-100% swing speed", "-20% walkspeed while holding" }
+	},
+	["textures"] = {
+		["Red"] = "rbxassetid://8847699006",
+		["Yellow"] = "rbxassetid://8847707355",
+		["Green"] = "rbxassetid://8847706773",
+		["Blue"] = "rbxassetid://8847703779",
+		["Spectators"] = "rbxassetid://8847698584"
+	}
+}
+v24("Greatsword", "Bamboo Buster", v97)
+v24("Bomb", "Bloom Bomb", {
+	["model"] = "Assets/Tools/Bloom Bomb",
+	["description"] = "Spring is bursting to life! And in some cases, VIOLENTLY bursting.",
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(0, -25, 0),
+	["particle"] = "ExplosionsFlower"
+})
+local v98 = {
+	["price"] = 0,
+	["model"] = "Assets/Tools/Golden Racket",
+	["baseTool"] = "Tennis Racket",
+	["description"] = "Tennis is a sport of champions, is it not? What\'s more befitting that than gold?",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["initFunc"] = function(arg1, arg2)
+		arg2.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, arg1.TeamColor.Color), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 233, 110)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 217, 0)) })
+	end,
+	["rarity"] = 5,
+	["notInShop"] = true,
+	["taskReward"] = true
+}
+v24("Tennis Racket", "Golden Racket", v98)
+local v99 = {
+	["price"] = 0,
+	["model"] = "Assets/Tools/Golden Launcher",
+	["description"] = "Let gleaming rockets loose and show your foes how victorious you can be!",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["rarity"] = 5,
+	["notInShop"] = true,
+	["taskReward"] = true,
+	["projectile"] = "GoldRocket",
+	["explodeParticle"] = "Explosions"
+}
+v24("Rocket Launcher", "Golden Launcher", v99)
+local v100 = {
+	["price"] = 0,
+	["model"] = "Assets/Tools/Gem Bomb",
+	["description"] = "This ancient gemstone is imbued with explosive power. Use wisely... but you know that already.",
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["rarity"] = 5,
+	["notASkin"] = false,
+	["notInShop"] = true,
+	["taskReward"] = true,
+	["explodeParticle"] = "Explosions"
+}
+v24("Square Bomb", "Gem Bomb", v100)
+v24("Sword", "Classic Sword", {
+	["model"] = "Assets/Tools/Classic Sword",
+	["description"] = "A legendary sword from brick battle\'s history.",
+	["rarity"] = 1,
+	["spin"] = true,
+	["previewRotation"] = Vector3.new(55, -65, 0),
+	["MESH_SCALE"] = Vector3.new(1, 1, 1),
+	["MESH_SCALE_SMEAR"] = Vector3.new(2.6, 1, 1)
+})
+local v101 = {
+	["model"] = "Assets/Tools/Voxcalibur",
+	["description"] = "What silent hero might\'ve dropped this? It\'s dangerous out there alone, you know.",
+	["rarity"] = 3,
+	["spin"] = true,
+	["previewRotation"] = Vector3.new(55, -65, 0),
+	["MESH_SCALE"] = Vector3.new(1, 1, 1),
+	["MESH_SCALE_SMEAR"] = Vector3.new(2.6, 1, 1),
+	["notASkin"] = true,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/BasicToolRed",
+		["Yellow"] = "rbxgameasset://Images/BasicToolYellow",
+		["Green"] = "rbxgameasset://Images/BasicToolGreen",
+		["Blue"] = "rbxgameasset://Images/BasicToolBlue",
+		["Spectators"] = "rbxgameasset://Images/BasicToolSpectator"
+	},
+	["stats"] = {
+		["positive"] = { "+30% jump power while holding", "+20% midair attack damage" },
+		["negative"] = { "-30% lunge speed" }
+	}
+}
+v24("Sword", "Voxcalibur", v101)
+local v102 = {
+	["model"] = "Assets/Tools/Beach Ball",
+	["description"] = "Volleyball is fun and all, but knocking people off their doomspires is more fun.",
+	["rarity"] = 1,
+	["notASkin"] = false,
+	["seasonExclusive"] = "summer",
+	["previewRotation"] = Vector3.new(40, 45, 0),
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/beachballRed",
+		["Yellow"] = "rbxgameasset://Images/beachballYellow",
+		["Green"] = "rbxgameasset://Images/beachballGreen",
+		["Blue"] = "rbxgameasset://Images/beachballBlue",
+		["Spectators"] = "rbxgameasset://Images/beachballSpectators"
+	}
+}
+v24("Pokey Ball", "Beach Ball", v102)
+local v103 = {
+	["model"] = "Assets/Tools/Classic Ball",
+	["description"] = "Boing! This superball has certainly seen a lot of use over the past decade.",
+	["rarity"] = 1,
+	["sounds"] = {
+		["Throw"] = "Boing",
+		["Reload"] = "BallReload"
+	}
+}
+v24("Superball", "Classic Ball", v103)
+local v104 = {
+	["model"] = "Assets/Tools/Turnip Ball",
+	["description"] = "Plucked straight from the soil. Make sure to wash before consumptio- wait, is that a face??",
+	["rarity"] = 2,
+	["textures"] = {
+		["Red"] = "rbxassetid://8856318768",
+		["Yellow"] = "rbxassetid://8856281369",
+		["Green"] = "rbxassetid://8856234180",
+		["Blue"] = "rbxassetid://8856262075",
+		["Spectators"] = "rbxassetid://8855899901"
+	}
+}
+v24("Superball", "Turnip Ball", v104)
+local v105 = {
+	["model"] = "Assets/Tools/Classic Bomb",
+	["description"] = "Nobody knows how this mysterious orb contains so much power, except for some guy named John.",
+	["rarity"] = 1,
+	["sounds"] = {
+		["Tick"] = "BombTickClassic",
+		["PlantedTick"] = "BombTickClassic2",
+		["Explode"] = "ExplosionOld"
+	},
+	["previewRotation"] = Vector3.new(70, -85, 0)
+}
+v24("Bomb", "Classic Bomb", v105)
+local v106 = {
+	["name"] = "Classic Launcher",
+	["model"] = "Assets/Tools/Classic Launcher",
+	["serverBehavior"] = "ServerTools/Rocket Launcher",
+	["clientBehavior"] = "ClientTools/Rocket Launcher",
+	["description"] = "An old-fashioned rocket launcher with a lot more \'swoosh\' to it.",
+	["slot"] = "ROCKET",
+	["rarity"] = 1,
+	["previewRotation"] = Vector3.new(-25, -55, 0),
+	["projectile"] = "ClassicRocket",
+	["sounds"] = {
+		["Explode"] = "Boom"
+	}
+}
+v24("Rocket Launcher", "Classic Launcher", v106)
+local v107 = {
+	["model"] = "Assets/Tools/Classic Trowel",
+	["description"] = "Many bricks have been built in midair using this trusty trowel.",
+	["baseTool"] = "Trowel",
+	["reload"] = v9.TROWEL_RELOAD,
+	["notASkin"] = false,
+	["rarity"] = 1,
+	["sounds"] = {
+		["Use"] = "Bass"
+	},
+	["previewBuilding"] = ""
+}
+v24("Trowel", "Classic Trowel", v107)
+local v108 = {
+	["model"] = "Assets/Tools/Gold Trowel",
+	["description"] = "Well, it won\'t lay any gold bricks... but it\'s certainly shiny.",
+	["baseTool"] = "Trowel",
+	["reload"] = v9.TROWEL_RELOAD,
+	["notASkin"] = false,
+	["rarity"] = 5,
+	["notInShop"] = true,
+	["taskReward"] = true,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/GoldWeaponRed",
+		["Yellow"] = "rbxgameasset://Images/GoldWeaponYellow",
+		["Green"] = "rbxgameasset://Images/GoldWeaponGreen",
+		["Blue"] = "rbxgameasset://Images/GoldWeaponBlue",
+		["Spectators"] = "rbxgameasset://Images/GoldWeaponSpectators"
+	},
+	["previewBuilding"] = ""
+}
+v24("Trowel", "Gold Trowel", v108)
+v24("Ball Turret", "Trampoline Trowel", {
+	["prefab"] = "Trampoline",
+	["description"] = "You, too, can make the bounciest trampolines imaginable in one easy step!",
+	["constructionMessage"] = "MakeTrampoline",
+	["notASkin"] = true,
+	["rarity"] = 2,
+	["buildLimit"] = 3,
+	["reloadTime"] = 6,
+	["brickCost"] = v12.Trampoline,
+	["previewBuilding"] = "Trampoline"
+})
+local v109 = {
+	["prefab"] = "Shadow",
+	["model"] = "Assets/Tools/Shadow Clone",
+	["description"] = "\229\189\177\227\129\174\229\136\134\232\186\171\227\129\174\227\129\147\227\129\166",
+	["partCreationFunction"] = v8,
+	["constructionMessage"] = "MakeShadow",
+	["notASkin"] = true,
+	["rarity"] = 4,
+	["buildLimit"] = 6,
+	["propSize"] = Vector3.new(4, 5, 1),
+	["brickCost"] = v12.Shadow,
+	["reload"] = 10,
+	["equipReload"] = 0.4,
+	["castLength"] = 6,
+	["equipAnim"] = "GrabFromBack",
+	["stats"] = {
+		["positive"] = { "Swap places with the placed clone", "Clone explodes when attacked" },
+		["negative"] = { "Slow reload speed", "Clone will not be your friend" }
+	},
+	["distance"] = 60,
+	["previewBuilding"] = "Shadow",
+	["ignoreTag"] = "ShadowCloneIgnore"
+}
+v24("Trowel", "Shadow Clone", v109)
+v24("Ball Turret", "Spike Trowel", {
+	["prefab"] = "Spikes",
+	["noRoundcat"] = true,
+	["description"] = "Leave some sharp spike pads behind to trap unsuspecting foes!",
+	["rarity"] = 4,
+	["reloadTime"] = 1,
+	["constructionMessage"] = "MakeSpikes",
+	["notASkin"] = true,
+	["noPatches"] = false,
+	["brickCost"] = v12.Spikes,
+	["previewBuilding"] = "Spikes"
+})
+v24("Trowel", "Bridge Trowel", {
+	["description"] = "\240\159\142\181Bridge overrr troubbleedd lavaaa~\240\159\142\181",
+	["rarity"] = 2,
+	["reload"] = v9.TROWEL_RELOAD,
+	["previewRotation"] = Vector3.new(0, 0, 0),
+	["trowelOffset"] = CFrame.Angles(-1.5707963267948966, 0, 0),
+	["spaceOffset"] = CFrame.new(0, 0, 12),
+	["constructionMessage"] = "MakeBridgeConstruction",
+	["partCreationFunction"] = v5,
+	["snap"] = true,
+	["propSize"] = Vector3.new(6, 1, 24),
+	["notASkin"] = true,
+	["brickCost"] = v12.Bridge,
+	["previewBuilding"] = "Bridge"
+})
+v24("Trowel", "Cage Trowel", {
+	["description"] = "Oh worm? <- that\'s what birds say",
+	["rarity"] = 3,
+	["reload"] = 1,
+	["trowelOffset"] = CFrame.Angles(-1.5707963267948966, 0, 0),
+	["constructionMessage"] = "MakeCageConstruction",
+	["partCreationFunction"] = v7,
+	["snap"] = true,
+	["propSize"] = Vector3.new(10, 12, 10),
+	["notASkin"] = true,
+	["brickCost"] = v12.Cage,
+	["distance"] = 150,
+	["previewBuilding"] = "Cage"
+})
+v24("Trowel", "Truss Trowel", {
+	["description"] = "Builds a tall, climbable truss. Useful for ladders and bridges!",
+	["rarity"] = 1,
+	["reload"] = v9.TROWEL_RELOAD,
+	["previewRotation"] = Vector3.new(15, 130, 0),
+	["trowelOffset"] = CFrame.Angles(-1.5707963267948966, 0, 0),
+	["constructionMessage"] = "MakeTrussConstruction",
+	["partCreationFunction"] = v6,
+	["snap"] = true,
+	["propSize"] = Vector3.new(2, 20, 2),
+	["notASkin"] = true,
+	["brickCost"] = v12.Truss,
+	["previewBuilding"] = "Truss"
+})
+local v110 = {
+	["name"] = "Umbrellade",
+	["model"] = "Assets/Tools/Umbrellade",
+	["baseTool"] = "Sword",
+	["description"] = "Float down from the sky gracefully, like a magical nanny of some sort.",
+	["slot"] = "SWORD",
+	["rarity"] = 2,
+	["previewRotation"] = Vector3.new(0, -90, 30),
+	["textures"] = {
+		["Red"] = "rbxassetid://7134649846",
+		["Yellow"] = "rbxassetid://7189168532",
+		["Green"] = "rbxassetid://7189114609",
+		["Blue"] = "rbxassetid://7189184016",
+		["Spectators"] = "rbxassetid://7189255346"
+	},
+	["MESH_SCALE"] = Vector3.new(0.1, 0.1, 0.1),
+	["MESH_SCALE_SMEAR"] = Vector3.new(0.1, 0.1, 0.1),
+	["noStrike"] = true,
+	["notASkin"] = true,
+	["loopSpinAttack"] = true,
+	["visualEvent"] = true,
+	["stats"] = {
+		["neutral"] = { "Use special in midair to float" },
+		["negative"] = { "No strike attack" }
+	}
+}
+v24("Sword", "Umbrellade", v110)
+local v111 = {
+	["name"] = "Petal Parasol",
+	["model"] = "Assets/Tools/Petal Parasol",
+	["description"] = "Float down from the sky gracefully, like a magical nanny of some sort.",
+	["baseTool"] = "Sword",
+	["slot"] = "SWORD",
+	["rarity"] = 3,
+	["previewRotation"] = Vector3.new(0, -90, 30),
+	["textures"] = {
+		["Red"] = "rbxassetid://7355864517",
+		["Yellow"] = "rbxassetid://7355865342",
+		["Green"] = "rbxassetid://7355864171",
+		["Blue"] = "rbxassetid://7355863766",
+		["Spectators"] = "rbxassetid://9167645296"
+	},
+	["MESH_SCALE"] = Vector3.new(1.5, 1.5, 1.5),
+	["MESH_SCALE_SMEAR"] = Vector3.new(1.5, 1.5, 1.5),
+	["notASkin"] = false
+}
+v24("Umbrellade", "Petal Parasol", v111)
+local v112 = {
+	["name"] = "Caddywhacker",
+	["model"] = "Assets/Tools/Caddywhacker",
+	["description"] = "Golf. A game of patience. A game of virtues. A game of... sending people flying into the stratosphere?",
+	["slot"] = "SWORD",
+	["rarity"] = 5,
+	["notASkin"] = false,
+	["textures"] = {
+		["Red"] = "rbxgameasset://Images/golfclubRed",
+		["Yellow"] = "rbxgameasset://Images/golfclubYellow",
+		["Green"] = "rbxgameasset://Images/golfclubGreen",
+		["Blue"] = "rbxgameasset://Images/golfclubBlue",
+		["Spectators"] = "rbxgameasset://Images/golfclubSpectators"
+	},
+	["MESH_SCALE"] = Vector3.new(1.5, 1.5, 1.5),
+	["MESH_SCALE_SMEAR"] = Vector3.new(3, 1.5, 1.5),
+	["previewRotation"] = Vector3.new(40, 70, 0)
+}
+v24("Homerunner", "Caddywhacker", v112)
+local v113 = {
+	["notASkin"] = false,
+	["name"] = "The Embezzler",
+	["model"] = "Assets/Tools/The Embezzler",
+	["description"] = "Blue Executive\'s weapon of choice, fashioned with all the latest office equipment. It\'s powered by coffee & the invisible hand of the market.",
+	["textures"] = {
+		["Red"] = "rbxassetid://7230758343",
+		["Yellow"] = "rbxassetid://7230234461",
+		["Green"] = "rbxassetid://7231181283",
+		["Blue"] = "rbxassetid://7236509517",
+		["Spectators"] = "rbxassetid://7231499441"
+	},
+	["rarity"] = 5,
+	["projectile"] = "EmbezzlerRocket",
+	["explodeParticle"] = "EmbezzlerExplosions",
+	["sounds"] = {
+		["Explode"] = "ExplosionEmbezzler"
+	},
+	["visualEvent"] = true,
+	["initFunc"] = function(arg1, arg2)
+		-- upvalues: (copy) v_u3
+		if v_u3:get(arg1, "weapons")["The Embezzler"].rarityOverride then
+			arg2.Barrel.UniqueSparkle.Enabled = true
+			arg2:SetAttribute("Unique", true)
+		end
+	end
+}
+v24("Hoss Hog", "The Embezzler", v113)
+local v114 = {
+	["notASkin"] = false,
+	["name"] = "Sticky Potion",
+	["model"] = "Assets/Tools/Sticky Potion",
+	["description"] = "Green Scientist\'s favorite home-concocted destructive potion. The chemicals inside are highly dangerous when mixed.",
+	["slot"] = "BOMB",
+	["rarity"] = 5,
+	["previewRotation"] = Vector3.new(0, 0, 15),
+	["explodeParticle"] = "ExplosionsPotion",
+	["sounds"] = {
+		["Throw"] = "ThrowPotion",
+		["Reload"] = "PotionReload",
+		["Explode"] = "ExplosionPotion"
+	},
+	["initFunc"] = function(arg1, arg2)
+		-- upvalues: (copy) v_u3
+		if v_u3:get(arg1, "weapons")["Sticky Potion"].rarityOverride then
+			arg2.Bomb.UniqueSparkle.Enabled = true
+			arg2:SetAttribute("Unique", true)
+		end
+	end
+}
+v24("Sticky Bomb", "Sticky Potion", v114)
+local v115 = {
+	["model"] = "Assets/Tools/Wise Eye",
+	["description"] = "This divining eye has historically been used by the Yellow Kingdom to discover new wells of magic.",
+	["rarity"] = 5,
+	["notASkin"] = false,
+	["sounds"] = {
+		["Throw"] = "ThrowWise",
+		["Reload"] = "BallReloadWise"
+	},
+	["previewRotation"] = Vector3.new(0, 15, 0),
+	["textures"] = {
+		["Red"] = "rbxassetid://7161055094",
+		["Yellow"] = "rbxassetid://7161055735",
+		["Green"] = "rbxassetid://7161054451",
+		["Blue"] = "rbxassetid://7161054142",
+		["Spectators"] = "rbxassetid://7161055491"
+	},
+	["startAnimation"] = "ThrowStart",
+	["loopAnimation"] = "ThrowLoop",
+	["throwAnimation"] = "Throw",
+	["projectile"] = "Wise Eye",
+	["initFunc"] = function(arg1, arg2)
+		-- upvalues: (copy) v_u3
+		if v_u3:get(arg1, "weapons")["Wise Eye"].rarityOverride then
+			arg2.Eye.UniqueSparkle.Enabled = true
+			arg2:SetAttribute("Unique", true)
+		end
+	end
+}
+v24("Shadow Shuriken", "Wise Eye", v115)
+local v116 = {
+	["model"] = "Assets/Tools/Oathkeeper",
+	["description"] = "The witches of Snowfall serve to keep magic out of the wrong hands. Some swear an oath to uphold the protection of all they hold dear and become fierce warriors.",
+	["rarity"] = 5,
+	["notASkin"] = false,
+	["previewRotation"] = Vector3.new(45, -90, 0),
+	["textures"] = {
+		["Red"] = "rbxassetid://7241174288",
+		["Yellow"] = "rbxassetid://7241174157",
+		["Green"] = "rbxassetid://7241174501",
+		["Blue"] = "rbxassetid://7241174684",
+		["Spectators"] = "rbxassetid://7241173851"
+	},
+	["visualEvent"] = true,
+	["initFunc"] = function(arg1, arg2)
+		-- upvalues: (copy) v_u3
+		if v_u3:get(arg1, "weapons").Oathkeeper.rarityOverride then
+			arg2.Sword.UniqueSparkle.Enabled = true
+			arg2:SetAttribute("Unique", true)
+		end
+	end
+}
+v24("Shadow Blade", "Oathkeeper", v116)
+for _, v117 in pairs(v_u14) do
+	if v11[v117.name] then
+		v117.price = v11[v117.name]
+	else
+		v117.price = nil
+	end
+end
+return v_u14

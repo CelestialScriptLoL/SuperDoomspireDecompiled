@@ -1,0 +1,37 @@
+-- Decompiled with Bunni.lol Decompiler
+
+return {
+	["TIE_VICTORY"] = 50,
+	["TIE_VICTORY_SWITCH"] = 25,
+	["SWITCH_VICTORY"] = 30,
+	["ROYAL_VICTORY"] = 60,
+	["LOSS"] = 20,
+	["MVP_BONUS"] = 20,
+	["DESTROYED_SPAWN_REWARD"] = 3,
+	["DESTROYED_SPAWN_TENNIS"] = 5,
+	["CROWNS_PER_BRICK_AMOUNT"] = 1,
+	["GET_SURVIVOR_KO_REWARD"] = function(arg1)
+		return math.min(50, arg1 * 5)
+	end,
+	["GET_KILL_REWARD"] = function(arg1)
+		return math.min(45, arg1 * 2)
+	end,
+	["GET_KDR_REWARD"] = function(arg1)
+		local v_floor = math.floor(arg1 * 5)
+		return math.min(45, v_floor)
+	end,
+	["GET_SPAWN_REWARD"] = function(arg1)
+		return arg1
+	end,
+	["GET_ROUNDCAT_REWARD"] = function(arg1)
+		return math.min(50, arg1 * 10)
+	end,
+	["GET_BRICK_REWARD"] = function(arg1)
+		local v_floor = math.floor(arg1 / 20)
+		return math.min(45, v_floor)
+	end,
+	["GET_SPAWN_CAPTURE_REWARD"] = function(arg1)
+		local v_floor = math.floor(arg1 / 2)
+		return math.min(45, v_floor)
+	end
+}

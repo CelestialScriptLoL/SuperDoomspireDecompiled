@@ -1,0 +1,478 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = {
+	["Ambient"] = Color3.fromRGB(35, 32, 134),
+	["Brightness"] = 2,
+	["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+	["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+	["OutdoorAmbient"] = Color3.fromRGB(115, 144, 190),
+	["FogColor"] = Color3.fromRGB(0, 12, 192),
+	["FogEnd"] = 5000,
+	["FogStart"] = 0,
+	["ColorCorrectionTint"] = Color3.fromRGB(270, 255, 270),
+	["Skybox"] = "SpaceNebula1",
+	["ClockTime"] = 12,
+	["Atmosphere"] = "Roundcat1"
+}
+local v2 = {
+	["Classic"] = {
+		["Ambient"] = Color3.fromRGB(127, 119, 135),
+		["Brightness"] = 1,
+		["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+		["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+		["OutdoorAmbient"] = Color3.fromRGB(171, 171, 194),
+		["FogColor"] = Color3.fromRGB(209, 203, 236),
+		["FogEnd"] = 980,
+		["FogStart"] = 300,
+		["ColorCorrectionTint"] = Color3.fromRGB(265, 255, 265),
+		["Skybox"] = "Basic",
+		["Atmosphere"] = "Classic"
+	},
+	["Rainbow"] = {
+		["Ambient"] = Color3.fromRGB(103, 93, 135),
+		["Brightness"] = 1,
+		["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+		["ColorShift_Top"] = Color3.fromRGB(76, 62, 85),
+		["OutdoorAmbient"] = Color3.fromRGB(150, 153, 194),
+		["FogColor"] = Color3.fromRGB(32, 3, 86),
+		["FogEnd"] = 900,
+		["FogStart"] = 100,
+		["ColorCorrectionTint"] = Color3.fromRGB(265, 255, 265),
+		["Skybox"] = "RainbowSpace",
+		["Atmosphere"] = "Rainbow"
+	},
+	["RoyaleGreen"] = {
+		["Ambient"] = Color3.fromRGB(127, 119, 135),
+		["Brightness"] = 1,
+		["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+		["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+		["OutdoorAmbient"] = Color3.fromRGB(171, 171, 194),
+		["FogColor"] = Color3.fromRGB(209, 203, 236),
+		["FogEnd"] = 1000000,
+		["FogStart"] = 300,
+		["ColorCorrectionTint"] = Color3.fromRGB(265, 255, 265),
+		["Skybox"] = "Basic"
+	},
+	["Lava"] = {
+		["Ambient"] = Color3.fromRGB(127, 119, 135),
+		["Brightness"] = 1,
+		["ColorShift_Bottom"] = Color3.fromRGB(255, 81, 1),
+		["ColorShift_Top"] = Color3.fromRGB(68, 32, 43),
+		["OutdoorAmbient"] = Color3.fromRGB(127, 119, 135),
+		["FogColor"] = Color3.fromRGB(68, 21, 37),
+		["FogEnd"] = 980,
+		["FogStart"] = 200,
+		["ColorCorrectionTint"] = Color3.fromRGB(280, 255, 265),
+		["Skybox"] = "Cave",
+		["Atmosphere"] = "Lava"
+	},
+	["Jungle"] = {
+		["Ambient"] = Color3.fromRGB(127, 119, 135),
+		["Brightness"] = 0.8,
+		["ColorShift_Bottom"] = Color3.fromRGB(34, 255, 0),
+		["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+		["OutdoorAmbient"] = Color3.fromRGB(127, 119, 135),
+		["FogColor"] = Color3.fromRGB(22, 102, 35),
+		["FogEnd"] = 1000,
+		["FogStart"] = 0,
+		["ColorCorrectionTint"] = Color3.fromRGB(320, 255, 320),
+		["Skybox"] = "GreenHazeMountains",
+		["Atmosphere"] = "Jungle"
+	},
+	["Dark Jungle"] = {
+		["Ambient"] = Color3.fromRGB(67, 79, 67),
+		["Brightness"] = 0.8,
+		["ColorShift_Bottom"] = Color3.fromRGB(34, 255, 0),
+		["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+		["OutdoorAmbient"] = Color3.fromRGB(127, 119, 135),
+		["FogColor"] = Color3.fromRGB(29, 63, 27),
+		["FogEnd"] = 750,
+		["FogStart"] = 0,
+		["ColorCorrectionTint"] = Color3.fromRGB(320, 255, 320),
+		["Skybox"] = "GreenHazeMountains",
+		["Atmosphere"] = "DarkJungle"
+	},
+	["Ruins"] = {
+		["Ambient"] = Color3.fromRGB(125, 135, 94),
+		["Brightness"] = 1,
+		["ColorShift_Bottom"] = Color3.fromRGB(90, 89, 59),
+		["ColorShift_Top"] = Color3.fromRGB(143, 141, 110),
+		["OutdoorAmbient"] = Color3.fromRGB(194, 189, 168),
+		["FogColor"] = Color3.fromRGB(236, 225, 179),
+		["FogEnd"] = 900,
+		["FogStart"] = 400,
+		["ColorCorrectionTint"] = Color3.fromRGB(265, 265, 255),
+		["Skybox"] = "RobloxGreatWest",
+		["Atmosphere"] = "Ruins",
+		["SunRays"] = "Basic"
+	}
+}
+local v3 = {
+	["Random"] = true,
+	["Options"] = {
+		{
+			["Ambient"] = Color3.fromRGB(190, 135, 169),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(62, 78, 93),
+			["ColorShift_Top"] = Color3.fromRGB(86, 61, 84),
+			["OutdoorAmbient"] = Color3.fromRGB(194, 155, 191),
+			["FogColor"] = Color3.fromRGB(170, 109, 121),
+			["FogEnd"] = 1000,
+			["FogStart"] = 250,
+			["ColorCorrectionTint"] = Color3.fromRGB(265, 235, 275),
+			["Skybox"] = "EveningPink",
+			["ClockTime"] = 8,
+			["Atmosphere"] = "Snowtop"
+		},
+		{
+			["Ambient"] = Color3.fromRGB(23, 9, 44),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(62, 78, 93),
+			["ColorShift_Top"] = Color3.fromRGB(61, 57, 86),
+			["OutdoorAmbient"] = Color3.fromRGB(222, 205, 255),
+			["FogColor"] = Color3.fromRGB(170, 109, 121),
+			["FogEnd"] = 1000,
+			["FogStart"] = 250,
+			["ColorCorrectionTint"] = Color3.fromRGB(265, 235, 275),
+			["Skybox"] = "Night",
+			["ClockTime"] = 14,
+			["Atmosphere"] = "SnowtopEvening"
+		}
+	}
+}
+v2.Snowfall = v3
+local v4 = {
+	["Random"] = true,
+	["Options"] = {
+		{
+			["Ambient"] = Color3.fromRGB(171, 173, 162),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+			["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+			["OutdoorAmbient"] = Color3.fromRGB(8, 186, 186),
+			["FogColor"] = Color3.fromRGB(150, 192, 156),
+			["FogEnd"] = 1500,
+			["FogStart"] = 0,
+			["ColorCorrectionTint"] = Color3.fromRGB(265, 265, 255),
+			["Skybox"] = "Polluted",
+			["Atmosphere"] = "Xiajing"
+		},
+		{
+			["Ambient"] = Color3.fromRGB(171, 173, 162),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+			["ColorShift_Top"] = Color3.fromRGB(124, 81, 43),
+			["OutdoorAmbient"] = Color3.fromRGB(186, 91, 13),
+			["FogColor"] = Color3.fromRGB(150, 192, 156),
+			["FogEnd"] = 1500,
+			["FogStart"] = 0,
+			["ColorCorrectionTint"] = Color3.fromRGB(265, 265, 255),
+			["Skybox"] = "OrangeEpic",
+			["Atmosphere"] = "Xiajing2"
+		},
+		{
+			["Ambient"] = Color3.fromRGB(171, 173, 162),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+			["ColorShift_Top"] = Color3.fromRGB(124, 53, 96),
+			["OutdoorAmbient"] = Color3.fromRGB(186, 77, 133),
+			["FogColor"] = Color3.fromRGB(150, 192, 156),
+			["FogEnd"] = 1500,
+			["FogStart"] = 0,
+			["ColorCorrectionTint"] = Color3.fromRGB(265, 265, 255),
+			["Skybox"] = "EveningPink",
+			["Atmosphere"] = "Xiajing3",
+			["ClockTime"] = 16.284,
+			["GeographicLatitude"] = 38.842,
+			["SunRays"] = "Basic"
+		}
+	}
+}
+v2.Xiajing = v4
+local v5 = {
+	["Random"] = true,
+	["Options"] = {
+		{
+			["Ambient"] = Color3.fromRGB(129, 200, 176),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(134, 192, 200),
+			["ColorShift_Top"] = Color3.fromRGB(0, 59, 32),
+			["OutdoorAmbient"] = Color3.fromRGB(68, 136, 149),
+			["FogColor"] = Color3.fromRGB(0, 69, 73),
+			["FogEnd"] = 900,
+			["FogStart"] = 200,
+			["ColorCorrectionTint"] = Color3.fromRGB(255, 265, 265),
+			["Skybox"] = "SpaceNebula3",
+			["Atmosphere"] = "Galaxy"
+		},
+		{
+			["Ambient"] = Color3.fromRGB(36, 35, 29),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(255, 224, 110),
+			["ColorShift_Top"] = Color3.fromRGB(74, 37, 19),
+			["OutdoorAmbient"] = Color3.fromRGB(149, 117, 86),
+			["ColorCorrectionTint"] = Color3.fromRGB(270, 255, 260),
+			["Skybox"] = "SpaceBigPlanet",
+			["Atmosphere"] = "Galaxy2"
+		},
+		{
+			["Ambient"] = Color3.fromRGB(45, 25, 53),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(93, 100, 189),
+			["ColorShift_Top"] = Color3.fromRGB(51, 24, 74),
+			["OutdoorAmbient"] = Color3.fromRGB(120, 83, 149),
+			["ColorCorrectionTint"] = Color3.fromRGB(270, 255, 270),
+			["Skybox"] = "SpaceNebula1",
+			["Atmosphere"] = "Galaxy3"
+		}
+	}
+}
+v2.Galaxy = v5
+v2.Ocean = {
+	["Ambient"] = Color3.fromRGB(28, 50, 150),
+	["Brightness"] = 1,
+	["ColorShift_Bottom"] = Color3.fromRGB(8, 68, 53),
+	["ColorShift_Top"] = Color3.fromRGB(97, 146, 197),
+	["OutdoorAmbient"] = Color3.fromRGB(83, 135, 184),
+	["FogColor"] = Color3.fromRGB(0, 14, 99),
+	["FogEnd"] = 900,
+	["FogStart"] = 0,
+	["ColorCorrectionTint"] = Color3.fromRGB(255, 255, 265),
+	["Skybox"] = "Seafloor",
+	["SunRays"] = "Underwater",
+	["Atmosphere"] = "Ocean",
+	["ClockTime"] = 12,
+	["GeographicLatitude"] = 24.651
+}
+v2.Rooftop = {
+	["Ambient"] = Color3.fromRGB(45, 48, 93),
+	["Brightness"] = 1,
+	["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+	["ColorShift_Top"] = Color3.fromRGB(157, 180, 255),
+	["OutdoorAmbient"] = Color3.fromRGB(125, 129, 194),
+	["FogColor"] = Color3.fromRGB(0, 14, 99),
+	["FogEnd"] = 900,
+	["FogStart"] = 0,
+	["ColorCorrectionTint"] = Color3.fromRGB(255, 255, 265),
+	["Skybox"] = "NebulaAzul",
+	["Atmosphere"] = "Cityscape",
+	["ClockTime"] = 16.5,
+	["GeographicLatitude"] = 41.733
+}
+v2.Madlab = {
+	["Ambient"] = Color3.fromRGB(82, 96, 98),
+	["Brightness"] = 1,
+	["ColorShift_Bottom"] = Color3.fromRGB(56, 91, 49),
+	["ColorShift_Top"] = Color3.fromRGB(73, 111, 103),
+	["OutdoorAmbient"] = Color3.fromRGB(162, 194, 191),
+	["FogColor"] = Color3.fromRGB(209, 203, 236),
+	["FogEnd"] = 980,
+	["FogStart"] = 300,
+	["ColorCorrectionTint"] = Color3.fromRGB(265, 255, 265),
+	["Skybox"] = "GreenHazeMountains",
+	["Atmosphere"] = "Lab"
+}
+v2["Storm Hill"] = {
+	["Ambient"] = Color3.fromRGB(117, 135, 114),
+	["Brightness"] = 0.9,
+	["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+	["ColorShift_Top"] = Color3.fromRGB(58, 59, 63),
+	["OutdoorAmbient"] = Color3.fromRGB(76, 72, 85),
+	["FogColor"] = Color3.fromRGB(33, 40, 35),
+	["FogEnd"] = 700,
+	["FogStart"] = 100,
+	["ColorCorrectionTint"] = Color3.fromRGB(250, 250, 250),
+	["Skybox"] = "StormyNight",
+	["Atmosphere"] = "StormHill"
+}
+v2["Possum City"] = {
+	["Ambient"] = Color3.fromRGB(45, 61, 45),
+	["Brightness"] = 0.75,
+	["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+	["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+	["OutdoorAmbient"] = Color3.fromRGB(96, 111, 95),
+	["FogColor"] = Color3.fromRGB(14, 21, 30),
+	["FogEnd"] = 600,
+	["FogStart"] = 50,
+	["ColorCorrectionTint"] = Color3.fromRGB(250, 255, 250),
+	["Skybox"] = "GrimNight",
+	["Atmosphere"] = "ZombieCity"
+}
+v2.Tennis = v1
+v2["Double Deck"] = v1
+v2.Conveyor = v1
+v2["Twin Alleys"] = v1
+v2.Lab = {
+	["Ambient"] = Color3.fromRGB(35, 32, 134),
+	["Brightness"] = 1,
+	["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+	["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+	["OutdoorAmbient"] = Color3.fromRGB(115, 144, 190),
+	["FogColor"] = Color3.fromRGB(0, 12, 192),
+	["FogEnd"] = 20000,
+	["FogStart"] = 0,
+	["ColorCorrectionTint"] = Color3.fromRGB(270, 255, 270),
+	["Skybox"] = "Basic"
+}
+v2.Relativity = {
+	["Ambient"] = Color3.fromRGB(130, 49, 171),
+	["Brightness"] = 2,
+	["ColorShift_Bottom"] = Color3.fromRGB(242, 97, 255),
+	["ColorShift_Top"] = Color3.fromRGB(214, 174, 148),
+	["OutdoorAmbient"] = Color3.fromRGB(145, 113, 157),
+	["FogColor"] = Color3.fromRGB(209, 203, 236),
+	["FogEnd"] = 1000,
+	["FogStart"] = 0,
+	["ColorCorrectionTint"] = Color3.fromRGB(270, 255, 270),
+	["Skybox"] = "Basic",
+	["Atmosphere"] = "Relativity"
+}
+v2["Crimson Courtyard"] = {
+	["Ambient"] = Color3.fromRGB(71, 71, 112),
+	["Brightness"] = 1,
+	["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+	["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+	["OutdoorAmbient"] = Color3.fromRGB(74, 61, 140),
+	["FogColor"] = Color3.fromRGB(14, 29, 62),
+	["FogEnd"] = 300,
+	["FogStart"] = 0,
+	["ColorCorrectionTint"] = Color3.fromRGB(245, 245, 255),
+	["Skybox"] = "NightMountains",
+	["Atmosphere"] = "Courtyard",
+	["ClockTime"] = 12.462,
+	["GeographicLatitude"] = 64.325
+}
+local v6 = {
+	["Random"] = true,
+	["Options"] = {
+		{
+			["Ambient"] = Color3.fromRGB(127, 119, 135),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(76, 79, 127),
+			["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+			["OutdoorAmbient"] = Color3.fromRGB(159, 178, 212),
+			["FogColor"] = Color3.fromRGB(122, 157, 203),
+			["FogEnd"] = 600,
+			["FogStart"] = 50,
+			["ColorCorrectionTint"] = Color3.fromRGB(270, 270, 275),
+			["Skybox"] = "Model2481",
+			["Atmosphere"] = "Coastal",
+			["SunRays"] = "IslandSun",
+			["ClockTime"] = 10.43,
+			["GeographicLatitude"] = 44
+		},
+		{
+			["Ambient"] = Color3.fromRGB(211, 106, 148),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(76, 79, 127),
+			["ColorShift_Top"] = Color3.fromRGB(255, 211, 174),
+			["OutdoorAmbient"] = Color3.fromRGB(208, 211, 255),
+			["FogColor"] = Color3.fromRGB(122, 191, 255),
+			["FogEnd"] = 6000,
+			["FogStart"] = 50,
+			["ColorCorrectionTint"] = Color3.fromRGB(270, 255, 270),
+			["Skybox"] = "SettingSun",
+			["Atmosphere"] = "IslandsSunset",
+			["SunRays"] = "IslandSunset",
+			["GeographicLatitude"] = 43,
+			["ClockTime"] = 17.277
+		}
+	}
+}
+v2["Coastal Coliseum"] = v6
+v2["Spicy Stadium"] = {
+	["Ambient"] = Color3.fromRGB(127, 119, 135),
+	["Brightness"] = 1,
+	["ColorShift_Bottom"] = Color3.fromRGB(255, 81, 1),
+	["ColorShift_Top"] = Color3.fromRGB(68, 32, 43),
+	["OutdoorAmbient"] = Color3.fromRGB(127, 119, 135),
+	["FogColor"] = Color3.fromRGB(68, 21, 37),
+	["FogEnd"] = 980,
+	["FogStart"] = 200,
+	["ColorCorrectionTint"] = Color3.fromRGB(280, 255, 265),
+	["Skybox"] = "Cave",
+	["Atmosphere"] = "Lava"
+}
+local v7 = {
+	["Random"] = true,
+	["Options"] = {
+		{
+			["Ambient"] = Color3.fromRGB(0, 88, 147),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(76, 79, 127),
+			["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+			["OutdoorAmbient"] = Color3.fromRGB(162, 205, 211),
+			["FogColor"] = Color3.fromRGB(122, 191, 255),
+			["FogEnd"] = 6000,
+			["FogStart"] = 50,
+			["ColorCorrectionTint"] = Color3.fromRGB(255, 270, 275),
+			["Skybox"] = "BlueSky2",
+			["Atmosphere"] = "Islands",
+			["SunRays"] = "IslandSun"
+		},
+		{
+			["Ambient"] = Color3.fromRGB(211, 106, 166),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(76, 79, 127),
+			["ColorShift_Top"] = Color3.fromRGB(255, 211, 174),
+			["OutdoorAmbient"] = Color3.fromRGB(208, 211, 255),
+			["FogColor"] = Color3.fromRGB(122, 191, 255),
+			["FogEnd"] = 6000,
+			["FogStart"] = 50,
+			["ColorCorrectionTint"] = Color3.fromRGB(270, 255, 270),
+			["Skybox"] = "SettingSun",
+			["Atmosphere"] = "IslandsSunset",
+			["SunRays"] = "IslandSunset",
+			["GeographicLatitude"] = 43,
+			["ClockTime"] = 17.277
+		}
+	}
+}
+v2.Islands = v7
+local v8 = {
+	["Random"] = true,
+	["Options"] = {
+		{
+			["Ambient"] = Color3.fromRGB(78, 211, 162),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(77, 127, 117),
+			["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+			["OutdoorAmbient"] = Color3.fromRGB(217, 244, 255),
+			["ColorCorrectionTint"] = Color3.fromRGB(255, 270, 270),
+			["Skybox"] = "NeutralCloudy",
+			["Atmosphere"] = "IzumiDay"
+		},
+		{
+			["Ambient"] = Color3.fromRGB(88, 135, 93),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(144, 115, 74),
+			["ColorShift_Top"] = Color3.fromRGB(51, 94, 87),
+			["OutdoorAmbient"] = Color3.fromRGB(194, 188, 139),
+			["ColorCorrectionTint"] = Color3.fromRGB(255, 270, 270),
+			["Skybox"] = "PeacefulMorning",
+			["Atmosphere"] = "IzumiMorning"
+		},
+		{
+			["Ambient"] = Color3.fromRGB(55, 78, 83),
+			["Brightness"] = 1,
+			["ColorShift_Bottom"] = Color3.fromRGB(77, 127, 117),
+			["ColorShift_Top"] = Color3.fromRGB(140, 167, 255),
+			["OutdoorAmbient"] = Color3.fromRGB(142, 168, 211),
+			["ColorCorrectionTint"] = Color3.fromRGB(255, 270, 270),
+			["Skybox"] = "NebulaAzul",
+			["Atmosphere"] = "IzumiNight"
+		}
+	}
+}
+v2.Izumi = v8
+v2["Lilypad Sanctum"] = {
+	["Ambient"] = Color3.fromRGB(135, 83, 63),
+	["Brightness"] = 1,
+	["ColorShift_Bottom"] = Color3.fromRGB(0, 0, 0),
+	["ColorShift_Top"] = Color3.fromRGB(0, 0, 0),
+	["OutdoorAmbient"] = Color3.fromRGB(194, 170, 130),
+	["ColorCorrectionTint"] = Color3.fromRGB(265, 255, 265),
+	["Skybox"] = "BasicMagentaOrange",
+	["Atmosphere"] = "Archive"
+}
+return v2

@@ -1,0 +1,33 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = {
+	["WINDOW_BG"] = Color3.fromRGB(122, 235, 217),
+	["TAB_COLOR"] = Color3.fromRGB(255, 141, 141),
+	["YES_COLOR"] = Color3.fromRGB(0, 180, 144),
+	["CLOSE_COLOR"] = Color3.fromRGB(255, 212, 212),
+	["ERROR"] = {
+		["BG"] = Color3.new(1, 1, 1),
+		["FG"] = Color3.fromRGB(255, 0, 25)
+	},
+	["DEFAULT"] = {
+		["BG"] = Color3.new(1, 1, 1),
+		["FG"] = Color3.fromRGB(80, 80, 80)
+	},
+	["CROWNS"] = {
+		["BG"] = Color3.fromRGB(255, 139, 85),
+		["FG"] = Color3.fromRGB(255, 233, 49)
+	},
+	["MUSIC"] = {
+		["BG"] = Color3.fromRGB(243, 181, 255),
+		["FG"] = Color3.fromRGB(126, 84, 180)
+	}
+}
+for _, v2 in pairs(game.Teams:GetTeams()) do
+	local v3 = {
+		["BG"] = v2.TeamColor.Color,
+		["FG"] = Color3.new(1, 1, 1)
+	}
+	v1[v2.Name:upper()] = v3
+	v1[v2.Name] = v3
+end
+return v1

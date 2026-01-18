@@ -1,0 +1,9 @@
+-- Decompiled with Bunni.lol Decompiler
+
+return {
+	["Ball Turret"] = 2,
+	["Trampoline"] = 3,
+	["Spikes"] = 6,
+	["Cage"] = 3,
+	["Shadow"] = 2
+}

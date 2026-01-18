@@ -1,0 +1,30 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = {
+	["Sheet1"] = "rbxgameasset://Images/uiPresets",
+	["Sheet2"] = "rbxgameasset://Images/TeamLogos"
+}
+return {
+	["KEYBOARD"] = { v1.Sheet1, Vector2.new(3, 0), 160 },
+	["TIME"] = { v1.Sheet1, Vector2.new(4, 0), 160 },
+	["INFO"] = { v1.Sheet1, Vector2.new(5, 0), 160 },
+	["QUESTION"] = { v1.Sheet1, Vector2.new(5, 1), 160 },
+	["FLAG"] = { v1.Sheet1, Vector2.new(5, 2), 160 },
+	["STAR"] = { v1.Sheet1, Vector2.new(5, 3), 160 },
+	["FRIEND"] = { v1.Sheet1, Vector2.new(4, 3), 160 },
+	["NOENTRY"] = { v1.Sheet1, Vector2.new(3, 4), 160 },
+	["PLUS"] = { v1.Sheet1, Vector2.new(4, 4), 160 },
+	["EXCLAIM"] = { v1.Sheet1, Vector2.new(5, 4), 160 },
+	["BACK"] = { v1.Sheet1, Vector2.new(0, 5), 160 },
+	["CHECK"] = { v1.Sheet1, Vector2.new(1, 5), 160 },
+	["REFRESH"] = { v1.Sheet1, Vector2.new(2, 5), 160 },
+	["WARNING"] = { v1.Sheet1, Vector2.new(3, 5), 160 },
+	["MUSIC"] = { "rbxassetid://7157761796", Vector2.new(0, 0), 72 },
+	["X"] = { v1.Sheet1, Vector2.new(4, 5), 160 },
+	["FORWARD"] = { v1.Sheet1, Vector2.new(5, 5), 160 },
+	["Red"] = { v1.Sheet2, Vector2.new(0, 0), 300 },
+	["Yellow"] = { v1.Sheet2, Vector2.new(1, 0), 300 },
+	["Green"] = { v1.Sheet2, Vector2.new(0, 1), 300 },
+	["Blue"] = { v1.Sheet2, Vector2.new(1, 1), 300 },
+	["Spectators"] = { v1.Sheet2, Vector2.new(2, 1), 300 }
+}

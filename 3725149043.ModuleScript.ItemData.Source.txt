@@ -1,0 +1,46 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v_u1 = require(game.ReplicatedStorage.Shared.Import)("Shared/Utils/Messages")
+local v2 = {
+	["Sticker Patch"] = {
+		["name"] = "Sticker Patches",
+		["description"] = "These can be used to add a sticker KO effect to your Tools!",
+		["model"] = "Assets/Items/Sticker Patch",
+		["action"] = "Open",
+		["func"] = function()
+			-- upvalues: (copy) v_u1
+			v_u1:send("OpenWindow", "StickerPatchWindow")
+		end,
+		["multiple"] = true,
+		["order"] = 1,
+		["price"] = 3000
+	},
+	["Title"] = {
+		["name"] = "Titles",
+		["description"] = "Use Titles to add special flair to your player nametag.",
+		["model"] = "Assets/Items/Title",
+		["action"] = "Set",
+		["multiple"] = false,
+		["order"] = 2
+	},
+	["VIP Club Pass"] = {
+		["name"] = "Super Club Pass",
+		["description"] = "Proof of your membership in the VIP Club. Gives you access to 1.5x Crowns earned at the end of rounds & special daily prizes.",
+		["model"] = "Assets/Items/VipPin",
+		["action"] = "Check",
+		["multiple"] = false,
+		["order"] = 3,
+		["testOnly"] = true
+	},
+	["VIP Server Options"] = {
+		["name"] = "VIP Server Options",
+		["description"] = "Allows you to edit certain options in your VIP Server.",
+		["model"] = "Assets/Items/VipServer",
+		["action"] = "Check",
+		["multiple"] = false,
+		["order"] = 0,
+		["previewRotation"] = Vector3.new(0, -25, 0),
+		["testOnly"] = true
+	}
+}
+return v2

@@ -1,0 +1,34 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v2 = v1("Server/MapBehaviors/Jungle")
+local v3 = v1("Server/MapBehaviors/ClassicBehavior")
+local v4 = v1("Server/MapBehaviors/RainbowBehavior")
+local v5 = v1("Server/MapBehaviors/LavaBehavior")
+local v6 = v1("Server/MapBehaviors/Ruins")
+local v7 = v1("Server/MapBehaviors/GalaxyBehavior")
+local v8 = v1("Server/MapBehaviors/RoyaleGreen")
+local v9 = v1("Server/MapBehaviors/Tennis")
+local v10 = v1("Server/MapBehaviors/InfectedMap")
+return {
+	["Classic"] = v3,
+	["Rainbow"] = v4,
+	["Galaxy"] = v7,
+	["Jungle"] = v2,
+	["Lava"] = v5,
+	["Ruins"] = v6,
+	["RoyaleGreen"] = v8,
+	["Crimson Courtyard"] = v10,
+	["Dark Jungle"] = v10,
+	["Possum City"] = v10,
+	["Storm Hill"] = v10,
+	["Islands"] = v1("Server/MapBehaviors/IslandsBehavior"),
+	["Coastal Coliseum"] = v1("Server/MapBehaviors/WaterBehavior"),
+	["Rooftop"] = v1("Server/MapBehaviors/RooftopBehavior"),
+	["Ocean"] = v1("Server/MapBehaviors/OceanBehavior"),
+	["Lilypad Sanctum"] = v1("Server/MapBehaviors/ArchiveBehavior"),
+	["Tennis"] = v9,
+	["Conveyor"] = v9,
+	["Double Deck"] = v9,
+	["Twin Alleys"] = v9
+}

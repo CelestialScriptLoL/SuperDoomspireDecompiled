@@ -1,0 +1,168 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = {
+	["Classic"] = {
+		["Name"] = "Classic",
+		["Type"] = "Basic",
+		["Icon"] = "rbxgameasset://Images/gamemodes",
+		["Offset"] = Vector2.new(0, 0),
+		["canRevote"] = true,
+		["Order"] = 1
+	},
+	["TwoTeamsFourTowers"] = {
+		["Name"] = "Two Teams",
+		["Type"] = "Basic",
+		["Icon"] = "rbxgameasset://Images/gamemodes",
+		["Offset"] = Vector2.new(1, 0),
+		["canRevote"] = true,
+		["Order"] = 2
+	},
+	["Infection"] = {
+		["Name"] = "Infection",
+		["Type"] = "Party",
+		["Icon"] = "rbxgameasset://Images/gamemodes",
+		["Offset"] = Vector2.new(2, 1),
+		["canRevote"] = false,
+		["Order"] = 2
+	},
+	["TeamDeathMatch"] = {
+		["Name"] = "Deathmatch",
+		["Type"] = "Basic",
+		["Icon"] = "rbxgameasset://Images/gamemodes",
+		["Offset"] = Vector2.new(0, 2),
+		["canRevote"] = false,
+		["Order"] = 3
+	},
+	["Tennis"] = {
+		["Name"] = "Roundcat Rally",
+		["Type"] = "Party",
+		["Icon"] = "rbxgameasset://Images/gamemodes",
+		["Offset"] = Vector2.new(2, 0),
+		["Order"] = 3
+	},
+	["SpawnCapture"] = {
+		["Name"] = "Spawn Capture",
+		["Type"] = "Basic",
+		["Icon"] = "rbxgameasset://Images/gamemodes",
+		["Offset"] = Vector2.new(0, 1),
+		["canRevote"] = true,
+		["Order"] = 3,
+		["VipOnly"] = true
+	},
+	["BlowStuffUp"] = {
+		["Name"] = "Blow Stuff Up",
+		["Type"] = "Party",
+		["Icon"] = "rbxgameasset://Images/gamemodes",
+		["Offset"] = Vector2.new(1, 1),
+		["Order"] = 1,
+		["VipOnly"] = true
+	}
+}
+if game:GetService("RunService"):IsStudio() or game.PlaceId == 3725285976 then
+	for _, v2 in pairs(v1) do
+		v2.canRevote = true
+	end
+end
+local v3 = {
+	["Gamemodes"] = v1
+}
+local v4 = {
+	["Classic"] = {
+		["Name"] = "Classic",
+		["Icon"] = "rbxgameasset://Images/map_classic"
+	},
+	["Lava"] = {
+		["Name"] = "Lava",
+		["Icon"] = "rbxgameasset://Images/map_lava"
+	},
+	["Jungle"] = {
+		["Name"] = "Jungle",
+		["Icon"] = "rbxgameasset://Images/mapjungle"
+	},
+	["Ruins"] = {
+		["Name"] = "Ruins",
+		["Icon"] = "rbxgameasset://Images/map_ruins"
+	},
+	["Galaxy"] = {
+		["Name"] = "Galaxy",
+		["Icon"] = "rbxgameasset://Images/mapgalaxy"
+	},
+	["Snowfall"] = {
+		["Name"] = "Snowfall",
+		["Icon"] = "rbxgameasset://Images/mapsnowfall"
+	},
+	["Xiajing"] = {
+		["Name"] = "Xiajing",
+		["Icon"] = "rbxgameasset://Images/map_xiajing"
+	},
+	["Ocean"] = {
+		["Name"] = "Ocean",
+		["Icon"] = "rbxgameasset://Images/mapocean"
+	},
+	["Rainbow"] = {
+		["Name"] = "Rainbow",
+		["Icon"] = "rbxgameasset://Images/map_rainbow"
+	},
+	["Islands"] = {
+		["Name"] = "Islands",
+		["Icon"] = "rbxgameasset://Images/mapIslands"
+	},
+	["Rooftop"] = {
+		["Name"] = "Rooftop",
+		["Icon"] = "rbxgameasset://Images/map_rooftop"
+	},
+	["Izumi"] = {
+		["Name"] = "Izumi",
+		["Icon"] = "rbxgameasset://Images/map_izumi"
+	},
+	["Dark Jungle"] = {
+		["Name"] = "Dark Jungle",
+		["Icon"] = "rbxgameasset://Images/mapDarkJungleZ"
+	},
+	["Storm Hill"] = {
+		["Name"] = "Storm Hill",
+		["Icon"] = "rbxgameasset://Images/map_stormhill"
+	},
+	["Possum City"] = {
+		["Name"] = "Possum City",
+		["Icon"] = "rbxgameasset://Images/map_possumcity"
+	},
+	["Crimson Courtyard"] = {
+		["Name"] = "Crimson Courtyard",
+		["Icon"] = "rbxgameasset://Images/map_courtyard"
+	},
+	["Relativity"] = {
+		["Name"] = "Relativity",
+		["Icon"] = "rbxgameasset://Images/map_relativity"
+	},
+	["Spicy Stadium"] = {
+		["Name"] = "Spicy Stadium",
+		["Icon"] = "rbxgameasset://Images/spicystadium"
+	},
+	["Coastal Coliseum"] = {
+		["Name"] = "Coastal Coliseum",
+		["Icon"] = "rbxgameasset://Images/coastal"
+	},
+	["Lilypad Sanctum"] = {
+		["Name"] = "Lilypad Sanctum",
+		["Icon"] = "rbxgameasset://Images/map_lilypad"
+	},
+	["Tennis"] = {
+		["Name"] = "Tennis",
+		["Icon"] = "rbxgameasset://Images/map_tennis"
+	},
+	["Conveyor"] = {
+		["Name"] = "Conveyor",
+		["Icon"] = "rbxgameasset://Images/map_conveyor"
+	},
+	["Double Deck"] = {
+		["Name"] = "Double Deck",
+		["Icon"] = "rbxgameasset://Images/map_doubledecker"
+	},
+	["Twin Alleys"] = {
+		["Name"] = "Twin Alleys",
+		["Icon"] = "rbxgameasset://Images/map_twinalleys"
+	}
+}
+v3.Maps = v4
+return v3

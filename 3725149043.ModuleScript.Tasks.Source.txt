@@ -1,0 +1,329 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = {}
+local v2 = {
+	["tasks"] = {
+		{
+			["id"] = "ko0",
+			["description"] = "Get 20 KOs!",
+			["name"] = "Okay KO!",
+			["rewardType"] = "tool",
+			["reward"] = "Sword (Dark)",
+			["requiredStat"] = "lifetimeKills",
+			["requiredValue"] = 20,
+			["icon"] = "BOOM",
+			["iconColor"] = Color3.fromRGB(40, 97, 255),
+			["baseColor"] = Color3.fromRGB(111, 214, 255)
+		},
+		{
+			["id"] = "spawns1",
+			["description"] = "Knock 10 enemy spawns off the map!",
+			["name"] = "Despawned",
+			["rewardType"] = "currency",
+			["reward"] = 100,
+			["requiredStat"] = "spawnsDestroyed",
+			["requiredValue"] = 10,
+			["icon"] = "SPAWN",
+			["iconColor"] = Color3.fromRGB(0, 132, 255),
+			["baseColor"] = Color3.fromRGB(111, 214, 255)
+		},
+		{
+			["id"] = "kdr0",
+			["description"] = "Get a KDR of 2 or greater in a match!",
+			["name"] = "KO:Death Ratio\'d",
+			["rewardType"] = "currency",
+			["reward"] = 75,
+			["requiredStat"] = "highestKDRInRound",
+			["requiredValue"] = 2,
+			["icon"] = "KDR",
+			["iconColor"] = Color3.fromRGB(156, 102, 255),
+			["baseColor"] = Color3.fromRGB(111, 214, 255),
+			["baseIcon"] = "BASE4"
+		},
+		{
+			["id"] = "reflect0",
+			["description"] = "Get 5 KOs by reflecting projectiles!",
+			["name"] = "Return to Sender",
+			["rewardType"] = "sticker",
+			["reward"] = "Tennis",
+			["requiredStat"] = "reflectKills",
+			["requiredValue"] = 5,
+			["additionalReward"] = 75,
+			["icon"] = "REFLECT",
+			["iconColor"] = Color3.fromRGB(179, 112, 255),
+			["baseColor"] = Color3.fromRGB(111, 214, 255),
+			["baseIcon"] = "BASE3"
+		},
+		{
+			["id"] = "infection0",
+			["description"] = "Win 10 rounds as an Infected in Infection.",
+			["name"] = "Brains, Brains!",
+			["rewardType"] = "sticker",
+			["reward"] = "Zombie",
+			["requiredStat"] = "infectedZombieWins",
+			["requiredValue"] = 10,
+			["icon"] = "INFECTED",
+			["iconColor"] = Color3.fromRGB(82, 102, 212),
+			["baseColor"] = Color3.fromRGB(65, 88, 37)
+		},
+		{
+			["id"] = "glass0",
+			["description"] = "Break 25 panes of glass with a Superball tool.",
+			["name"] = "Property Damage",
+			["rewardType"] = "currency",
+			["reward"] = 50,
+			["requiredStat"] = "glassBroken",
+			["requiredValue"] = 25,
+			["icon"] = "TOOLBALL",
+			["iconColor"] = Color3.fromRGB(179, 112, 255),
+			["baseColor"] = Color3.fromRGB(111, 214, 255)
+		}
+	},
+	["color"] = Color3.fromRGB(111, 214, 255),
+	["displayOrder"] = 1
+}
+v1.beginner = v2
+local v3 = {
+	["tasks"] = {
+		{
+			["id"] = "ko1",
+			["description"] = "Get 100 KOs!",
+			["name"] = "Violence is Not the Answer",
+			["rewardType"] = "sticker",
+			["reward"] = "Warrior",
+			["requiredStat"] = "lifetimeKills",
+			["requiredValue"] = 100,
+			["additionalReward"] = 150,
+			["icon"] = "BOOM",
+			["iconColor"] = Color3.fromRGB(255, 144, 40),
+			["baseColor"] = Color3.fromRGB(172, 255, 77)
+		},
+		{
+			["id"] = "deplatform1",
+			["description"] = "Knock 25 enemies off the map!",
+			["name"] = "Let\'s Deplatform Some People",
+			["rewardType"] = "sticker",
+			["reward"] = "Bye",
+			["requiredStat"] = "enemiesDeplatformed",
+			["requiredValue"] = 25,
+			["additionalReward"] = 150,
+			["icon"] = "DEPLATFORM",
+			["iconColor"] = Color3.fromRGB(74, 147, 255),
+			["baseColor"] = Color3.fromRGB(172, 255, 77)
+		},
+		{
+			["id"] = "kdr1",
+			["description"] = "Get a KDR of 4 or greater in a match!",
+			["name"] = "Teh Pwnz0r!",
+			["rewardType"] = "sticker",
+			["reward"] = "Bloxxer",
+			["requiredStat"] = "highestKDRInRound",
+			["requiredValue"] = 4,
+			["additionalReward"] = 150,
+			["icon"] = "KDR",
+			["iconColor"] = Color3.fromRGB(179, 0, 134),
+			["baseColor"] = Color3.fromRGB(172, 255, 77)
+		},
+		{
+			["id"] = "reflect1",
+			["description"] = "Reflect 100 projectiles with your sword!",
+			["name"] = "Mirror, Mirror, on the Doomspire",
+			["rewardType"] = "sticker",
+			["reward"] = "Blocked",
+			["requiredStat"] = "reflects",
+			["requiredValue"] = 100,
+			["additionalReward"] = 150,
+			["icon"] = "REFLECT",
+			["iconColor"] = Color3.fromRGB(255, 72, 40),
+			["baseColor"] = Color3.fromRGB(172, 255, 77)
+		},
+		{
+			["id"] = "maxreflect1",
+			["description"] = "Reflect a single projectile 10 or more times.",
+			["name"] = "Right Back At Ya",
+			["rewardType"] = "tool",
+			["reward"] = "Crystal Ball",
+			["requiredStat"] = "maxReflects",
+			["requiredValue"] = 10,
+			["additionalReward"] = 200,
+			["icon"] = "MAXREFLECT",
+			["iconColor"] = Color3.fromRGB(255, 72, 40),
+			["baseColor"] = Color3.fromRGB(172, 255, 77)
+		},
+		{
+			["id"] = "wins1",
+			["description"] = "Win 50 rounds.",
+			["name"] = "Sweet Victory",
+			["rewardType"] = "sticker",
+			["reward"] = "Little Royalty",
+			["requiredStat"] = "lifetimeWins",
+			["requiredValue"] = 50,
+			["additionalReward"] = 200,
+			["icon"] = "SPIRECROWN",
+			["iconColor"] = Color3.fromRGB(255, 174, 0),
+			["baseColor"] = Color3.fromRGB(172, 255, 77)
+		},
+		{
+			["id"] = "royalwins1",
+			["description"] = "Get 100 Royal Victories.",
+			["name"] = "Royal Sweep",
+			["rewardType"] = "special",
+			["reward"] = "Sticker Patch",
+			["amount"] = 2,
+			["requiredStat"] = "lifetimeRoyalWins",
+			["requiredValue"] = 100,
+			["icon"] = "SPIRECROWN",
+			["iconColor"] = Color3.fromRGB(255, 0, 157),
+			["baseColor"] = Color3.fromRGB(172, 255, 77)
+		},
+		{
+			["id"] = "infection1",
+			["description"] = "Win 10 rounds as a survivor in Infection.",
+			["name"] = "Left 4live",
+			["rewardType"] = "tool",
+			["reward"] = "Frying Pan",
+			["requiredStat"] = "infectedSurvivorWins",
+			["requiredValue"] = 10,
+			["icon"] = "SURVIVOR",
+			["iconColor"] = Color3.fromRGB(197, 0, 0),
+			["baseColor"] = Color3.fromRGB(65, 88, 37)
+		},
+		{
+			["id"] = "infection2",
+			["description"] = "KO 100 survivors in Infection.",
+			["name"] = "Making Fiends",
+			["rewardType"] = "tool",
+			["reward"] = "Nail Bat",
+			["requiredStat"] = "infectedSurvivorKills",
+			["requiredValue"] = 100,
+			["icon"] = "INFECTED",
+			["iconColor"] = Color3.fromRGB(128, 197, 0),
+			["baseColor"] = Color3.fromRGB(65, 88, 37)
+		},
+		{
+			["id"] = "rally1",
+			["description"] = "Win 10 rounds of Roundcat Rally.",
+			["name"] = "Cat Burglar",
+			["rewardType"] = "tool",
+			["reward"] = "Roundcat",
+			["requiredStat"] = "rallyWins",
+			["requiredValue"] = 10,
+			["icon"] = "TOOLROCKET",
+			["iconColor"] = Color3.fromRGB(255, 164, 112),
+			["baseColor"] = Color3.fromRGB(111, 214, 255)
+		}
+	},
+	["color"] = Color3.fromRGB(212, 255, 111),
+	["displayOrder"] = 2
+}
+v1.intermediate = v3
+local v4 = {
+	["tasks"] = {
+		{
+			["id"] = "ko3",
+			["description"] = "Get 1,000 KOs!",
+			["name"] = "Knockout Star",
+			["rewardType"] = "tool",
+			["reward"] = "Golden Sword",
+			["requiredStat"] = "lifetimeKills",
+			["requiredValue"] = 1000,
+			["additionalReward"] = 250,
+			["icon"] = "SWORD",
+			["iconColor"] = Color3.fromRGB(255, 82, 51),
+			["baseColor"] = Color3.fromRGB(253, 214, 42)
+		},
+		{
+			["id"] = "ko4",
+			["description"] = "Get 2,500 KOs!",
+			["name"] = "Knockout Superstar",
+			["rewardType"] = "tool",
+			["reward"] = "Golden Greatsword",
+			["requiredStat"] = "lifetimeKills",
+			["requiredValue"] = 2500,
+			["additionalReward"] = 250,
+			["icon"] = "CROWN",
+			["iconColor"] = Color3.fromRGB(255, 16, 108),
+			["baseColor"] = Color3.fromRGB(253, 214, 42)
+		},
+		{
+			["id"] = "wins3",
+			["description"] = "Get 250 victories!",
+			["name"] = "Victory Royalty",
+			["rewardType"] = "tool",
+			["reward"] = "Golden Launcher",
+			["requiredStat"] = "lifetimeWins",
+			["requiredValue"] = 250,
+			["icon"] = "SPIRECROWN",
+			["iconColor"] = Color3.fromRGB(255, 82, 51),
+			["baseColor"] = Color3.fromRGB(253, 214, 42)
+		},
+		{
+			["id"] = "royalwins2",
+			["description"] = "Get 500 Royal Victories!",
+			["name"] = "Royal Brilliance",
+			["rewardType"] = "special",
+			["reward"] = "Sticker Patch",
+			["amount"] = 5,
+			["requiredStat"] = "lifetimeRoyalWins",
+			["requiredValue"] = 500,
+			["icon"] = "SPIRECROWN",
+			["iconColor"] = Color3.fromRGB(255, 0, 157),
+			["baseColor"] = Color3.fromRGB(253, 214, 42)
+		},
+		{
+			["id"] = "bricks3",
+			["description"] = "Get 25,000 total bricks!",
+			["name"] = "Brickster",
+			["rewardType"] = "tool",
+			["reward"] = "Gem Bomb",
+			["requiredStat"] = "lifetimeBricks",
+			["requiredValue"] = 25000,
+			["icon"] = "BRICK",
+			["iconColor"] = Color3.fromRGB(255, 82, 51),
+			["baseColor"] = Color3.fromRGB(253, 214, 42)
+		},
+		{
+			["id"] = "reflect3",
+			["description"] = "Get 250 KOs by reflecting projectiles!",
+			["name"] = "No You",
+			["rewardType"] = "tool",
+			["reward"] = "Golden Racket",
+			["requiredStat"] = "reflectKills",
+			["requiredValue"] = 250,
+			["additionalReward"] = 100,
+			["icon"] = "REFLECT",
+			["iconColor"] = Color3.fromRGB(255, 82, 51),
+			["baseColor"] = Color3.fromRGB(253, 214, 42)
+		},
+		{
+			["id"] = "deplatform3",
+			["description"] = "Knock 1,000 enemies off the map!",
+			["name"] = "Abyss Expert",
+			["rewardType"] = "tool",
+			["reward"] = "Novaball",
+			["requiredStat"] = "enemiesDeplatformed",
+			["requiredValue"] = 1000,
+			["additionalReward"] = 150,
+			["icon"] = "DEPLATFORM",
+			["iconColor"] = Color3.fromRGB(255, 82, 51),
+			["baseColor"] = Color3.fromRGB(253, 214, 42)
+		},
+		{
+			["id"] = "destruct1",
+			["description"] = "Destroy 2,000 player-built parts.",
+			["name"] = "Wrecked It",
+			["rewardType"] = "tool",
+			["reward"] = "Gold Trowel",
+			["requiredStat"] = "constructionKills",
+			["requiredValue"] = 2000,
+			["additionalReward"] = 150,
+			["icon"] = "TOOLTROWEL",
+			["iconColor"] = Color3.fromRGB(255, 82, 51),
+			["baseColor"] = Color3.fromRGB(253, 214, 42)
+		}
+	},
+	["color"] = Color3.fromRGB(255, 98, 59),
+	["displayOrder"] = 3
+}
+v1.advanced = v4
+return v1

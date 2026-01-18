@@ -1,0 +1,9 @@
+-- Decompiled with Bunni.lol Decompiler
+
+return {
+	["ROCKET"] = "Rocket Launcher",
+	["SWORD"] = "Sword",
+	["BOMB"] = "Bomb",
+	["TROWEL"] = "Trowel",
+	["BALL"] = "Superball"
+}

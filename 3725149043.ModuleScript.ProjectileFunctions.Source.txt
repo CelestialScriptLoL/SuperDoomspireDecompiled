@@ -1,0 +1,1085 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v_u1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v_u1("Shared/Utils/Messages")
+local v_u_collection = game:GetService("CollectionService")
+local v_u_http = game:GetService("HttpService")
+game:GetService("Players")
+local v_u_promise = v_u1("Promise")
+local v_u3 = v_u1("Shared/Utils/LowerHealth")
+local v_u4 = v_u1("Shared/Data/WeaponConstants")
+local v_u5 = v_u1("Shared/Data/TeamData")
+local v_u6 = v_u1("Shared/Data/ToolCosmetics")
+local v_u7 = v_u1("Shared/Data/ToolData")
+local v_u8 = v_u1("Shared/PlayerData")
+local v_u9 = v_u1("Shared/Utils/BreakGlass")
+local v_u10 = v_u1("Shared/Utils/TeamCollide")
+local v_u_new = Random.new()
+local v_u11 = v_u1("Shared/Utils/FastSpawn")
+local function v_u12(arg1, arg2, _, _, arg5, arg6, arg7)
+	-- upvalues: (copy) v_u3, (copy) v_u2, (copy) v_u_collection, (copy) v_u11, (copy) v_u_promise
+	if arg1 then
+		local v_u1 = arg1.Parent:FindFirstChild("Humanoid") or arg1.Parent.Parent:FindFirstChild("Humanoid")
+		if not (arg1.Parent:FindFirstChildOfClass("ForceField") or arg1.Parent.Parent:FindFirstChildOfClass("ForceField")) then
+			if v_u1 then
+				if v_u1.Health <= 0 then
+					return
+				end
+				v_u3(arg2, v_u1.Parent, arg5, arg7)
+				if arg7 and (arg7.fire and math.random(1, 100) < arg7.fireChance) then
+					v_u2:send("Burn", v_u1.Parent, arg7.fireLength, arg2, arg7)
+				end
+				if arg7 and arg7.chill then
+					v_u2:send("Chill", v_u1, arg7.chill, arg2)
+				end
+				if arg7 and (arg7.ragdoll and not v_u_collection:HasTag(v_u1.Parent, "BallEffect")) then
+					local v_u_getplayerfromcharacter = game.Players:GetPlayerFromCharacter(v_u1.Parent)
+					if arg2 and (v_u_getplayerfromcharacter and (v_u_getplayerfromcharacter.Team == arg2.Team and arg2.Team ~= game.Teams.Spectators)) then
+						return
+					end
+					local v_u_ragdoll = arg7.ragdoll
+					if v_u_collection:HasTag(v_u1.Parent, "RagdollResist") then
+						v_u_ragdoll = v_u_ragdoll * 0.75
+					end
+					v_u_collection:AddTag(v_u1.Parent, "BallEffect")
+					v_u2:send("RagdollCharacter", v_u1.Parent)
+					arg1.CFrame = arg1.CFrame
+					v_u11(function()
+						-- upvalues: (copy) v_u_getplayerfromcharacter, (ref) v_u2, (ref) v_u_ragdoll, (ref) v_u_promise, (copy) v_u1, (ref) v_u_collection
+						if v_u_getplayerfromcharacter then
+							v_u2:sendClient(v_u_getplayerfromcharacter, "StatusEffect", "ragdoll", v_u_ragdoll)
+						end
+						v_u_promise.delay(v_u_ragdoll):andThen(function()
+							-- upvalues: (ref) v_u2, (ref) v_u1, (ref) v_u_getplayerfromcharacter, (ref) v_u_promise, (ref) v_u_collection
+							v_u2:send("UnragdollCharacter", v_u1.Parent)
+							v_u2:sendClient(v_u_getplayerfromcharacter, "UnragdollCharacter", v_u1.Parent)
+							v_u_promise.delay(2):andThen(function()
+								-- upvalues: (ref) v_u_collection, (ref) v_u1
+								v_u_collection:RemoveTag(v_u1.Parent, "BallEffect")
+							end)
+						end)
+					end)
+				end
+				if arg7 and arg7.knockback then
+					v_u2:send("Knockback", arg1.Parent, arg6 * arg7.knockback, arg7.knockbackTime or 0.2, arg7.knockbackHorizontal or false)
+				end
+			end
+		end
+	else
+		return
+	end
+end
+local function v_u13(arg1, arg2, arg3, arg4, _, arg6)
+	-- upvalues: (copy) v_u7, (copy) v_u2, (copy) v_u_http, (copy) v_u8, (copy) v_u_new
+	local v1 = arg1.Parent.Parent:FindFirstChild("Humanoid") or arg1.Parent:FindFirstChild("Humanoid")
+	local v2 = 1.1
+	local v3 = 1.2
+	local v_reflectpower = arg1:FindFirstChild("reflectPower")
+	local v_reflectspeed = arg1:FindFirstChild("reflectSpeed")
+	local v_tool = arg1:FindFirstChild("tool")
+	local v_reflectaccuracy = arg6.reflectAccuracy
+	if v_tool then
+		v_tool = v_tool.Value
+	end
+	if v_reflectpower then
+		v3 = v_reflectpower.Value
+	end
+	if v_reflectspeed then
+		v2 = v_reflectspeed.Value
+	end
+	if v1 and v1.Health > 0 then
+		local v4 = game.Players:GetPlayerFromCharacter(arg1.Parent.Parent) or game.Players:GetPlayerFromCharacter(arg1.Parent)
+		if v_tool and (v_u7[v_tool] and v_u7[v_tool].reflectSound) then
+			v_u2:send("PlaySound", v_u7[v_tool].reflectSound, arg3, 50)
+		end
+		local v_generateguid = v_u_http:GenerateGUID()
+		if arg6.reflects and arg6.reflects >= 5 then
+			if arg6.reflects < 10 then
+				v_u2:send("PlaySound", "Reflect2", arg3, 1 + (arg6.reflects - 5) * 0.1, true)
+			else
+				v_u2:send("PlaySound", "Reflect3", arg3, 1 + (arg6.reflects - 10) * 0.05, true)
+			end
+		else
+			v_u2:send("PlaySound", "Reflect", arg3, arg6.reflects and (1 + arg6.reflects * 0.1 or 1) or 1, true)
+		end
+		if arg1:FindFirstChild("OnReflect") then
+			arg1.OnReflect:Fire(v4, arg1, arg3)
+		end
+		if v1.RootPart and (arg2.Character and arg2.Character:FindFirstChild("HumanoidRootPart")) then
+			v_u2:send("PlayParticleSet", "Reflect", v4.Team.Name, arg3)
+			local v_position = v1.RootPart.Position
+			local v_p = arg2.Character.HumanoidRootPart.CFrame.p
+			arg6.reflects = arg6.reflects and (arg6.reflects + 1 or 1) or 1
+			arg6.lastReflect = tick()
+			arg6.serverStart = tick()
+			arg6.serverTick = tick()
+			if v_u8:get(v4, "maxReflects") < arg6.reflects then
+				v_u8:set(v4, "maxReflects", arg6.reflects)
+			end
+			v_u8:add(v4, "reflects", 1)
+			arg6.speed = arg6.speed * v2
+			if arg6.gravity then
+				arg6.gravity = arg6.gravity * 0.5
+			end
+			if arg6.damage then
+				arg6.damage = arg6.damage * v3
+			end
+			if arg6.radius then
+				arg6.radius = math.min(arg6.baseRadius * 4, arg6.radius * v3)
+			end
+			if arg6.knockback then
+				arg6.knockback = arg6.knockback * v2
+			end
+			if arg6.knockbackTime then
+				arg6.knockbackTime = arg6.knockbackTime * v2
+			end
+			if v_reflectaccuracy ~= nil then
+				local v_nextnumber = v_u_new:NextNumber(-v_reflectaccuracy, v_reflectaccuracy)
+				local v_nextnumber = v_u_new:NextNumber(-v_reflectaccuracy, v_reflectaccuracy)
+				v_p = v_p + Vector3.new(v_nextnumber, v_nextnumber, v_u_new:NextNumber(-v_reflectaccuracy, v_reflectaccuracy))
+			end
+			if arg6.Mega then
+				v_position = v_position + CFrame.new(v_position, v_p).LookVector * 7 + Vector3.new(0, 3, 0)
+				v_p = v_p + Vector3.new(0, 0.5, 0)
+				arg6.originPos = v_position
+			end
+			v_u2:send("CreateProjectile", v_generateguid, v_position, v_p, game.ReplicatedStorage.Assets.Projectiles[arg4], v4, arg6)
+			v_u2:sendAllClients("CreateProjectile", v_generateguid, v_position, v_p, game.ReplicatedStorage.Assets.Projectiles[arg4].Name, v4, arg6)
+		end
+	end
+end
+local function v_u14(arg1, arg2, arg3, arg4)
+	local v_getplayerfromcharacter = game.Players:GetPlayerFromCharacter(arg4)
+	if v_getplayerfromcharacter == nil then
+		return false
+	end
+	if arg3 == v_getplayerfromcharacter then
+		return false
+	end
+	if arg2.lastReflect and tick() - arg2.lastReflect < 0.1 then
+		return false
+	end
+	if v_getplayerfromcharacter.Team == arg3.Team and v_getplayerfromcharacter.Team.Name ~= "Spectators" then
+		return false
+	end
+	if arg2.cannotReflect then
+		return false
+	end
+	if arg4 and arg4.PrimaryPart then
+		local v_dot = arg4.PrimaryPart.CFrame.lookVector:Dot((arg1 - arg4.PrimaryPart.Position).unit)
+		local v_acos = math.acos(v_dot)
+		if math.deg(v_acos) > 60 then
+			return false
+		end
+	end
+	return true
+end
+local function v_u15(arg1)
+	-- upvalues: (copy) v_u_collection
+	for _, v1 in pairs(arg1:GetDescendants()) do
+		if v1:IsA("BasePart") and v_u_collection:HasTag(v1, "Reflect") then
+			return true
+		end
+	end
+	return false
+end
+local v16 = {
+	["Hit"] = {
+		["Default"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u12
+			v_u12(arg1, arg2, arg3, arg4, 10, arg5, arg6)
+		end,
+		["Pellet"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u2, (copy) v_u7, (copy) v_u12, (copy) v_u9
+			v_u2:send("PlaySound", v_u7[arg6.toolName].impactSound, arg3, 150)
+			v_u12(arg1, arg2, arg3, arg4, arg6.damage, arg5, arg6)
+			v_u2:send("PlayParticle", v_u7[arg6.toolName].particle, 1, arg3)
+			if arg1.Name == "Glass" then
+				v_u9(arg2, arg3, arg1)
+			end
+		end,
+		["Arrow"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u2, (copy) v_u7, (copy) v_u12
+			v_u2:send("PlaySound", v_u7[arg6.toolName].impactSound, arg3, 150)
+			v_u12(arg1, arg2, arg3, arg4, arg6.damage, arg5, arg6)
+			v_u2:send("PlayParticle", v_u7[arg6.toolName].particle, 1, arg3)
+		end,
+		["ArrowBig"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u2, (copy) v_u7, (copy) v_u12, (copy) v_u9
+			v_u2:send("PlaySound", v_u7[arg6.toolName].impactSound, arg3, 150)
+			v_u12(arg1, arg2, arg3, arg4, arg6.damage, arg5, arg6)
+			v_u2:send("PlayParticle", v_u7[arg6.toolName].particle, 1, arg3)
+			if arg1.Name == "Glass" then
+				v_u9(arg2, arg3, arg1)
+			end
+		end,
+		["Paintball"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u5, (copy) v_u2, (copy) v_u7, (copy) v_u12
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				if not arg1:IsDescendantOf(workspace.SpectateZone) and arg1.Size.Magnitude < 8 then
+					arg1.BrickColor = arg2.TeamColor
+				end
+				local v_attachment = Instance.new("Attachment")
+				v_attachment.WorldPosition = arg3
+				v_attachment.Parent = workspace.Terrain
+				local v_clone = game.ReplicatedStorage.Assets.Particles.Paint:Clone()
+				v_clone.Parent = v_attachment
+				v_clone.Color = ColorSequence.new(v_u5[arg2.Team.Name].colors.explosives, arg2.TeamColor.Color)
+				v_clone:Emit(8)
+				v_u2:send("PlaySound", v_u7[arg6.toolName].impactSound, arg3, 150)
+				v_u12(arg1, arg2, arg3, arg4, arg6.damage, arg5, arg6)
+			end
+		end,
+		["Rocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.ROCKET_EXPLOSION_DAMAGE
+				arg6.minDamage = v_u4.ROCKET_EXPLOSION_MINDAMAGE
+				arg6.radius = v_u4.ROCKET_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_rocket_jumpmultiplier = v_u4.ROCKET_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_rocket_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = arg6.pressure or v_u4.ROCKET_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.ROCKET_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.ROCKET_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or (arg6.ragdoll or v_u4.ROCKET_EXPLOSION_RAGDOLL_RADIUS),
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = arg6.bombJumpMultiplier or v_rocket_jumpmultiplier,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET",
+					["noDestroy"] = arg6.noDestroy
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["EggDev"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = 0
+				arg6.radius = v_u4.ROCKET_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_rocket_jumpmultiplier = v_u4.ROCKET_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_rocket_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v2 = nil or 0.8
+					local v3
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v2)
+						v3 = true
+					else
+						v3 = nil
+					end
+					arg6.damage = v_damage
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.ROCKET_EXPLOSION_PRESSURE * 0.5,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.ROCKET_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.ROCKET_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = 0,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_rocket_jumpmultiplier * 2,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET"
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["BusterShotBig"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.ROCKET_EXPLOSION_DAMAGE
+				arg6.minDamage = v_u4.ROCKET_EXPLOSION_MINDAMAGE
+				arg6.radius = v_u4.ROCKET_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+				if not arg6.t then
+					arg6.t = 0
+				end
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v1
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v2 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v2)
+						v1 = true
+					else
+						v1 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v1 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.ROCKET_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.ROCKET_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.ROCKET_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v1 and 0 or v_u4.ROCKET_EXPLOSION_RAGDOLL_RADIUS,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_u4.BUSTER_JUMPMULTIPLIER,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET"
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["DirectRocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.DIRECT_ROCKET_EXPLOSION_DAMAGE
+				arg6.minDamage = v_u4.DIRECT_ROCKET_EXPLOSION_MINDAMAGE
+				arg6.radius = v_u4.DIRECT_ROCKET_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+				if not arg6.t then
+					arg6.t = 0
+				end
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_direct_rocket_jumpmultiplier = v_u4.DIRECT_ROCKET_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_direct_rocket_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.DIRECT_ROCKET_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.DIRECT_ROCKET_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.DIRECT_ROCKET_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or v_u4.DIRECT_ROCKET_EXPLOSION_RAGDOLL_RADIUS,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_direct_rocket_jumpmultiplier,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET"
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["EngineRocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.HOTROD_EXPLOSION_DAMAGE
+				arg6.minDamage = v_u4.HOTROD_EXPLOSION_MINDAMAGE
+				arg6.radius = v_u4.HOTROD_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_hotrod_jumpmultiplier = v_u4.HOTROD_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_hotrod_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.HOTROD_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.HOTROD_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.HOTROD_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or v_u4.HOTROD_EXPLOSION_RAGDOLL_RADIUS,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_hotrod_jumpmultiplier,
+					["selfDamage"] = 15,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET"
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["IceRocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.ICEROCKET_EXPLOSION_DAMAGE
+				arg6.minDamage = v_u4.ICEROCKET_EXPLOSION_MINDAMAGE
+				arg6.radius = v_u4.ICEROCKET_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_icerocket_jumpmultiplier = v_u4.ICEROCKET_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_icerocket_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.ICEROCKET_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.ROCKET_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.ROCKET_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or v_u4.ICEROCKET_EXPLOSION_RAGDOLL_RADIUS,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_icerocket_jumpmultiplier,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET",
+					["chill"] = v_u4.ICEROCKET_CHILLTIME
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["LaserRocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.LASER_ROCKET_EXPLOSION_DAMAGE
+				arg6.minDamage = v_u4.LASER_ROCKET_EXPLOSION_MINDAMAGE
+				arg6.radius = v_u4.LASER_ROCKET_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_laser_rocket_jumpmultiplier = v_u4.LASER_ROCKET_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_laser_rocket_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = 0.5 or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.ROCKET_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.LASER_ROCKET_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.LASER_ROCKET_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or v_u4.LASER_ROCKET_EXPLOSION_RAGDOLL_RADIUS,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_laser_rocket_jumpmultiplier,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET"
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["ShadowRocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.SHADOW_EXPLOSION_DAMAGE
+				arg6.minDamage = v_u4.SHADOW_EXPLOSION_MINDAMAGE
+				arg6.radius = v_u4.SHADOW_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_shadow_jumpmultiplier = v_u4.SHADOW_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_shadow_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.SHADOW_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.SHADOW_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.SHADOW_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or v_u4.SHADOW_EXPLOSION_RAGDOLL_RADIUS,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_shadow_jumpmultiplier,
+					["fire"] = true,
+					["fireChance"] = 100,
+					["fireLength"] = 8,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET"
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+				v_u2:send("PlayParticle", "ShadowSmoke", 45, arg3)
+			end
+		end,
+		["BombRocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				if not arg6.airtimeDamageUp then
+					arg6.airtimeDamageUp = 66
+				end
+				if not arg6.t then
+					arg6.t = 0
+				end
+				arg6.t = math.max(0, arg6.t - 0.15)
+				arg6.damage = v_u4.BOMBARDIER_EXPLOSION_DAMAGE + math.min(300, arg6.airtimeDamageUp * arg6.t)
+				arg6.minDamage = v_u4.BOMBARDIER_EXPLOSION_MINDAMAGE + math.min(100, arg6.airtimeDamageUp * arg6.t)
+				arg6.radius = v_u4.BOMBARDIER_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_bombardier_jumpmultiplier = v_u4.BOMBARDIER_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_bombardier_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.BOMBARDIER_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.BOMBARDIER_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.BOMBARDIER_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or v_u4.BOMBARDIER_EXPLOSION_RAGDOLL_RADIUS,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_bombardier_jumpmultiplier,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET"
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["CrystalRocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				if not arg6.airtimeDamageUp then
+					arg6.airtimeDamageUp = 200
+				end
+				if not arg6.t then
+					arg6.t = 0
+				end
+				arg6.t = math.max(0, arg6.t - 0.15)
+				arg6.damage = v_u4.CRYSTAL_EXPLOSION_DAMAGE + math.min(200, arg6.airtimeDamageUp * arg6.t)
+				arg6.minDamage = v_u4.CRYSTAL_EXPLOSION_MINDAMAGE + math.min(100, arg6.airtimeDamageUp * arg6.t)
+				arg6.radius = v_u4.CRYSTAL_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_rocket_jumpmultiplier = v_u4.ROCKET_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_rocket_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.CRYSTAL_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.CRYSTAL_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.CRYSTAL_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or v_u4.CRYSTAL_EXPLOSION_RAGDOLL_RADIUS,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_rocket_jumpmultiplier,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET"
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["FireWave"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u12, (copy) v_u2
+			v_u12(arg1, arg2, arg3, arg4, arg6.damage, arg5, arg6)
+			if arg2 and arg2.Team then
+				v_u2:send("PlayParticle", "FireBurst" .. arg2.Team.Name, 6, arg3)
+			end
+		end,
+		["IceWave"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u12, (copy) v_u2
+			v_u12(arg1, arg2, arg3, arg4, arg6.damage, arg5, arg6)
+			v_u2:send("PlayParticle", "Snowflakes", 8, arg3)
+		end,
+		["TennisBall"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u12, (copy) v_u2, (copy) v_u9
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+				return
+			else
+				v_u12(arg1, arg2, arg3, arg4, arg6.damage, arg5, arg6)
+				v_u2:send("PlaySound", "TennisBallHit", arg3, 50)
+				if arg2 and arg2.Team then
+					v_u2:send("PlayParticle", "Impact", 1, arg3)
+				end
+				if arg1.Name == "Glass" then
+					v_u9(arg2, arg3, arg1)
+				end
+			end
+		end,
+		["BusterShot"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u12, (copy) v_u2, (copy) v_u9
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+				return
+			else
+				v_u12(arg1, arg2, arg3, arg4, arg6.damage, arg5, arg6)
+				v_u2:send("PlaySound", "BusterHit", arg3, 150)
+				if arg2 and arg2.Team then
+					v_u2:send("PlayParticle", "BusterHit" .. arg2.Team.Name, 1, arg3)
+				end
+				if arg1.Name == "Glass" then
+					v_u9(arg2, arg3, arg1)
+				end
+			end
+		end,
+		["BusterShotMedium"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.ROCKET_EXPLOSION_DAMAGE
+				arg6.minDamage = v_u4.ROCKET_EXPLOSION_MINDAMAGE
+				arg6.radius = v_u4.ROCKET_EXPLOSION_RADIUS
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v1
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v2 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v2)
+						v1 = true
+					else
+						v1 = nil
+					end
+					arg6.damage = v_damage
+				else
+					v1 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius * 0.5,
+					["pressure"] = v_u4.ROCKET_EXPLOSION_PRESSURE * 0.5,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.ROCKET_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.ROCKET_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v1 and 0 or v_u4.ROCKET_EXPLOSION_RAGDOLL_RADIUS * 0,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_u4.BUSTER_JUMPMULTIPLIER * 0,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET",
+					["noDestroy"] = true
+				})
+				v_u2:send("PlaySound", v_u7[arg6.toolName].sounds.Explode, arg3, 150)
+			end
+		end,
+		["MegaCatRocket"] = function(arg1, arg2, arg3, arg4, arg5, arg6)
+			-- upvalues: (copy) v_u4, (copy) v_u_collection, (copy) v_u15, (copy) v_u14, (copy) v_u13, (copy) v_u1, (copy) v_u7, (copy) v_u2
+			if not arg6.damage then
+				arg6.damage = v_u4.ROCKET_EXPLOSION_DAMAGE * 2
+				arg6.minDamage = v_u4.ROCKET_EXPLOSION_MINDAMAGE * 2
+				arg6.radius = v_u4.ROCKET_EXPLOSION_RADIUS * 2.5
+				arg6.baseRadius = arg6.radius
+			end
+			if (v_u_collection:HasTag(arg1, "Reflect") or v_u15(arg1.Parent)) and (v_u14(arg3, arg6, arg2, arg1.Parent) or v_u14(arg3, arg6, arg2, arg1.Parent.Parent)) then
+				v_u13(arg1, arg2, arg3, arg4, arg5, arg6)
+			else
+				local v_rocket_jumpmultiplier = v_u4.ROCKET_JUMPMULTIPLIER
+				local v1 = v_u1("Server/Systems/GameLoop")
+				if v1:getGamemode().rocketJumpOverride and (arg2 and arg2.Team.Name ~= "Spectators") then
+					v_rocket_jumpmultiplier = v1:getGamemode().rocketJumpOverride
+				end
+				local v2
+				if arg6.t and (arg6.damage and not arg6.reflects) then
+					local v_damage = arg6.damage
+					local v3 = nil or 0.8
+					if arg6.t <= 0.2 then
+						v_damage = math.min(50, v_damage * v3)
+						v2 = true
+					else
+						v2 = nil
+					end
+					arg6.damage = v_damage
+					if v2 then
+						arg6.ragdoll = 0
+					end
+				else
+					v2 = false
+				end
+				v_u2:send("CreateExplosion", arg3, arg2, {
+					["reflects"] = arg6.reflects,
+					["radius"] = arg6.radius,
+					["pressure"] = v_u4.ROCKET_EXPLOSION_PRESSURE,
+					["particle"] = v_u7[arg6.toolName].explodeParticle,
+					["minRadius"] = v_u4.ROCKET_EXPLOSION_MIN_RADIUS,
+					["maxRadius"] = v_u4.ROCKET_EXPLOSION_MAX_RADIUS,
+					["ragdoll"] = v2 and 0 or 1,
+					["damage"] = arg6.damage,
+					["minDamage"] = arg6.minDamage,
+					["bombJumpMultiplier"] = v_rocket_jumpmultiplier,
+					["toolName"] = arg6.toolName,
+					["toolSlot"] = "ROCKET",
+					["noDamagedEvents"] = true
+				})
+				v_u2:send("PlaySound", "ExplosionMegaCat", arg3, 150)
+			end
+		end
+	},
+	["Created"] = {
+		["Paintball"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u5, (copy) v_u10
+			arg3.toolSlot = "BALL"
+			arg1.Base.BrickColor = arg2.TeamColor
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			local v_projectiletrail = arg1:FindFirstChild("ProjectileTrail", true)
+			if v_projectiletrail then
+				v_projectiletrail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(0.5, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(1, Color3.new(0.2, 0.2, 0.2)) })
+			end
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["Pellet"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			arg3.toolSlot = "BALL"
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["Arrow"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			arg3.toolSlot = "BALL"
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["ArrowBig"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			arg3.toolSlot = "BALL"
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["Rocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u5, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(900, 1100) * 0.001
+			arg1.Base.RocketFly:Play()
+			if arg1:FindFirstChild("Trail") then
+				arg1.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(0.5, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(1, Color3.new(0.2, 0.2, 0.2)) })
+			end
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["CrystalRocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(900, 1100) * 0.001
+			arg1.Base.RocketFly:Play()
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["LaserRocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(900, 1100) * 0.001
+			arg1.Base.RocketFly:Play()
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["ShadowRocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(900, 1100) * 0.001
+			arg1.Base.RocketFly:Play()
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["DirectRocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u5, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(900, 1100) * 0.001
+			arg1.Base.RocketFly:Play()
+			if arg1:FindFirstChild("Trail") then
+				arg1.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(0.5, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(1, Color3.new(0.2, 0.2, 0.2)) })
+			end
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["BombRocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u5, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(900, 1100) * 0.001
+			arg1.Base.RocketFly2.PlaybackSpeed = arg1.Base.RocketFly.PlaybackSpeed
+			arg1.Base.RocketFly:Play()
+			arg1.Base.RocketFly2:Play()
+			if arg1:FindFirstChild("StarTrail") then
+				arg1.StarTrail.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.light),
+					ColorSequenceKeypoint.new(0.5, v_u5[arg2.Team.Name].colors.explosives),
+					ColorSequenceKeypoint.new(0.75, Color3.new(1, 1, 1)),
+					ColorSequenceKeypoint.new(1, v_u5[arg2.Team.Name].colors.light)
+				})
+			end
+			if arg1:FindFirstChild("Trail") then
+				arg1.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(0.25, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(1, Color3.new(0.2, 0.2, 0.2)) })
+			end
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["EngineRocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u5, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(900, 1100) * 0.001
+			arg1.Base.RocketFly:Play()
+			if arg1:FindFirstChild("Trail") then
+				arg1.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(0.25, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(1, Color3.new(0.2, 0.2, 0.2)) })
+			end
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["IceRocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u5, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.ProjectileTrail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1, v_u5[arg2.Team.Name].colors.explosives) })
+			arg1.SideTrailA.Color = ColorSequence.new({
+				ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives),
+				ColorSequenceKeypoint.new(0.6, v_u5[arg2.Team.Name].colors.explosives),
+				ColorSequenceKeypoint.new(0.8, v_u5[arg2.Team.Name].colors["Frost Staff"]),
+				ColorSequenceKeypoint.new(1, Color3.new(1, 1, 1))
+			})
+			arg1.SideTrailB.Color = ColorSequence.new({
+				ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives),
+				ColorSequenceKeypoint.new(0.6, v_u5[arg2.Team.Name].colors.explosives),
+				ColorSequenceKeypoint.new(0.8, v_u5[arg2.Team.Name].colors["Frost Staff"]),
+				ColorSequenceKeypoint.new(1, Color3.new(1, 1, 1))
+			})
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(950, 1050) * 0.001
+			arg1.Base.RocketFly:Play()
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["FireWave"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u5, (copy) v_u10
+			arg3.toolSlot = "SWORD"
+			arg1.Base.Color = v_u5[arg2.Team.Name].colors.explosives
+			arg1.Base.PointLight.Color = arg1.Base.Color
+			arg1.Base.ProjectileTrail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(0.5, v_u5[arg2.Team.Name].colors.light), ColorSequenceKeypoint.new(1, Color3.new(0.2, 0.2, 0.2)) })
+			arg1.Base.Fire.Color = arg1.Base.ProjectileTrail.Color
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["IceWave"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u5, (copy) v_u10
+			arg3.toolSlot = "SWORD"
+			arg1.Base.ProjectileTrail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(0.3, v_u5[arg2.Team.Name].colors.light), ColorSequenceKeypoint.new(1, Color3.new(1, 1, 1)) })
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["TennisBall"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			arg3.toolSlot = "SWORD"
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg1.Base.TextureID = "rbxgameasset://Images/Tennis" .. arg2.Team.Name
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+		end,
+		["BusterShot"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			arg3.toolSlot = "ROCKET"
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+			arg1.Base.RocketFly:Play()
+		end,
+		["BusterShotMedium"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			arg3.toolSlot = "ROCKET"
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+			arg1.Base.RocketFly:Play()
+		end,
+		["BusterShotBig"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+			arg1.Base.RocketFly:Play()
+		end,
+		["EggDev"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+			arg1.Base.RocketFly:Play()
+		end,
+		["MegaCatRocket"] = function(arg1, arg2, arg3)
+			-- upvalues: (copy) v_u6, (copy) v_u10, (copy) v_u5
+			v_u6:skin(arg2.Team, arg1, arg3.toolName)
+			arg3.Mega = true
+			if arg2 then
+				v_u10:setNoCollide(arg1, arg2.Team)
+			end
+			arg1.Base.RocketFly.PlaybackSpeed = math.random(900, 1100) * 0.001
+			arg1.Base.RocketFly:Play()
+			if arg1:FindFirstChild("Trail") then
+				arg1.Trail.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(0.5, v_u5[arg2.Team.Name].colors.explosives), ColorSequenceKeypoint.new(1, Color3.new(0.2, 0.2, 0.2)) })
+			end
+		end
+	}
+}
+return v16

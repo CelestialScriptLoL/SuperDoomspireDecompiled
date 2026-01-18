@@ -1,0 +1,29 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+v1("Shared/Utils/Messages")
+local v_u2 = v1("Server/Systems/SuddenDeathRing")
+return {
+	["MILK_HEALTH"] = function()
+		for _, v1 in pairs(game.Players:GetPlayers()) do
+			if v1.Team ~= game.Teams.Spectators then
+				local v_character = v1.Character
+				if v_character then
+					v_character = v1.Character:FindFirstChild("Humanoid")
+				end
+				if v_character then
+					v_character:TakeDamage(2)
+				end
+			end
+		end
+	end,
+	["DEATH_RING"] = function()
+		-- upvalues: (copy) v_u2
+		if v_u2.started then
+			v_u2:tick()
+		else
+			v_u2:start()
+		end
+	end,
+	["NONE"] = function() end
+}

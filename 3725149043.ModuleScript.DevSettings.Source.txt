@@ -1,0 +1,13 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v_immutable = require(game.ReplicatedStorage.Shared.Import)("Immutable")
+local v1 = {
+	["DEBUG_MODE"] = false,
+	["IS_STATE_LOGGED"] = false
+}
+local v_devsettingslocal = script.Parent:FindFirstChild("DevSettingsLocal")
+if v_devsettingslocal then
+	return v_immutable.join(v1, require(v_devsettingslocal))
+else
+	return v1
+end

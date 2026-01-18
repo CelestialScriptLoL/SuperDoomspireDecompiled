@@ -1,0 +1,76 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u3 = v1("Shared/Utils/AddCash")
+local v_u4 = v1("Shared/PlayerData")
+local v_u5 = v1("Shared/Data/ItemData")
+local v_u_analytics = game:GetService("AnalyticsService")
+local v6 = {}
+local function v_u7(arg1, arg2)
+	-- upvalues: (copy) v_u3, (copy) v_u2, (copy) v_u_analytics, (copy) v_u4
+	v_u3(arg1, arg2, true)
+	v_u2:sendClient(arg1, "GetItem", {
+		["name"] = arg2 .. " Crowns",
+		["itemType"] = "Crowns"
+	}, "Thanks for supporting us!")
+	v_u_analytics:FireInGameEconomyEvent(arg1, "Crowns", Enum.AnalyticsEconomyAction.Acquire, "Currency", arg2, "robux")
+	return v_u4:forceSave(arg1) and true or false
+end
+local function v_u8(arg1, arg2)
+	-- upvalues: (copy) v_u4, (copy) v_u5, (copy) v_u2
+	local v_get = v_u4:get(arg1, "specialitems")
+	if v_get == nil then
+		v_get = {
+			["Sticker Patch"] = {
+				["num"] = arg2
+			}
+		}
+	elseif v_get["Sticker Patch"] then
+		v_get["Sticker Patch"].num = v_get["Sticker Patch"].num + arg2
+	else
+		v_get["Sticker Patch"] = {
+			["num"] = arg2
+		}
+	end
+	local v_sticker patch = v_u5["Sticker Patch"]
+	v_sticker patch.num = arg2
+	v_sticker patch.itemType = "Special"
+	v_u2:sendClient(arg1, "GetItem", v_sticker patch, "Thanks for supporting us!")
+	v_u4:set(arg1, "specialitems", v_get)
+	v_u2:sendClient(arg1, "StickerPatchesUpdated")
+	return v_u4:forceSave(arg1) and true or false
+end
+v6[877677951] = function(arg1)
+	-- upvalues: (copy) v_u7
+	return v_u7(arg1, 1)
+end
+v6[910752796] = function(arg1)
+	-- upvalues: (copy) v_u7
+	return v_u7(arg1, 600)
+end
+v6[910753349] = function(arg1)
+	-- upvalues: (copy) v_u7
+	return v_u7(arg1, 3200)
+end
+v6[910756799] = function(arg1)
+	-- upvalues: (copy) v_u7
+	return v_u7(arg1, 8000)
+end
+v6[910762867] = function(arg1)
+	-- upvalues: (copy) v_u7
+	return v_u7(arg1, 35000)
+end
+v6[910763421] = function(arg1)
+	-- upvalues: (copy) v_u7
+	return v_u7(arg1, 100000)
+end
+v6[965269887] = function(arg1)
+	-- upvalues: (copy) v_u8
+	return v_u8(arg1, 1)
+end
+v6[965269897] = function(arg1)
+	-- upvalues: (copy) v_u8
+	return v_u8(arg1, 5)
+end
+return v6

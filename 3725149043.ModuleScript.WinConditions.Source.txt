@@ -1,0 +1,86 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/GamemodeLibrary")
+local v_u3 = v1("Server/Systems/GameLoop")
+return {
+	["ALL_SPAWNS_DESTROYED_AND_ONLY_ONE_TEAM"] = function(_)
+		-- upvalues: (copy) v_u2
+		local v1 = 0
+		local v2 = {}
+		for _, v3 in pairs(game.Teams:GetTeams()) do
+			if v3.Name ~= "Spectators" then
+				if game:GetService("RunService"):IsStudio() then
+					if #game.Players:GetPlayers() == 1 then
+						if v_u2.countSpawns(v3) > 0 then
+							v1 = v1 + 1
+							table.insert(v2, v3)
+						end
+					elseif v_u2.countSpawns(v3) > 0 and #v3:GetPlayers() > 0 then
+						v1 = v1 + 1
+						table.insert(v2, v3)
+					elseif v_u2.countSpawns(v3) == 0 and #v3:GetPlayers() > 0 then
+						v1 = v1 + 1
+						table.insert(v2, v3)
+					end
+				elseif v_u2.countSpawns(v3) > 0 and #v3:GetPlayers() > 0 then
+					v1 = v1 + 1
+					table.insert(v2, v3)
+				elseif v_u2.countSpawns(v3) == 0 and #v3:GetPlayers() > 0 then
+					v1 = v1 + 1
+					table.insert(v2, v3)
+				end
+			end
+		end
+		if v1 > 1 then
+			return false, v2
+		else
+			return true, v2
+		end
+	end,
+	["ALL_SPAWNS_DESTROYED"] = function(_)
+		-- upvalues: (copy) v_u2
+		local v1 = 0
+		local v2 = {}
+		for _, v3 in pairs(game.Teams:GetTeams()) do
+			if v3.Name ~= "Spectators" then
+				if game:GetService("RunService"):IsStudio() then
+					if #game.Players:GetPlayers() == 1 then
+						if v_u2.countSpawns(v3) > 0 then
+							v1 = v1 + 1
+							table.insert(v2, v3)
+						end
+					elseif v_u2.countSpawns(v3) > 0 and #v3:GetPlayers() > 0 then
+						v1 = v1 + 1
+						table.insert(v2, v3)
+					end
+				elseif v_u2.countSpawns(v3) > 0 and #v3:GetPlayers() > 0 then
+					v1 = v1 + 1
+					table.insert(v2, v3)
+				end
+			end
+		end
+		if v1 > 1 then
+			return false, v2
+		else
+			return true, v2
+		end
+	end,
+	["KILL_COUNT_REACHED"] = function()
+		-- upvalues: (copy) v_u3
+		local v_getgamemode = v_u3:getGamemode()
+		local v1 = {}
+		for _, v2 in pairs(game.Teams:GetTeams()) do
+			if v2.Name ~= "Spectators" then
+				local v3 = v_getgamemode.trackedTeamStats[v2.Name]
+				if v3 and v3.rawkills >= v_getgamemode.killCount then
+					return true, { v2 }
+				end
+			end
+			if #v2:GetPlayers() > 0 then
+				table.insert(v1, v2)
+			end
+		end
+		return false, v1
+	end
+}

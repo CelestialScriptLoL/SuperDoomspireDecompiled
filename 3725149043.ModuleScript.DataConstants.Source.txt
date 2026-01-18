@@ -1,0 +1,390 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+v1("Shared/Utils/Messages")
+local v2 = v1("Shared/Utils/Date")
+local v_get = v2:get(os.time())
+local v3 = {}
+local v4 = {
+	["cash"] = 100,
+	["bricks"] = 10,
+	["equippedWeapons"] = {
+		["ROCKET"] = "Rocket Launcher",
+		["SWORD"] = "Sword",
+		["BOMB"] = "Bomb",
+		["TROWEL"] = "Trowel",
+		["BALL"] = "Superball"
+	},
+	["equippedStickers"] = {
+		"Smile",
+		"GG!",
+		"Really?",
+		"Heart"
+	},
+	["equippedTitle"] = nil
+}
+local v5 = {
+	["Rocket Launcher"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Sword"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 2
+	},
+	["Bomb"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 3
+	},
+	["Superball"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 4
+	},
+	["Trowel"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 5
+	}
+}
+v4.weapons = v5
+v4.claimedChests = {}
+local v6 = {
+	["GG!"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 4
+	},
+	["Smile"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 3
+	},
+	["Heart"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 2
+	},
+	["Really?"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	}
+}
+v4.stickers = v6
+v4.pets = {}
+v4.titles = {}
+local v7 = {
+	["Sticker Patch"] = {
+		["num"] = 0
+	}
+}
+v4.specialitems = v7
+v4.completedTasks = {}
+v4.lifetimeKills = 0
+v4.lifetimeDeaths = 0
+v4.lifetimeWins = 0
+v4.lifetimeLosses = 0
+v4.lastStreakDay = 0
+v4.lifetimeBricks = 0
+v4.currentStreakDay = 1
+v4.lastStreakTime = os.time()
+v4.highestKDRInRound = 0
+v4.enemiesDeplatformed = 0
+v4.spawnsDestroyed = 0
+v4.killsWhileOnFire = 0
+v4.reflectKills = 0
+v4.reflects = 0
+v4.maxReflects = 0
+v4.toolsOwned = 5
+v4.petsOwned = 0
+v4.stickersOwned = 3
+v4.titlesOwned = 0
+v4.rallyWins = 0
+v4.eventEggs = 0
+v4.settings = {
+	["hudSize"] = 1,
+	["altSpecial"] = 1,
+	["inputTips"] = 1,
+	["toolOrder"] = {
+		"ROCKET",
+		"SWORD",
+		"BOMB",
+		"BALL",
+		"TROWEL"
+	},
+	["musicVolume"] = 35,
+	["screenShake"] = 2,
+	["mobileCam"] = 0,
+	["useLoadouts"] = 0
+}
+v4.tips = {}
+v4.usedCodes = {}
+v3.DEFAULT_DATA = v4
+local v8 = {
+	["cash"] = 0,
+	["bricks"] = 10,
+	["equippedWeapons"] = {},
+	["equippedStickers"] = {
+		"Smile",
+		"GG!",
+		"Really?",
+		"Heart"
+	},
+	["equippedTitle"] = nil
+}
+local v9 = {
+	["Truss Trowel"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Remote Detonator"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Sticky Bomb"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Shadow Clone"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Shadow Dragon"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Shadow Blade"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Shadow Shuriken"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Rocket Launcher"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	},
+	["Sword"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 2
+	},
+	["Bomb"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 3
+	},
+	["Superball"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 4
+	},
+	["Trowel"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 5
+	},
+	["Fire Sword"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 5
+	},
+	["Firebrand"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 5
+	},
+	["Cage Trowel"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 5
+	},
+	["Tennis Racket"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 6
+	},
+	["Hoss Hog"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 6
+	},
+	["Trampoline Trowel"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 6
+	},
+	["Bridge Trowel"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 6
+	},
+	["Ball Turret"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 6
+	},
+	["Paintball Gun"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 6
+	},
+	["Shadow Bomb"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 6
+	},
+	["Gift Bomb"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 15
+	},
+	["Candy Cane"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 15
+	},
+	["Snowball"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 15
+	},
+	["Greatsword"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 51
+	},
+	["Arm Cannon"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 52
+	},
+	["Homerunner"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 52
+	},
+	["Voxcalibur"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 51
+	},
+	["Golden Sword"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 55
+	},
+	["Golden Launcher"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 55
+	},
+	["Golden Racket"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 55
+	},
+	["Golden Greatsword"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 55
+	},
+	["Gem Bomb"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 55
+	},
+	["Novaball"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 55
+	},
+	["Scope Shot (Dark)"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 55
+	},
+	["Slingshot"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 60
+	},
+	["Frying Pan"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 60
+	},
+	["Nail Bat"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 60
+	},
+	["Coconut"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 60
+	},
+	["Spike Trowel"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 60
+	},
+	["Kitty Launcher"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 60
+	},
+	["Boomerang"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 90
+	},
+	["Bananarang"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 90
+	},
+	["Bombardier"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 91
+	},
+	["Crystal Blaster"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 91
+	}
+}
+v8.weapons = v9
+v8.claimedChests = {}
+local v10 = {
+	["GG!"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 4
+	},
+	["Smile"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 3
+	},
+	["Heart"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 2
+	},
+	["Really?"] = {
+		["date"] = v2:shorthand(v_get),
+		["num"] = 1
+	}
+}
+v8.stickers = v10
+v8.pets = {}
+v8.titles = {}
+local v11 = {
+	["Sticker Patch"] = {
+		["num"] = 50
+	}
+}
+v8.specialitems = v11
+v8.completedTasks = { "test task 4" }
+v8.lifetimeKills = 0
+v8.lifetimeDeaths = 0
+v8.lifetimeWins = 0
+v8.lifetimeRoyalWins = 50
+v8.lifetimeLosses = 0
+v8.lastStreakDay = 0
+v8.lifetimeBricks = 25000
+v8.currentStreakDay = 1
+v8.lastStreakTime = os.time()
+v8.highestKDRInRound = 0
+v8.enemiesDeplatformed = 0
+v8.spawnsDestroyed = 0
+v8.killsWhileOnFire = 100
+v8.reflectKills = 3
+v8.reflects = 0
+v8.maxReflects = 0
+v8.toolsOwned = 5
+v8.petsOwned = 0
+v8.stickersOwned = 3
+v8.titlesOwned = 0
+v8.rallyWins = 10
+v8.eventEggs = 29
+v8.settings = {
+	["hudSize"] = 1,
+	["altSpecial"] = 1,
+	["inputTips"] = 1,
+	["toolOrder"] = {
+		"ROCKET",
+		"SWORD",
+		"BOMB",
+		"BALL",
+		"TROWEL"
+	},
+	["musicVolume"] = 35,
+	["screenShake"] = 2,
+	["mobileCam"] = 0,
+	["useLoadouts"] = 0
+}
+v8.loadouts = {}
+v8.tips = {}
+v8.usedCodes = {}
+v3.TEST_DATA = v8
+v3.TEST_STORE = "d19b"
+v3.PRODUCTION_STORE = "Production"
+return v3

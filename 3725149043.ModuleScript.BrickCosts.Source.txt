@@ -1,0 +1,21 @@
+-- Decompiled with Bunni.lol Decompiler
+
+return game:GetService("RunService"):IsStudio() and {
+	["Ball Turret"] = 0,
+	["Truss"] = 0,
+	["Cage"] = 0,
+	["Bridge"] = 0,
+	["Brick"] = 0,
+	["Trampoline"] = 0,
+	["Spikes"] = 0,
+	["Shadow"] = 0
+} or {
+	["Ball Turret"] = 15,
+	["Truss"] = 5,
+	["Cage"] = 5,
+	["Bridge"] = 3,
+	["Brick"] = 1,
+	["Trampoline"] = 10,
+	["Spikes"] = 5,
+	["Shadow"] = 15
+}

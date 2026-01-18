@@ -1,0 +1,243 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u_collection = game:GetService("CollectionService")
+game:GetService("HttpService")
+local v_u3 = v1("Shared/Utils/LowerHealth")
+v1("Shared/Data/WeaponConstants")
+v1("Shared/Data/TeamData")
+v1("Shared/Utils/GetProjectileDamageModifier")
+local v_u4 = v1("Server/Systems/Knockback")
+local v_u_promise = v1("Promise")
+local v_u5 = v1("Shared/Utils/FastSpawn")
+local v_u6 = v1("Server/Systems/GameLoop")
+local v_u_players = game:GetService("Players")
+local v_u7 = {}
+local v_u8 = {}
+local v_u9 = {}
+local function v_u10(arg1)
+	-- upvalues: (copy) v_u_collection, (copy) v_u2
+	if v_u_collection:HasTag(arg1, "Ragdolled") then
+		return
+	else
+		local v_getplayerfromcharacter = game.Players:GetPlayerFromCharacter(arg1)
+		if v_getplayerfromcharacter then
+			arg1.HumanoidRootPart:SetNetworkOwner(v_getplayerfromcharacter)
+			v_u2:send("RagdollCharacter", arg1)
+			v_u2:sendClient(v_getplayerfromcharacter, "RagdollCharacter", arg1)
+		else
+			v_u2:send("RagdollCharacter", arg1)
+		end
+	end
+end
+local function v_u11(arg1)
+	-- upvalues: (copy) v_u_collection, (copy) v_u2
+	if v_u_collection:HasTag(arg1, "Ragdolled") then
+		local v_getplayerfromcharacter = game.Players:GetPlayerFromCharacter(arg1)
+		if v_getplayerfromcharacter then
+			v_u2:sendClient(v_getplayerfromcharacter, "UnragdollCharacter", arg1)
+			v_u2:send("UnragdollCharacter", arg1)
+			arg1.HumanoidRootPart:SetNetworkOwner(v_getplayerfromcharacter)
+		else
+			v_u2:send("UnragdollCharacter", arg1)
+		end
+	else
+		return
+	end
+end
+local function v_u12(arg1, arg2, arg3, arg4)
+	-- upvalues: (copy) v_u_collection, (copy) v_u7, (copy) v_u2, (copy) v_u5, (copy) v_u_promise, (copy) v_u8, (copy) v_u_players, (copy) v_u9, (copy) v_u6, (copy) v_u3, (copy) v_u10, (copy) v_u11, (copy) v_u4
+	if arg2 then
+		local v_u_humanoid = arg2.Parent:FindFirstChild("Humanoid")
+		local v_humanoid = arg3.Character:FindFirstChild("Humanoid")
+		local v_forcefield = arg2.Parent:FindFirstChildOfClass("ForceField")
+		local v1 = arg4.structureDamage or 0.4
+		local v_health = arg2:FindFirstChild("Health")
+		if not arg2.Anchored and (v_health and (not v_u_collection:HasTag(arg2, arg3.Team.Name) or arg3.Team.Name == "Spectators")) then
+			if v_u7[arg1] then
+				if v_u7[arg1][arg2] then
+					if time() - v_u7[arg1][arg2] < arg4.cooldown then
+						return
+					end
+					v_u7[arg1][arg2] = time()
+				else
+					v_u7[arg1][arg2] = time()
+				end
+			else
+				v_u7[arg1] = {}
+				v_u7[arg1][arg2] = time()
+			end
+			v_u2:send("DamagePart", arg2, v1, arg3)
+		end
+		if v_u_collection:HasTag(arg2, "IgnoreRaycast") then
+			return
+		elseif not v_forcefield then
+			if arg4.canLaunch and v_u_collection:HasTag(arg2, "Launchable") then
+				local v_u_position = arg1.Position
+				local v_u_lookvector = arg1.CFrame.lookVector
+				local v_launchpower = arg4.launchPower
+				if arg2.Parent:IsA("Model") then
+					local v_u_parent = arg2.Parent
+					local v_u_primarypart = v_u_parent.PrimaryPart
+					local v_u2 = v_launchpower or Vector3.new(250, 0, 250)
+					v_u5(function()
+						-- upvalues: (ref) v_u_collection, (copy) v_u_parent, (copy) v_u_primarypart, (ref) v_u2, (copy) v_u_lookvector, (copy) v_u_position, (ref) v_u5, (copy) arg3, (ref) v_u_promise, (ref) v_u2
+						if not v_u_collection:HasTag(v_u_parent, "Launched") then
+							if v_u_primarypart:FindFirstChild("PlantWeld") then
+								v_u_primarypart.PlantWeld:Destroy()
+							end
+							local v_weld = v_u_primarypart:FindFirstChild("Weld")
+							if v_weld and not (v_u_collection:HasTag(v_weld, "GorillaGlue") or v_u_collection:HasTag(v_weld, "NoBreak")) then
+								v_weld:Destroy()
+							end
+							v_u2:send("PlayParticle", "Appear", 1, v_u_primarypart.Position)
+							v_u_collection:AddTag(v_u_parent, "Launched")
+							local v_u1 = v_u_lookvector or (v_u_primarypart.Position - v_u_position).unit
+							if v_u_parent:FindFirstChild("Bomb") then
+								v_u_parent.Bomb.ProjectileTrail.Enabled = true
+							end
+							v_u5(function()
+								-- upvalues: (ref) v_u_primarypart, (ref) arg3, (ref) v_u_promise, (ref) v_u_collection, (ref) v_u_parent
+								if v_u_primarypart and (v_u_primarypart.Parent and v_u_primarypart.Anchored == false) then
+									v_u_primarypart:SetNetworkOwner(arg3)
+								end
+								v_u_promise.delay(1):andThen(function()
+									-- upvalues: (ref) v_u_collection, (ref) v_u_parent, (ref) v_u_promise, (ref) v_u_primarypart
+									v_u_collection:RemoveTag(v_u_parent, "Launched")
+									v_u_promise.delay(4):andThen(function()
+										-- upvalues: (ref) v_u_primarypart
+										if v_u_primarypart and (v_u_primarypart.Parent and v_u_primarypart.Anchored == false) then
+											v_u_primarypart:SetNetworkOwner(nil)
+										end
+									end)
+								end)
+							end)
+							v_u2:send("PlaySound", "BombWhoosh", v_u_primarypart)
+							v_u_promise.delay(0.02):andThen(function()
+								-- upvalues: (ref) v_u2, (ref) arg3, (ref) v_u_primarypart, (copy) v_u1, (ref) v_u2
+								v_u2:sendClient(arg3, "Launch", v_u_primarypart, v_u1 * v_u2 + Vector3.new(0, v_u2.Y, 0))
+							end)
+						end
+					end)
+				end
+			end
+			if v_u_humanoid then
+				local _ = { arg3.Character, arg1 }
+				if arg3 and v_u_humanoid.Parent == arg3.Character then
+					return
+				end
+				if v_u_humanoid.Health <= 0 then
+					return
+				end
+				if not (v_humanoid and (v_humanoid.Parent and (arg3.Character and arg3.Character:FindFirstChild("Head")))) then
+					return
+				end
+				if v_humanoid and v_humanoid.Health <= 0 then
+					return
+				end
+				if not v_u8[v_u_humanoid] then
+					v_u8[v_u_humanoid] = {}
+				end
+				if v_u8[v_u_humanoid][arg3] and time() - v_u8[v_u_humanoid][arg3] < 0.15 then
+					return
+				end
+				local v_getplayerfromcharacter = v_u_players:GetPlayerFromCharacter(v_u_humanoid.Parent)
+				if v_getplayerfromcharacter and (v_getplayerfromcharacter.Team == arg3.Team and v_getplayerfromcharacter.Team ~= game.Teams.Spectators) then
+					return
+				end
+				if v_u7[arg1] then
+					if v_u7[arg1][v_u_humanoid] then
+						if time() - v_u7[arg1][v_u_humanoid] < arg4.cooldown then
+							return
+						end
+						v_u7[arg1][v_u_humanoid] = time()
+					else
+						v_u7[arg1][v_u_humanoid] = time()
+					end
+				else
+					v_u7[arg1] = {}
+					v_u7[arg1][v_u_humanoid] = time()
+				end
+				if arg3 then
+					v_u8[v_u_humanoid][arg3] = time()
+					if not v_u9[arg3] then
+						v_u9[arg3] = {}
+					end
+					if v_u9[arg3][v_u_humanoid] and time() - v_u9[arg3][v_u_humanoid] < 0.15 then
+						return
+					end
+					v_u9[arg3][v_u_humanoid] = time()
+				end
+				local v_getgamemode = v_u6:getGamemode()
+				v_u3(arg3, v_u_humanoid.Parent, arg4.damage * (not (v_getgamemode and (v_getgamemode.teamMeleeModifiers and v_getgamemode.teamMeleeModifiers[arg3.Team.Name])) and 1 or v_getgamemode.teamMeleeModifiers[arg3.Team.Name]), arg4)
+				local v_hitfunction = arg4.hitFunction
+				if v_hitfunction then
+					v_hitfunction(arg3, arg3.Character, arg2)
+				end
+				if arg4.ragdoll then
+					local v_ragdoll = arg4.ragdoll
+					if v_u_collection:HasTag(v_u_humanoid.Parent, "RagdollResist") then
+						v_ragdoll = v_ragdoll * 0.75
+					end
+					v_u10(v_u_humanoid.Parent)
+					v_u_promise.delay(v_ragdoll):andThen(function()
+						-- upvalues: (ref) v_u11, (copy) v_u_humanoid
+						v_u11(v_u_humanoid.Parent)
+					end)
+					v_u2:sendClient(v_getplayerfromcharacter, "StatusEffect", "ragdoll", v_ragdoll)
+				end
+				if arg4.healthSteal and (v_humanoid and v_humanoid.Health > 0) then
+					v_humanoid.Health = v_humanoid.Health + arg4.damage * arg4.healthSteal
+				end
+				if arg4.knockback then
+					local v_lookvector = arg1.CFrame.lookVector
+					if arg4.knockbackAway then
+						v_lookvector = -(arg1.Position - arg2.Position).unit
+					end
+					if arg4.knockbackAdd then
+						v_lookvector = v_lookvector + arg4.knockbackAdd
+					end
+					v_u4.knockback(arg2.Parent, v_lookvector * arg4.knockback, arg4.knockbackTime or 0.2, arg4.knockbackHorizontal or false)
+				end
+				if arg4.fire and math.random() * 100 < arg4.fireChance then
+					v_u2:send("Burn", arg2.Parent, arg4.fireLength, arg3, arg4)
+				end
+				if arg4.particle then
+					v_u2:send("PlayParticle", arg4.particle, arg4.particleCount, arg2.Position)
+				end
+				if arg4.sound then
+					v_u2:send("PlaySound", arg4.sound, arg2.Position, arg4.soundVar or 150)
+				end
+			end
+			local v_damagedevent = arg2:FindFirstChild("DamagedEvent")
+			if v_damagedevent then
+				v_damagedevent:Fire("hitbox", arg4.damage, arg3.Team.Name, arg3, arg1.CFrame.lookVector)
+				if v_u7[arg1] then
+					if v_u7[arg1][v_damagedevent] then
+						if time() - v_u7[arg1][v_damagedevent] >= arg4.cooldown then
+							v_u7[arg1][v_damagedevent] = time()
+						end
+					else
+						v_u7[arg1][v_damagedevent] = time()
+						return
+					end
+				end
+				v_u7[arg1] = {}
+				v_u7[arg1][v_damagedevent] = time()
+			end
+		end
+	else
+		return
+	end
+end
+return {
+	["Default"] = function(arg1, arg2, arg3, arg4)
+		-- upvalues: (copy) v_u12
+		v_u12(arg1, arg2, arg3, arg4)
+	end,
+	["Sword"] = function(arg1, arg2, arg3, arg4)
+		-- upvalues: (copy) v_u12
+		v_u12(arg1, arg2, arg3, arg4)
+	end
+}

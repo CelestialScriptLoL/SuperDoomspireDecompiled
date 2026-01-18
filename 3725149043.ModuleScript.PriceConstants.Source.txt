@@ -1,0 +1,5 @@
+-- Decompiled with Bunni.lol Decompiler
+
+return {
+	["ROUND_RETURN"] = 25
+}

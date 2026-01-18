@@ -1,0 +1,96 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Data/ToolData")
+local v_u3 = v1("Shared/Data/TeamData")
+local v_u_collection = game:GetService("CollectionService")
+local v_u_assets = v1("Assets")
+local v_u4 = {
+	"Red",
+	"Yellow",
+	"Green",
+	"Blue",
+	"Spectators"
+}
+local v5 = {}
+local function v_u6(arg1, arg2)
+	if arg1:IsA("BasePart") or arg1:IsA("PointLight") then
+		arg1.Color = arg2
+		return
+	elseif arg1:IsA("SpecialMesh") then
+		arg1.VertexColor = Vector3.new(arg2.r, arg2.g, arg2.b)
+		return
+	elseif arg1:IsA("ParticleEmitter") then
+		arg1.Color = ColorSequence.new(arg2, arg2)
+		return
+	elseif arg1:IsA("Trail") then
+		arg1.Color = ColorSequence.new(arg2)
+	elseif arg1:IsA("Decal") or arg1:IsA("Texture") then
+		arg1.Color3 = arg2
+	end
+end
+local function v_u7(arg1, arg2, arg3)
+	-- upvalues: (copy) v_u_collection, (copy) v_u_assets, (copy) v_u4, (copy) v_u2, (copy) v_u3, (copy) v_u6
+	if v_u_collection:HasTag(arg1, "SurfaceAppearance") then
+		local v_surfaceappearance = arg1:FindFirstChildOfClass("SurfaceAppearance")
+		if v_surfaceappearance then
+			v_surfaceappearance:Destroy()
+		end
+		local v_clone = v_u_assets.SurfaceAppearance[arg3][arg2.Name]:Clone()
+		v_clone.Name = "SurfaceAppearance"
+		v_clone.Parent = arg1
+	end
+	if v_u_collection:HasTag(arg1, "TeamGlow") then
+		for _, v1 in pairs(v_u4) do
+			v_u_collection:RemoveTag(arg1, "Glow" .. v1)
+		end
+		v_u_collection:AddTag(arg1, "Glow" .. arg2.Name)
+	end
+	if v_u_collection:HasTag(arg1, "Texture") then
+		if arg1:IsA("SpecialMesh") then
+			arg1.TextureId = v_u2[arg3].textures[arg2.Name]
+		elseif arg1:IsA("MeshPart") then
+			arg1.TextureID = v_u2[arg3].textures[arg2.Name]
+		end
+	end
+	if v_u_collection:HasTag(arg1, "Texture2") then
+		if arg1:IsA("SpecialMesh") then
+			arg1.TextureId = v_u2[arg3].textures2[arg2.Name]
+		elseif arg1:IsA("MeshPart") then
+			arg1.TextureID = v_u2[arg3].textures2[arg2.Name]
+		elseif arg1:IsA("Decal") then
+			arg1.Texture = v_u2[arg3].textures2[arg2.Name]
+		end
+	end
+	if v_u_collection:HasTag(arg1, "TeamLogo") then
+		arg1.OffsetStudsU = arg1.StudsPerTileU / 3 * v_u3[arg2.Name].iconOffset.X
+		arg1.OffsetStudsV = arg1.StudsPerTileV / 2 * v_u3[arg2.Name].iconOffset.Y
+	end
+	if v_u_collection:HasTag(arg1, "TeamBrickColor") then
+		v_u6(arg1, v_u3[arg2.Name].colors.brickcolor)
+		return
+	elseif v_u_collection:HasTag(arg1, "TeamExplosiveColor") then
+		v_u6(arg1, v_u3[arg2.Name].colors.explosives)
+		return
+	elseif v_u_collection:HasTag(arg1, "TeamLightColor") then
+		v_u6(arg1, v_u3[arg2.Name].colors.light)
+		return
+	elseif v_u_collection:HasTag(arg1, "ToolSpecificColor") then
+		v_u6(arg1, v_u3[arg2.Name].colors[arg3])
+	elseif v_u_collection:HasTag(arg1, "TeamGlassColor") then
+		v_u6(arg1, v_u3[arg2.Name].colors.glass)
+	end
+end
+function v5.skin(_, arg2, arg3, arg4)
+	-- upvalues: (copy) v_u7
+	if arg2 then
+		if arg3:IsA("BasePart") then
+			v_u7(arg3, arg2, arg4)
+		end
+		local v_getdescendants = arg3:GetDescendants()
+		for _, v1 in pairs(v_getdescendants) do
+			v_u7(v1, arg2, arg4)
+		end
+	end
+end
+return v5

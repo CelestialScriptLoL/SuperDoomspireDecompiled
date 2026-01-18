@@ -1,0 +1,26 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = {
+	["buy1"] = {
+		["id"] = 910752796
+	},
+	["buy2"] = {
+		["id"] = 910753349
+	},
+	["buy3"] = {
+		["id"] = 910756799
+	},
+	["buy4"] = {
+		["id"] = 910762867
+	},
+	["buy5"] = {
+		["id"] = 910763421
+	},
+	["buyPatch"] = {
+		["id"] = 965269887
+	},
+	["buyPatches"] = {
+		["id"] = 965269897
+	}
+}
+return v1
