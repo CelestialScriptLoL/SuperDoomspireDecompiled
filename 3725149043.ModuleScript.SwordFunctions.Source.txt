@@ -1,0 +1,1413 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u_http = game:GetService("HttpService")
+local v_u3 = v1("Shared/Data/ToolData")
+local v_u4 = v1("Client/Data/CharacterData")
+v1("Shared/PlayerData")
+local v_u5 = v1("Shared/Data/WeaponConstants")
+local _ = v_u5.SWORD_SLASH_DAMAGE
+local _ = v_u5.SWORD_LUNGE_DAMAGE
+local _ = v_u5.SWORD_SPIN_DAMAGE
+local _ = v_u5.SWORD_STRIKE_DAMAGE
+local v_u6 = 0
+local function v_u7(arg1, arg2, arg3, arg4, arg5, arg6)
+	-- upvalues: (ref) v_u6, (copy) v_u2
+	if tick() - v_u6 >= 0.1 then
+		v_u6 = tick()
+		v_u2:sendServer("HandleBlast", arg2, arg3, arg4, arg5, arg6)
+		v_u2:send("CreateProjectile", arg2, arg3, arg4, arg5.Name, arg1.player, arg6)
+	end
+end
+local v_u8 = {
+	["Sword"] = {
+		["onSwing"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u2, (copy) v_u4, (copy) v_u5
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Lunge"
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273933272584.Velocity = Vector3.new(UNNAMED_1273933272584.Velocity.X, v_max, UNNAMED_1273933272584.Velocity.Z)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			v_u2:send("Knockback", arg1.player.Character.PrimaryPart.CFrame.lookVector * 100 + Vector3.new(0, 0, 0), 0.28)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 10, 0), 0.1)
+			end
+		end,
+		["duringLunge"] = function(arg1)
+			if tick() - arg1.lastLunge < 0.6 then
+				arg1.tool.Sword.Weld.C0 = arg1.tool.Sword.Weld.C0 * CFrame.Angles(0, 0.39269908169872414, 0)
+			else
+				arg1.tool.Sword.Weld.C0 = arg1.startC0
+			end
+		end,
+		["onLungeEnd"] = function(_)
+			-- upvalues: (copy) v_u4
+			if v_u4.swordAction == "Lunge" then
+				v_u4.swordAction = nil
+			end
+		end,
+		["onStrike"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSpinEnd"] = function(_) end,
+		["onEquip"] = function(arg1)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+		end,
+		["onUnequip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onCharged"] = function(arg1)
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(1, 1, 1)
+		end
+	},
+	["Golden Sword"] = {
+		["onEquip"] = function(arg1)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			arg1.tool.Sword.Particle:Emit(5)
+		end
+	},
+	["Golden Greatsword"] = {
+		["onEquip"] = function(arg1)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			arg1.tool.Sword.Particle:Emit(5)
+		end
+	},
+	["Greatsword"] = {
+		["onSwing"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u2, (copy) v_u5
+			v_u4.canSlash = false
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Great Spin"
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+			if v_u4.midair then
+				local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+				UNNAMED_1273933376280.Velocity = Vector3.new(UNNAMED_1273933376280.Velocity.X, v_max, UNNAMED_1273933376280.Velocity.Z)
+				v_u2:send("Knockback", Vector3.new(0, 60, 0), 0.15)
+			end
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u5
+			v_u4.canSlash = true
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			if v_u4.swordAction == "Great Spin" then
+				v_u4.swordAction = nil
+			end
+		end,
+		["onStrike"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSpinEnd"] = function(_) end,
+		["onEquip"] = function(arg1)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+		end,
+		["onUnequip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onCharged"] = function(arg1)
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(1, 1, 1)
+		end
+	},
+	["Bamboo Buster"] = {
+		["onSwing"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u_http, (copy) v_u7, (copy) v_u5, (copy) v_u4, (copy) v_u2
+			local v_generateguid = v_u_http:GenerateGUID()
+			v_u7(arg1, v_generateguid, arg1.player.Character.PrimaryPart.Position + arg1.player.Character.PrimaryPart.CFrame.lookVector * 3, arg1.player.Character.PrimaryPart.Position + arg1.player.Character.PrimaryPart.CFrame.lookVector * 10, game.ReplicatedStorage.Assets.Projectiles.BambooRocket, {
+				["toolName"] = arg1.tool.Name,
+				["baseProjectile"] = "Rocket",
+				["speed"] = 50,
+				["noDestroy"] = true,
+				["detTime"] = 1.2,
+				["minDamage"] = 25,
+				["damage"] = 50,
+				["ragdoll"] = 0,
+				["bombJumpMultiplier"] = 0,
+				["pressure"] = 0,
+				["minRadius"] = v_u5.ROCKET_EXPLOSION_MIN_RADIUS,
+				["maxRadius"] = v_u5.ROCKET_EXPLOSION_MAX_RADIUS
+			})
+			local v_proprocket = arg1.tool.PropRocket
+			if v_proprocket and v_u5.VISUALS_WHITELIST.Transparency then
+				v_proprocket.Transparency = 1
+				arg1.tool.VisualEvent:FireServer(v_proprocket, "Transparency", 1)
+			end
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273932607128.Velocity = Vector3.new(UNNAMED_1273932607128.Velocity.X, v_max, UNNAMED_1273932607128.Velocity.Z)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 36, 0), 0.1)
+			end
+		end,
+		["onProjectile"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u2
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273932604632.Velocity = Vector3.new(UNNAMED_1273932604632.Velocity.X, v_max, UNNAMED_1273932604632.Velocity.Z)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 20, 0), 0.1)
+			end
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u5
+			v_u4.canSlash = true
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			if v_u4.swordAction == "Great Spin" then
+				v_u4.swordAction = nil
+			end
+		end,
+		["onStrike"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSpinEnd"] = function(_) end,
+		["onEquip"] = function(arg1)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+		end,
+		["onUnequip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onCharged"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(1, 1, 1)
+			local v_proprocket = arg1.tool.PropRocket
+			if v_proprocket and v_u5.VISUALS_WHITELIST.Transparency then
+				v_proprocket.Transparency = 0
+				arg1.tool.VisualEvent:FireServer(v_proprocket, "Transparency", 0)
+			end
+		end
+	},
+	["Lightsword"] = {
+		["onSwing"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Lifetime then
+				v_trail.Lifetime = 0.45
+				arg1.tool.VisualEvent:FireServer(v_trail, "Lifetime", 0.45)
+			end
+		end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Lifetime then
+				v_trail.Lifetime = 0.45
+				arg1.tool.VisualEvent:FireServer(v_trail, "Lifetime", 0.45)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Lifetime then
+				v_trail.Lifetime = 0.1
+				arg1.tool.VisualEvent:FireServer(v_trail, "Lifetime", 0.1)
+			end
+		end,
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u2, (copy) v_u4, (copy) v_u5
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Lunge"
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273932609096.Velocity = Vector3.new(UNNAMED_1273932609096.Velocity.X, v_max, UNNAMED_1273932609096.Velocity.Z)
+			local v_sword = arg1.tool.Sword
+			if v_sword and v_u5.VISUALS_WHITELIST.Transparency then
+				v_sword.Transparency = 0.4
+				arg1.tool.VisualEvent:FireServer(v_sword, "Transparency", 0.4)
+			end
+			v_u2:send("Knockback", arg1.player.Character.PrimaryPart.CFrame.lookVector * 100 + Vector3.new(0, 0, 0), 0.28)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 10, 0), 0.1)
+			end
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Lifetime then
+				v_trail.Lifetime = 0.1
+				arg1.tool.VisualEvent:FireServer(v_trail, "Lifetime", 0.1)
+			end
+			if v_u4.swordAction == "Lunge" then
+				v_u4.swordAction = nil
+			end
+		end,
+		["onStrike"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_sword = arg1.tool.Sword
+			if v_sword and v_u5.VISUALS_WHITELIST.Transparency then
+				v_sword.Transparency = 0.4
+				arg1.tool.VisualEvent:FireServer(v_sword, "Transparency", 0.4)
+			end
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Lifetime then
+				v_trail.Lifetime = 0.45
+				arg1.tool.VisualEvent:FireServer(v_trail, "Lifetime", 0.45)
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Lifetime then
+				v_trail.Lifetime = 0.1
+				arg1.tool.VisualEvent:FireServer(v_trail, "Lifetime", 0.1)
+			end
+		end,
+		["onSpin"] = function(arg1)
+			arg1.tool.Trail.Lifetime = 1
+		end,
+		["onSpinEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Lifetime then
+				v_trail.Lifetime = 0.1
+				arg1.tool.VisualEvent:FireServer(v_trail, "Lifetime", 0.1)
+			end
+		end,
+		["onEquip"] = function(_) end,
+		["onUnequip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Lifetime then
+				v_trail.Lifetime = 0.1
+				arg1.tool.VisualEvent:FireServer(v_trail, "Lifetime", 0.1)
+			end
+		end,
+		["onCharged"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_sword = arg1.tool.Sword
+			if v_sword and v_u5.VISUALS_WHITELIST.Transparency then
+				v_sword.Transparency = 0
+				arg1.tool.VisualEvent:FireServer(v_sword, "Transparency", 0)
+			end
+		end
+	},
+	["Glowblade"] = {
+		["onSwing"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u2, (copy) v_u4, (copy) v_u5
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Lunge"
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273933270376.Velocity = Vector3.new(UNNAMED_1273933270376.Velocity.X, v_max, UNNAMED_1273933270376.Velocity.Z)
+			arg1.tool.Glow.Sword.Transparency = 1
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+			v_u2:send("Knockback", arg1.player.Character.PrimaryPart.CFrame.lookVector * 100 + Vector3.new(0, 0, 0), 0.28)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 10, 0), 0.1)
+			end
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			if v_u4.swordAction == "Lunge" then
+				v_u4.swordAction = nil
+			end
+		end,
+		["onStrike"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Glow.Sword.Transparency = 1
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSpinEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onEquip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onUnequip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onCharged"] = function(arg1)
+			arg1.tool.Glow.Sword.Transparency = 0
+		end
+	},
+	["Fire Sword"] = {
+		["Projectile"] = function(arg1)
+			return {
+				["toolName"] = arg1.tool.Name,
+				["toolSlot"] = "Sword",
+				["baseProjectile"] = arg1.tooldata.projectile,
+				["speed"] = 70,
+				["maxTime"] = 3,
+				["fire"] = true,
+				["fireChance"] = 100,
+				["fireLength"] = 5,
+				["damage"] = 35
+			}
+		end,
+		["onProjectile"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u2
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273932604536.Velocity = Vector3.new(UNNAMED_1273932604536.Velocity.X, v_max, UNNAMED_1273932604536.Velocity.Z)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 20, 0), 0.1)
+			end
+		end,
+		["onSwing"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+			arg1.tool.Sword.Tip.Fire.Enabled = true
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			arg1.tool.Sword.Tip.Fire.Enabled = false
+		end,
+		["onSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+			arg1.tool.Sword.Tip.Fire.Enabled = true
+		end,
+		["onStrike"] = function(arg1)
+			arg1.tool.Sword.Tip.Fire.Enabled = true
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+		end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Tip.Fire.Enabled = false
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpinEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Tip.Fire.Enabled = false
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onEquip"] = function(arg1)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+		end,
+		["onUnequip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			arg1.tool.Sword.Tip.Fire.Enabled = false
+		end
+	},
+	["Ice Sword"] = {
+		["Projectile"] = function(arg1)
+			return {
+				["toolName"] = arg1.tool.Name,
+				["toolSlot"] = "Sword",
+				["baseProjectile"] = arg1.tooldata.projectile,
+				["speed"] = 70,
+				["maxTime"] = 3,
+				["chill"] = 8,
+				["damage"] = 35
+			}
+		end,
+		["onProjectile"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u2
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273933375608.Velocity = Vector3.new(UNNAMED_1273933375608.Velocity.X, v_max, UNNAMED_1273933375608.Velocity.Z)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 20, 0), 0.1)
+			end
+		end,
+		["onSwing"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpinEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onEquip"] = function(_) end,
+		["onUnequip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onCharged"] = function(_) end
+	},
+	["Tennis Racket"] = {
+		["Projectile"] = function(arg1)
+			return {
+				["toolName"] = arg1.tool.Name,
+				["toolSlot"] = "Sword",
+				["baseProjectile"] = arg1.tooldata.projectile,
+				["speed"] = 80,
+				["maxTime"] = 3.5,
+				["damage"] = 20,
+				["ragdoll"] = 0.75,
+				["knockback"] = Vector3.new(40, 0, 40),
+				["knockbackTime"] = 0.65,
+				["knockbackHorizontal"] = true
+			}
+		end,
+		["onProjectile"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u2
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273933377672.Velocity = Vector3.new(UNNAMED_1273933377672.Velocity.X, v_max, UNNAMED_1273933377672.Velocity.Z)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 20, 0), 0.1)
+			end
+		end
+	},
+	["Voxcalibur"] = {
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u2, (copy) v_u4, (copy) v_u5
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Lunge"
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273932605352.Velocity = Vector3.new(UNNAMED_1273932605352.Velocity.X, v_max, UNNAMED_1273932605352.Velocity.Z)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 10, 0), 0.1)
+				v_u2:send("Knockback", arg1.player.Character.PrimaryPart.CFrame.lookVector * 70 + Vector3.new(0, 0, 0), 0.28)
+			else
+				v_u2:send("Knockback", arg1.player.Character.PrimaryPart.CFrame.lookVector * 70 + Vector3.new(0, 0, 0), 0.196)
+			end
+		end
+	},
+	["Frying Pan"] = {
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u2, (copy) v_u4, (copy) v_u5
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Mega Smack"
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273933387320.Velocity = Vector3.new(UNNAMED_1273933387320.Velocity.X, v_max, UNNAMED_1273933387320.Velocity.Z)
+			if v_u4.midair then
+				v_u2:send("Knockback", Vector3.new(0, 35, 0), 0.1)
+			end
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(_)
+			-- upvalues: (copy) v_u4
+			if v_u4.swordAction == "Mega Smack" then
+				v_u4.swordAction = nil
+			end
+		end
+	},
+	["Brickbreaker"] = {
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u2, (copy) v_u5
+			v_u4.swordAction = "Brick Smash"
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			wait(0.9)
+			if arg1.tool and (arg1.tool.Handle and (v_u4.swordAction == "Brick Smash" and (arg1.isEquipped and v_u4.canAct))) then
+				v_u2:sendServer("ActivateHitbox", "BrickBreak")
+				arg1.tool.Handle.BigSwing:Play()
+			end
+			if v_u4.midair and arg1.isEquipped then
+				local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+				UNNAMED_1273933386456.Velocity = Vector3.new(UNNAMED_1273933386456.Velocity.X, v_max, UNNAMED_1273933386456.Velocity.Z)
+				v_u2:send("Knockback", Vector3.new(0, 50, 0), 0.25)
+			end
+			wait(0.5)
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(_)
+			-- upvalues: (copy) v_u4
+			if v_u4.swordAction == "Brick Smash" then
+				v_u4.swordAction = nil
+			end
+		end,
+		["onLoopSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4, (copy) v_u2
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+			if v_u4.midair then
+				local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+				UNNAMED_1273932613896.Velocity = Vector3.new(UNNAMED_1273932613896.Velocity.X, v_max, UNNAMED_1273932613896.Velocity.Z)
+				v_u2:send("Knockback", Vector3.new(0, 40, 0), 0.15)
+			end
+		end,
+		["duringLoopSpin"] = function(_) end,
+		["onLoopSpinEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4, (copy) v_u2
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			if v_u4.state ~= "Climbing" and (v_u4.state ~= "Ragdoll" and v_u4.state ~= "Dead") then
+				v_u4.swordAction = "Brick Smash"
+				arg1.Anims.LungeFast:Play()
+				arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+				wait(0.2)
+				if arg1.tool and (arg1.tool.Handle and (v_u4.swordAction == "Brick Smash" and (arg1.isEquipped and v_u4.canAct))) then
+					v_u2:sendServer("ActivateHitbox", "BrickBreak")
+					arg1.tool.Handle.BigSwing:Play()
+				end
+				if v_u4.midair and arg1.isEquipped then
+					local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+					UNNAMED_1273933269608.Velocity = Vector3.new(UNNAMED_1273933269608.Velocity.X, v_max, UNNAMED_1273933269608.Velocity.Z)
+					v_u2:send("Knockback", Vector3.new(0, 50, 0), 0.25)
+				end
+				wait(1)
+				arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+				if v_u4.swordAction == "Brick Smash" then
+					v_u4.swordAction = nil
+				end
+			end
+		end
+	},
+	["Shadow Blade"] = {
+		["onSwing"] = function(_) end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u2, (copy) v_u4, (copy) v_u5
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Lunge"
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273932602472.Velocity = Vector3.new(UNNAMED_1273932602472.Velocity.X, v_max, UNNAMED_1273932602472.Velocity.Z)
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+			v_u2:send("Knockback", arg1.player.Character.PrimaryPart.CFrame.lookVector * 100 * 1.2 + Vector3.new(0, 6, 0), 0.28)
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u4, (copy) v_u5
+			if v_u4.swordAction == "Lunge" or v_u4.canAct == false then
+				v_u4.swordAction = nil
+				local v_trail = arg1.tool.Trail
+				if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+					v_trail.Enabled = false
+					arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+				end
+			end
+		end,
+		["onStrike"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSpinEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onEquip"] = function(_) end,
+		["onUnequip"] = function(_) end,
+		["onCharged"] = function(arg1)
+			arg1.tool.Particles.Glow:Emit(20)
+		end
+	},
+	["Homerunner"] = {
+		["onSwing"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4, (copy) v_u2
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			v_u4.swordAction = "Home Run"
+			v_u4.canSlash = false
+			wait(0.725)
+			if arg1.tool and (arg1.tool.Handle and (v_u4.swordAction == "Home Run" and (arg1.isEquipped and v_u4.canAct))) then
+				v_u2:sendServer("ActivateHitbox", "Lunge")
+				arg1.tool.Handle.HomeRun:Play()
+			end
+			if v_u4.midair and arg1.isEquipped then
+				local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+				UNNAMED_1273932612792.Velocity = Vector3.new(UNNAMED_1273932612792.Velocity.X, v_max, UNNAMED_1273932612792.Velocity.Z)
+				v_u2:send("Knockback", Vector3.new(0, 50, 0), 0.25)
+			end
+			wait(0.775)
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(_)
+			-- upvalues: (copy) v_u4
+			if v_u4.swordAction == "Home Run" then
+				v_u4.swordAction = nil
+				v_u4.canSlash = true
+			end
+		end,
+		["onSpinEnd"] = function(_) end,
+		["onStrike"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE_SMEAR
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onEquip"] = function(arg1)
+			arg1.tool.Sword.Mesh.Scale = arg1.tooldata.MESH_SCALE
+		end,
+		["onUnequip"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			v_u4.swordAction = nil
+			v_u4.canSlash = true
+		end,
+		["onCharged"] = function(arg1)
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(1, 1, 1)
+		end
+	},
+	["Umbrellade"] = {
+		["onLunge"] = function(self)
+			-- upvalues: (copy) v_u2, (copy) v_u4, (copy) v_u5
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Lunge"
+			local v_max = math.max(0, self.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273932600072.Velocity = Vector3.new(UNNAMED_1273932600072.Velocity.X, v_max, UNNAMED_1273932600072.Velocity.Z)
+			local v_swordopen = self.tool.SwordOpen
+			if v_swordopen and v_u5.VISUALS_WHITELIST.Transparency then
+				v_swordopen.Transparency = 0
+				self.tool.VisualEvent:FireServer(v_swordopen, "Transparency", 0)
+			end
+			local v_sword = self.tool.Sword
+			if v_sword and v_u5.VISUALS_WHITELIST.Transparency then
+				v_sword.Transparency = 1
+				self.tool.VisualEvent:FireServer(v_sword, "Transparency", 1)
+			end
+			local v_lungetrail = self.tool.SwordOpen.LungeTrail
+			if v_lungetrail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_lungetrail.Enabled = true
+				self.tool.VisualEvent:FireServer(v_lungetrail, "Enabled", true)
+			end
+			local v_star = self.tool.SwordOpen.BeamAtt0.Star
+			if v_star and v_u5.VISUALS_WHITELIST.Enabled then
+				v_star.Enabled = true
+				self.tool.VisualEvent:FireServer(v_star, "Enabled", true)
+			end
+			local v_star = self.tool.Sword.Tip.Star
+			if v_star and v_u5.VISUALS_WHITELIST.Emit then
+				v_star:Emit(6)
+				self.tool.VisualEvent:FireServer(v_star, "Emit", 6)
+			end
+			local v_mesh = self.tool.SwordOpen.Mesh
+			local v1 = self.tooldata.MESH_SCALE * Vector3.new(1.4, 1, 1.4)
+			if v_mesh and v_u5.VISUALS_WHITELIST.Scale then
+				v_mesh.Scale = v1
+				self.tool.VisualEvent:FireServer(v_mesh, "Scale", v1)
+			end
+			task.delay(0.1, function()
+				-- upvalues: (copy) self, (ref) v_u5
+				local v1 = self
+				local v_mesh = self.tool.SwordOpen.Mesh
+				local v_mesh_scale = self.tooldata.MESH_SCALE
+				if v_mesh and v_u5.VISUALS_WHITELIST.Scale then
+					v_mesh.Scale = v_mesh_scale
+					v1.tool.VisualEvent:FireServer(v_mesh, "Scale", v_mesh_scale)
+				end
+			end)
+			v_u2:send("Knockback", self.player.Character.PrimaryPart.CFrame.lookVector * 100 + Vector3.new(0, 0, 0), 0.28)
+		end,
+		["duringLunge"] = function(arg1)
+			if tick() - arg1.lastLunge < 0.6 then
+				arg1.tool.Sword.Weld.C0 = arg1.tool.Sword.Weld.C0 * CFrame.Angles(0, 0.2617993877991494, 0)
+			else
+				arg1.tool.Sword.Weld.C0 = arg1.startC0
+			end
+		end,
+		["onLungeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4
+			local v_swordopen = arg1.tool.SwordOpen
+			if v_swordopen and v_u5.VISUALS_WHITELIST.Transparency then
+				v_swordopen.Transparency = 1
+				arg1.tool.VisualEvent:FireServer(v_swordopen, "Transparency", 1)
+			end
+			local v_sword = arg1.tool.Sword
+			if v_sword and v_u5.VISUALS_WHITELIST.Transparency then
+				v_sword.Transparency = 0
+				arg1.tool.VisualEvent:FireServer(v_sword, "Transparency", 0)
+			end
+			local v_star = arg1.tool.SwordOpen.BeamAtt0.Star
+			if v_star and v_u5.VISUALS_WHITELIST.Enabled then
+				v_star.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_star, "Enabled", false)
+			end
+			local v_lungetrail = arg1.tool.SwordOpen.LungeTrail
+			if v_lungetrail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_lungetrail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_lungetrail, "Enabled", false)
+			end
+			if v_u4.swordAction == "Lunge" then
+				v_u4.swordAction = nil
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onEquip"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_swordopen = arg1.tool.SwordOpen
+			if v_swordopen and v_u5.VISUALS_WHITELIST.Transparency then
+				v_swordopen.Transparency = 1
+				arg1.tool.VisualEvent:FireServer(v_swordopen, "Transparency", 1)
+			end
+			local v_sword = arg1.tool.Sword
+			if v_sword and v_u5.VISUALS_WHITELIST.Transparency then
+				v_sword.Transparency = 0
+				arg1.tool.VisualEvent:FireServer(v_sword, "Transparency", 0)
+			end
+			local v_lungetrail = arg1.tool.SwordOpen.LungeTrail
+			if v_lungetrail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_lungetrail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_lungetrail, "Enabled", false)
+			end
+			local v_star = arg1.tool.SwordOpen.BeamAtt0.Star
+			if v_star and v_u5.VISUALS_WHITELIST.Enabled then
+				v_star.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_star, "Enabled", false)
+			end
+			local v_mesh = arg1.tool.SwordOpen.Mesh
+			local v_mesh_scale = arg1.tooldata.MESH_SCALE
+			if v_mesh and v_u5.VISUALS_WHITELIST.Scale then
+				v_mesh.Scale = v_mesh_scale
+				arg1.tool.VisualEvent:FireServer(v_mesh, "Scale", v_mesh_scale)
+			end
+			local v_flighttrail = arg1.tool.FlightTrail
+			if v_flighttrail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_flighttrail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_flighttrail, "Enabled", false)
+			end
+		end,
+		["onLoopSpin"] = function(self)
+			-- upvalues: (copy) v_u4, (copy) v_u5, (copy) v_u2
+			v_u4.swordAction = "UmbrellaHover"
+			v_u4.loopSpinStarted = time()
+			local v_swordopen = self.tool.SwordOpen
+			if v_swordopen and v_u5.VISUALS_WHITELIST.Transparency then
+				v_swordopen.Transparency = 0
+				self.tool.VisualEvent:FireServer(v_swordopen, "Transparency", 0)
+			end
+			local v_mesh = self.tool.SwordOpen.Mesh
+			local v1 = self.tooldata.MESH_SCALE * Vector3.new(1.4, 1, 1.4)
+			if v_mesh and v_u5.VISUALS_WHITELIST.Scale then
+				v_mesh.Scale = v1
+				self.tool.VisualEvent:FireServer(v_mesh, "Scale", v1)
+			end
+			local v_star = self.tool.Sword.Tip.Star
+			if v_star and v_u5.VISUALS_WHITELIST.Emit then
+				v_star:Emit(10)
+				self.tool.VisualEvent:FireServer(v_star, "Emit", 10)
+			end
+			local v_flighttrail = self.tool.FlightTrail
+			if v_flighttrail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_flighttrail.Enabled = true
+				self.tool.VisualEvent:FireServer(v_flighttrail, "Enabled", true)
+			end
+			task.delay(0.12, function()
+				-- upvalues: (copy) self, (ref) v_u5
+				local v1 = self
+				local v_mesh = self.tool.SwordOpen.Mesh
+				local v_mesh_scale = self.tooldata.MESH_SCALE
+				if v_mesh and v_u5.VISUALS_WHITELIST.Scale then
+					v_mesh.Scale = v_mesh_scale
+					v1.tool.VisualEvent:FireServer(v_mesh, "Scale", v_mesh_scale)
+				end
+				self.tool.SwordOpen.Mesh.Scale = self.tooldata.MESH_SCALE
+			end)
+			local v_sword = self.tool.Sword
+			if v_sword and v_u5.VISUALS_WHITELIST.Transparency then
+				v_sword.Transparency = 1
+				self.tool.VisualEvent:FireServer(v_sword, "Transparency", 1)
+			end
+			if v_u4.midair then
+				local v_max = math.max(0, self.player.Character.PrimaryPart.Velocity.Y)
+				UNNAMED_1273933270808.Velocity = Vector3.new(UNNAMED_1273933270808.Velocity.X, v_max, UNNAMED_1273933270808.Velocity.Z)
+				v_u2:send("Knockback", Vector3.new(0, 40, 0), 0.15)
+			end
+		end,
+		["duringLoopSpin"] = function(arg1)
+			-- upvalues: (copy) v_u4
+			if v_u4.midair and (arg1.player.Character.PrimaryPart and v_u4.swordAction == "UmbrellaHover") then
+				arg1.tool.Sword.Weld.C0 = arg1.tool.Sword.Weld.C0 * CFrame.Angles(0, 0.10471975511965977, 0)
+				local v_clamp = math.clamp(arg1.player.Character.PrimaryPart.AssemblyLinearVelocity.Y, tick() - arg1.loopSpinStarted < 5 and -16 or (tick() - arg1.loopSpinStarted < 10 and -32 or -80), 40)
+				arg1.player.Character.PrimaryPart.AssemblyLinearVelocity = Vector3.new(arg1.player.Character.PrimaryPart.AssemblyLinearVelocity.X, v_clamp, arg1.player.Character.PrimaryPart.AssemblyLinearVelocity.Z)
+			end
+		end,
+		["onLoopSpinEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4
+			arg1.tool.Sword.Weld.C0 = arg1.startC0
+			local v_flighttrail = arg1.tool.FlightTrail
+			if v_flighttrail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_flighttrail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_flighttrail, "Enabled", false)
+			end
+			v_u4.loopSpinStarted = 0
+			v_u4.umbrellaLanded = time() + 0.5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			arg1.tool.Sword.Mesh.VertexColor = Vector3.new(0.8, 0.8, 0.8)
+			local v_mesh = arg1.tool.SwordOpen.Mesh
+			local v_mesh_scale = arg1.tooldata.MESH_SCALE
+			if v_mesh and v_u5.VISUALS_WHITELIST.Scale then
+				v_mesh.Scale = v_mesh_scale
+				arg1.tool.VisualEvent:FireServer(v_mesh, "Scale", v_mesh_scale)
+			end
+			local v_swordopen = arg1.tool.SwordOpen
+			if v_swordopen and v_u5.VISUALS_WHITELIST.Transparency then
+				v_swordopen.Transparency = 1
+				arg1.tool.VisualEvent:FireServer(v_swordopen, "Transparency", 1)
+			end
+			local v_sword = arg1.tool.Sword
+			if v_sword and v_u5.VISUALS_WHITELIST.Transparency then
+				v_sword.Transparency = 0
+				arg1.tool.VisualEvent:FireServer(v_sword, "Transparency", 0)
+			end
+			task.wait(0.5)
+			if v_u4.swordAction == "UmbrellaHover" then
+				v_u4.swordAction = nil
+			end
+		end
+	},
+	["Oathkeeper"] = {
+		["onSwing"] = function(_) end,
+		["onSwipeStart"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSwipeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onLunge"] = function(arg1)
+			-- upvalues: (copy) v_u2, (copy) v_u4, (copy) v_u5
+			v_u2:sendServer("ActivateHitbox", "Lunge")
+			v_u4.swordAction = "Lunge"
+			local v_max = math.max(0, arg1.player.Character.PrimaryPart.Velocity.Y)
+			UNNAMED_1273933377624.Velocity = Vector3.new(UNNAMED_1273933377624.Velocity.X, v_max, UNNAMED_1273933377624.Velocity.Z)
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+			local v_flame = arg1.tool.Sword.Tip.Flame
+			if v_flame and v_u5.VISUALS_WHITELIST.Enabled then
+				v_flame.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_flame, "Enabled", false)
+			end
+			v_u2:send("Knockback", arg1.player.Character.PrimaryPart.CFrame.lookVector * 100 * 1.2 + Vector3.new(0, 6, 0), 0.28)
+		end,
+		["duringLunge"] = function(_) end,
+		["onLungeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5, (copy) v_u4
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+			if v_u4.swordAction == "Lunge" then
+				v_u4.swordAction = nil
+			end
+		end,
+		["onStrike"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["duringStrike"] = function(_) end,
+		["onStrikeEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onSpin"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", true)
+			end
+		end,
+		["onSpinEnd"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_trail = arg1.tool.Trail
+			if v_trail and v_u5.VISUALS_WHITELIST.Enabled then
+				v_trail.Enabled = false
+				arg1.tool.VisualEvent:FireServer(v_trail, "Enabled", false)
+			end
+		end,
+		["onEquip"] = function(_) end,
+		["onUnequip"] = function(_) end,
+		["onCharged"] = function(arg1)
+			-- upvalues: (copy) v_u5
+			local v_flame = arg1.tool.Sword.Tip.Flame
+			if v_flame and v_u5.VISUALS_WHITELIST.Enabled then
+				v_flame.Enabled = true
+				arg1.tool.VisualEvent:FireServer(v_flame, "Enabled", true)
+			end
+		end
+	},
+	["getFunctions"] = function(_, arg2)
+		-- upvalues: (copy) v_u8, (copy) v_u3
+		local v_sword = v_u8.Sword
+		local v1 = v_u8[arg2] or (v_u8[v_u3[arg2].baseTool] or v_u8.Sword)
+		local v2
+		if v_u3[arg2].baseTool then
+			v2 = v_u8[v_u3[arg2].baseTool]
+		else
+			v2 = nil
+		end
+		local v3 = {}
+		if v2 then
+			for v4, v5 in pairs(v2) do
+				if v1[v4] == nil then
+					v1[v4] = v5
+				end
+			end
+		end
+		for v6, v7 in pairs(v_sword) do
+			if v1[v6] == nil then
+				v1[v6] = v7
+			end
+		end
+		for v8, v9 in pairs(v1) do
+			v3[v8] = v9
+		end
+		return v3
+	end
+}
+return v_u8

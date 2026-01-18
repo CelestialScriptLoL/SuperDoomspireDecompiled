@@ -1,0 +1,88 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u3 = v1("Shared/Data/ToolData")
+local v_u_tween = game:GetService("TweenService")
+local v_u4 = {
+	["Bomb"] = {
+		["onSwing"] = function(_) end
+	},
+	["Shadow Bomb"] = {
+		["onSwing"] = function(_) end
+	},
+	["Sticky Bomb"] = {
+		["onReload"] = function(_) end,
+		["onStartThrow"] = function(_) end,
+		["onThrow"] = function(_) end,
+		["onEquip"] = function(_) end,
+		["onUnequip"] = function(_) end
+	},
+	["Remote Detonator"] = {
+		["onReload"] = function(_) end,
+		["onStartThrow"] = function(_) end,
+		["onThrow"] = function(_)
+			-- upvalues: (copy) v_u2
+			v_u2:send("PlayAnimationClient", "HoldingDetonator")
+			v_u2:send("StopAnimationClient", "HoldingBomb")
+		end,
+		["onEquip"] = function(_)
+			-- upvalues: (copy) v_u2
+			v_u2:send("PlayAnimationClient", "HoldingBomb")
+		end,
+		["onDetonate"] = function(_)
+			-- upvalues: (copy) v_u2
+			v_u2:send("StopAnimationClient", "HoldingDetonator")
+		end,
+		["onUnequip"] = function(_)
+			-- upvalues: (copy) v_u2
+			v_u2:send("StopAnimationClient", "HoldingDetonator")
+			v_u2:send("StopAnimationClient", "HoldingBomb")
+		end
+	},
+	["Super Bomb"] = {
+		["onTick"] = function(arg1)
+			-- upvalues: (copy) v_u_tween
+			arg1.fx.Effect.Enabled = true
+			arg1.Mesh.Scale = Vector3.new(1.5, 1.5, 1.5)
+			arg1.overlay.Transparency = 0.3
+			local v_create = v_u_tween:Create(arg1.Mesh, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0), {
+				["Scale"] = Vector3.new(1, 1, 1)
+			})
+			local v_create = v_u_tween:Create(arg1.overlay, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0), {
+				["Transparency"] = 1
+			})
+			v_create:Play()
+			v_create:Play()
+		end
+	},
+	["getFunctions"] = function(_, arg2)
+		-- upvalues: (copy) v_u4, (copy) v_u3
+		local v_bomb = v_u4.Bomb
+		local v1 = v_u4[arg2] or (v_u4[v_u3[arg2].baseTool] or v_u4.Bomb)
+		local v2
+		if v_u3[arg2].baseTool then
+			v2 = v_u4[v_u3[arg2].baseTool]
+		else
+			v2 = nil
+		end
+		local v3 = {}
+		if v2 then
+			for v4, v5 in pairs(v2) do
+				if v1[v4] == nil then
+					v1[v4] = v5
+				end
+			end
+		end
+		for v6, v7 in pairs(v_bomb) do
+			if v1[v6] == nil then
+				v1[v6] = v7
+			end
+		end
+		for v8, v9 in pairs(v1) do
+			v3[v8] = v9
+		end
+		return v3
+	end
+}
+return v_u4
