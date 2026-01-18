@@ -1,0 +1,203 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+game:GetService("CollectionService")
+game:GetService("HttpService")
+local v_u3 = v1("Client/Data/CharacterData")
+local v4 = v1("Shared/Data/WeaponConstants")
+local v_u5 = v1("Shared/Data/ToolData")
+local v_u_promise = v1("Promise")
+local v_u6 = v1("Client/Data/InputData")
+local v_u7 = v1("Shared/Utils/GetMouseHit")
+local v_u8 = v1("Shared/Utils/MouseIcon")
+local v_u9 = v1("Shared/ToolFunctions/BallFunctions")
+local v_u_userinput = game:GetService("UserInputService")
+local _ = v4.BALL_RELOAD_TIME
+local v_u10 = {}
+v_u10.__index = v_u10
+function v_u10.instance(arg1, arg2)
+	-- upvalues: (copy) v_u5, (copy) v_u3
+	arg1.player = game.Players.LocalPlayer
+	arg1.tool = arg2
+	arg1.toolData = v_u5[arg2.Name]
+	arg1.lastFire = time() - 100
+	arg2.Equipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:equipped(arg1.player.Character)
+	end)
+	arg2.Unequipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:unequipped(arg1.player.Character)
+	end)
+	arg2.Activated:connect(function()
+		-- upvalues: (ref) v_u3, (copy) arg1
+		if v_u3.canAct ~= false then
+			arg1:activated()
+		end
+	end)
+	arg2.Deactivated:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:deactivated()
+	end)
+	arg2.RequiresHandle = false
+	arg2.CanBeDropped = false
+	arg1.tooldata = v_u5[arg2.Name]
+	arg1.sounds = arg1.tooldata.sounds
+	arg1.reload = arg1.tooldata.reload
+	arg1.currentReload = arg1.reload
+	arg1.maxCharge = arg1.tooldata.chargeTime or 0.6
+	arg1.createMessage = arg1.tooldata.createMessage or "CreateBall"
+end
+function v_u10.onRelease(self)
+	-- upvalues: (copy) v_u8, (copy) v_u7, (copy) v_u2, (copy) v_u_promise
+	if not self.threw then
+		local v1 = time() - self.startFire > self.maxCharge
+		local v_reload = self.reload
+		self.currentReload = self.reload
+		if v1 and self.tooldata.reloadCharge then
+			v_reload = self.tooldata.reloadCharge
+			self.currentReload = self.tooldata.reloadCharge
+		end
+		self.lastFire = time()
+		self.threw = true
+		self:doThrowAnimation()
+		local v_fullcharge = self.tool.Handle.Attachment:FindFirstChild("FullCharge")
+		if v_fullcharge then
+			v_fullcharge.Enabled = false
+		end
+		self:makeTransparent(1)
+		self.funcs.onThrow(self)
+		v_u8:set("Reload")
+		local v2 = v_u7()
+		v_u2:sendServer("PlaySoundServer", self.sounds.Throw, self.tool.Handle, self.player.Team.Name, 50)
+		v_u2:sendServer(self.createMessage, self.tool.Name, self.player.Character:FindFirstChildOfClass("Tool").Handle.Position, v2, v1)
+		v_u_promise.delay(v_reload - 0.8):andThen(function()
+			-- upvalues: (copy) self, (ref) v_u2, (ref) v_u_promise
+			if self.isEquipped then
+				v_u2:send("PlayAnimationClient", "GrabFromBack")
+			end
+			v_u_promise.delay(0.4):andThen(function()
+				-- upvalues: (ref) self
+				self.funcs.onReload(self)
+				self:makeTransparent(0)
+			end)
+		end)
+		v_u2:send("ToolCooldown", "BALL", v_reload)
+		v_u_promise.delay(v_reload):andThen(function()
+			-- upvalues: (ref) v_u2, (copy) self, (ref) v_u8
+			v_u2:send("ToolSparkle", "BALL")
+			if self.isEquipped and v_u8:get() == "Reload" then
+				v_u2:sendServer("PlaySoundServer", self.sounds.Reload, self.tool.Handle, self.player.Team.Name, 50)
+				if v_u8:get() == "Reload" then
+					v_u8:set("Aim")
+				end
+			end
+		end)
+		v_u2:send("StopAnimationClient", self.toolData.startAnimation or "ThrowStart")
+		v_u2:send("StopAnimationClient", self.toolData.loopAnimation or "ThrowLoop")
+	end
+end
+function v_u10.makeTransparent(arg1, arg2)
+	if arg2 == 1 then
+		arg1.funcs.makeTransparent(arg1)
+	else
+		arg1.funcs.makeOpaque(arg1)
+	end
+	for _, v1 in pairs(arg1.tool.Handle:GetChildren()) do
+		if v1:IsA("Decal") or v1:IsA("Texture") then
+			v1.Transparency = arg2
+		end
+	end
+end
+function v_u10.doThrowAnimation(arg1)
+	-- upvalues: (copy) v_u2
+	v_u2:send("PlayAnimationClient", arg1.toolData.throwAnimation or "Throw")
+end
+function v_u10.doChargeAnimation(self)
+	-- upvalues: (copy) v_u_promise, (copy) v_u2
+	v_u_promise.delay(self.maxCharge):andThen(function()
+		-- upvalues: (copy) self, (ref) v_u2
+		if self.tool.Handle and self.firing == true then
+			local v_fullcharge = self.tool.Handle.Attachment:FindFirstChild("FullCharge")
+			if not v_fullcharge then
+				v_fullcharge = game.ReplicatedStorage.Assets.Particles.FullCharge:Clone()
+				v_fullcharge.Parent = self.tool.Handle.Attachment
+			end
+			v_fullcharge:Emit(1)
+			v_fullcharge.Enabled = true
+			v_u2:send("PlaySoundClient", "FullCharge", self.tool.Handle)
+		end
+	end)
+	v_u2:send("PlayAnimationClient", self.toolData.startAnimation or "ThrowStart")
+	v_u2:send("PlayAnimationClient", self.toolData.loopAnimation or "ThrowLoop")
+end
+function v_u10.canThrow(arg1)
+	return time() - arg1.lastFire > arg1.currentReload
+end
+function v_u10.activated(arg1)
+	-- upvalues: (copy) v_u2
+	if arg1:canThrow() then
+		arg1.threw = false
+		arg1.firing = true
+		arg1.startFire = time()
+		arg1.funcs.onStartThrow(arg1)
+		v_u2:send("StopAnimationClient", arg1.toolData.startAnimation or "ThrowStart")
+		v_u2:send("StopAnimationClient", arg1.toolData.loopAnimation or "ThrowLoop", 0.3)
+		arg1:doChargeAnimation()
+	end
+end
+function v_u10.deactivated(arg1)
+	-- upvalues: (copy) v_u2
+	if arg1.firing then
+		arg1:onRelease()
+		v_u2:send("StopAnimationClient", arg1.toolData.loopAnimation or "ThrowLoop")
+	end
+	arg1.firing = false
+end
+function v_u10.equipped(arg1, _)
+	-- upvalues: (copy) v_u8, (copy) v_u2, (copy) v_u9, (copy) v_u6, (copy) v_u_userinput
+	if arg1:canThrow() then
+		v_u8:set("Aim")
+	else
+		v_u8:set("Reload")
+	end
+	v_u2:send("StopAnimationClient", arg1.toolData.loopAnimation or "ThrowLoop")
+	arg1.isEquipped = true
+	arg1.firing = false
+	if not arg1.funcs then
+		arg1.funcs = v_u9:getFunctions(arg1.tool.Name)
+	end
+	arg1.funcs.onEquip(arg1)
+	if v_u6.inputType == "Touch" then
+		arg1.longPress = v_u_userinput.TouchLongPress:Connect(function(_, arg2, _)
+			-- upvalues: (copy) arg1
+			if arg2 == Enum.UserInputState.Begin then
+				arg1:activated()
+			elseif arg2 == Enum.UserInputState.End then
+				arg1:deactivated()
+			end
+		end)
+	end
+end
+function v_u10.unequipped(arg1, _)
+	-- upvalues: (copy) v_u8, (copy) v_u2
+	v_u8:set("")
+	v_u2:send("StopAnimationClient", arg1.toolData.loopAnimation or "ThrowLoop")
+	arg1.funcs.onUnequip(arg1)
+	arg1.isEquipped = false
+	arg1.firing = false
+	local v_fullcharge = arg1.tool.Handle.Attachment:FindFirstChild("FullCharge")
+	if v_fullcharge then
+		v_fullcharge.Enabled = false
+	end
+	if arg1.longPress then
+		arg1.longPress:Disconnect()
+		arg1.longPress = nil
+	end
+end
+function v_u10.new()
+	-- upvalues: (copy) v_u10
+	return setmetatable({}, v_u10)
+end
+return v_u10

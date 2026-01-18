@@ -1,0 +1,130 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u3 = v1("Shared/Data/ToolData")
+local v_u_http = game:GetService("HttpService")
+local v_u4 = v1("Shared/Utils/GetMouseHit")
+local v_u5 = v1("Shared/Utils/MouseIcon")
+local v_u6 = v1("Shared/Utils/FastSpawn")
+local v_u7 = v1("Client/Data/CharacterData")
+local v_u_promise = v1("Promise")
+local v_u8 = {}
+v_u8.__index = v_u8
+function v_u8.instance(arg1, arg2)
+	-- upvalues: (copy) v_u3, (copy) v_u7
+	arg1.player = arg2.Parent.Parent
+	arg1.tool = arg2
+	arg1.data = v_u3[arg1.tool.Name]
+	arg2.Equipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:equipped(arg1.player.Character)
+	end)
+	arg2.Unequipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:unequipped(arg1.player.Character)
+	end)
+	arg2.Activated:connect(function()
+		-- upvalues: (ref) v_u7, (copy) arg1
+		if v_u7.canAct ~= false then
+			arg1:activated()
+		end
+	end)
+	arg2.Deactivated:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:deactivated()
+	end)
+	arg1.lastFire = time() - 100
+end
+function v_u8.fire(self)
+	-- upvalues: (copy) v_u5, (copy) v_u4, (copy) v_u_http, (copy) v_u2, (copy) v_u6, (copy) v_u_promise
+	if time() - self.lastFire <= self.data.reload then
+		return
+	elseif time() - self.lastFire >= 0.05 then
+		self.lastFire = time()
+		v_u5:set("Reload")
+		local v1 = v_u4()
+		if self.data.projectileOffset then
+			v1 = v1 + self.data.projectileOffset or v1
+		end
+		local v_position = self.tool.Handle.Position
+		local v_generateguid = v_u_http:GenerateGUID()
+		local v2 = game.ReplicatedStorage.Assets.Projectiles[self.data.projectile]
+		v_u2:send("PlayAnimationClient", self.data.fireAnimation or "FireRocket")
+		v_u2:sendServer("HandleBlast", v_generateguid, v_position, v1, v2, {
+			["toolName"] = self.tool.Name,
+			["toolSlot"] = "BALL",
+			["baseProjectile"] = self.data.projectile,
+			["speed"] = self.data.speed,
+			["damage"] = self.data.damage,
+			["gravity"] = self.data.projectileGravity,
+			["reflectAccuracy"] = self.data.reflectAccuracy or nil
+		})
+		v_u2:send("CreateProjectile", v_generateguid, v_position, v1, v2.Name, self.player, {
+			["toolName"] = self.tool.Name,
+			["toolSlot"] = "BALL",
+			["baseProjectile"] = UNNAMED_1273919800936,
+			["speed"] = self.data.speed,
+			["damage"] = self.data.damage,
+			["gravity"] = self.data.projectileGravity
+		})
+		v_u2:sendServer("PlaySoundServer", self.data.fireSound, self.tool.Handle, nil, 150)
+		if self.data.fireFunction then
+			self.data.fireFunction(self)
+		end
+		v_u6(function()
+			-- upvalues: (ref) v_u2, (copy) self, (ref) v_u_promise, (ref) v_u5
+			v_u2:send("ToolCooldown", "BALL", self.data.reload)
+			v_u_promise.delay(self.data.reload):andThen(function()
+				-- upvalues: (ref) self, (ref) v_u5, (ref) v_u_promise
+				if self.data.reloadFunction then
+					self.data.reloadFunction(self)
+				end
+				if self.isEquipped and time() - self.lastFire >= self.data.reload then
+					v_u5:set("Aim")
+					v_u_promise.delay(0.1):andThen(function()
+						-- upvalues: (ref) self
+						if self.isHolding then
+							self:fire()
+						end
+					end)
+				end
+			end)
+		end)
+	end
+end
+function v_u8.activated(arg1)
+	arg1.isHolding = true
+	if time() - arg1.lastFire > arg1.data.reload then
+		arg1:fire()
+	end
+end
+function v_u8.deactivated(arg1)
+	arg1.isHolding = false
+end
+function v_u8.equipped(arg1, _)
+	-- upvalues: (copy) v_u2, (copy) v_u5
+	arg1.isEquipped = true
+	if arg1.data.idleAnimation then
+		v_u2:send("PlayAnimationClient", arg1.data.idleAnimation)
+	end
+	if time() - arg1.lastFire > arg1.data.reload then
+		v_u5:set("Aim")
+	else
+		v_u5:set("Reload")
+	end
+end
+function v_u8.unequipped(arg1, _)
+	-- upvalues: (copy) v_u2, (copy) v_u5
+	if arg1.data.idleAnimation then
+		v_u2:send("StopAnimationClient", arg1.data.idleAnimation)
+	end
+	arg1.isEquipped = false
+	arg1.isHolding = false
+	v_u5:set("")
+end
+function v_u8.new()
+	-- upvalues: (copy) v_u8
+	return setmetatable({}, v_u8)
+end
+return v_u8

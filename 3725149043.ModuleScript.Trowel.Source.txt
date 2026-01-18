@@ -1,0 +1,349 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u_collection = game:GetService("CollectionService")
+game:GetService("UserInputService")
+local v_u3 = v1("Client/Data/CharacterData")
+local v_u_run = game:GetService("RunService")
+local v_u_contextaction = game:GetService("ContextActionService")
+local v4 = v1("Shared/Data/WeaponConstants")
+local v_u5 = v1("Client/Data/InputData")
+local v_u6 = v1("Shared/Data/ToolData")
+local v_u7 = v1("Shared/Data/TeamData")
+local v_u_promise = v1("Promise")
+local v_u8 = v1("Shared/Utils/MouseIcon")
+local v_u_trowel_distance = v4.TROWEL_DISTANCE
+local v_u9 = 0
+local v_u10 = {}
+v_u10.__index = v_u10
+function v_u10.showRotateUi(self)
+	-- upvalues: (copy) v_u5
+	if v_u5.inputType == "Touch" then
+		local v_localplayer = game.Players.LocalPlayer
+		v_localplayer.PlayerGui.Rotate.MainFrame:TweenPosition(UDim2.new(0.5, 0, 0.75, 0), "Out", "Quad", 0.3)
+		self.events = {}
+		self.events[1] = v_localplayer.PlayerGui.Rotate.MainFrame.RotateLeft.Activated:connect(function()
+			-- upvalues: (copy) self
+			self.rotation = self.rotation - 1.5707963267948966
+		end)
+		self.events[2] = v_localplayer.PlayerGui.Rotate.MainFrame.RotateRight.Activated:connect(function()
+			-- upvalues: (copy) self
+			self.rotation = self.rotation + 1.5707963267948966
+		end)
+		self.events[3] = v_localplayer.PlayerGui.Rotate.MainFrame.Place.Activated:connect(function()
+			-- upvalues: (copy) self
+			self:activated()
+		end)
+	end
+end
+function v_u10.hideRotateUi(arg1)
+	-- upvalues: (copy) v_u5
+	if v_u5.inputType == "Touch" then
+		game.Players.LocalPlayer.PlayerGui.Rotate.MainFrame:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Quad", 0.3)
+		for _, v1 in pairs(arg1.events) do
+			v1:disconnect()
+		end
+	end
+end
+function v_u10.instance(arg1, arg2)
+	-- upvalues: (copy) v_u6, (copy) v_u3, (ref) v_u9, (copy) v_u_promise
+	arg1.player = game.Players.LocalPlayer
+	arg1.rotation = 0
+	arg1.lastPlace = 0
+	arg1.tool = arg2
+	arg1.data = v_u6[arg2.Name]
+	arg2.Equipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:equipped(arg1.player.Character)
+	end)
+	arg2.Unequipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:unequipped(arg1.player.Character)
+	end)
+	arg2.Activated:connect(function()
+		-- upvalues: (ref) v_u3, (copy) arg1
+		if v_u3.canAct ~= false then
+			arg1:activated()
+		end
+	end)
+	arg2.RequiresHandle = false
+	arg2.CanBeDropped = false
+	v_u9 = arg1.data.reload or v_u9
+	arg1.equipReload = arg1.data.equipReload or nil
+	v_u_promise.try(function()
+		-- upvalues: (copy) arg1
+		arg1.tool:WaitForChild("Handle")
+		local v1 = arg1
+		local v_handle = arg1.tool.Handle
+		if v_handle then
+			v_handle = arg1.tool.Handle:WaitForChild("EquipSound", 5)
+		end
+		v1.equipSound = v_handle
+	end)
+end
+function v_u10.getRayResults(arg1)
+	-- upvalues: (copy) v_u5, (copy) v_u_collection, (ref) v_u_trowel_distance
+	local v_inputtype = v_u5.inputType
+	local v_new = RaycastParams.new()
+	v_new.FilterType = Enum.RaycastFilterType.Blacklist
+	local v1 = { arg1.player.Character, arg1.preview, arg1.previewSkin }
+	local v_charactermodel = v_u_collection:GetTagged("CharacterModel")
+	for _, v2 in pairs(v_charactermodel) do
+		table.insert(v1, v2)
+	end
+	local v_ignoreraycast = v_u_collection:GetTagged("IgnoreRaycast")
+	for _, v3 in pairs(v_ignoreraycast) do
+		table.insert(v1, v3)
+	end
+	local v_toolobject = v_u_collection:GetTagged("ToolObject")
+	for _, v4 in pairs(v_toolobject) do
+		table.insert(v1, v4)
+	end
+	if arg1.data.ignoreTag then
+		local v_gettagged = v_u_collection:GetTagged(arg1.data.ignoreTag)
+		for _, v5 in pairs(v_gettagged) do
+			table.insert(v1, v5)
+		end
+	end
+	v_new.FilterDescendantsInstances = v1
+	local v6 = nil
+	if v_inputtype == "Touch" then
+		local v_raycast = workspace:Raycast(workspace.CurrentCamera.CFrame.Position, workspace.CurrentCamera.CFrame.LookVector * 1000, v_new)
+		if arg1.data.snap and (v_raycast and (v_raycast.Instance and v_raycast.Position)) then
+			local v_ceil = math.ceil(v_raycast.Position.X)
+			local v_ceil = math.ceil(v_raycast.Position.Z)
+			v6 = Vector3.new(v_ceil, v_raycast.Position.Y, v_ceil)
+		end
+		local v7 = arg1.player.Character and arg1.player.Character.PrimaryPart
+		if v7 then
+			v7 = arg1.player.Character.PrimaryPart.Position
+		end
+		if v_u_trowel_distance < (v7 - v_raycast.Position).Magnitude then
+			return nil, v_raycast.Position, Vector3.new()
+		else
+			return v_raycast and ({
+				["Instance"] = v_raycast.Instance,
+				["Position"] = v6 or v_raycast.Position,
+				["Material"] = v_raycast.Material,
+				["Normal"] = v_raycast.Normal
+			} or nil) or nil
+		end
+	else
+		local v_getmouse = arg1.player:GetMouse()
+		local v_raycast = workspace:Raycast(v_getmouse.UnitRay.Origin, v_getmouse.UnitRay.Direction * 1000, v_new)
+		if arg1.data.snap and (v_raycast and (v_raycast.Instance and v_raycast.Position)) then
+			local v_ceil = math.ceil(v_raycast.Position.X)
+			local v_ceil = math.ceil(v_raycast.Position.Z)
+			v6 = Vector3.new(v_ceil, v_raycast.Position.Y, v_ceil)
+		end
+		local v8 = arg1.player.Character and arg1.player.Character.PrimaryPart
+		if v8 then
+			v8 = arg1.player.Character.PrimaryPart.Position
+		end
+		if v_raycast and v_u_trowel_distance < (v8 - v_raycast.Position).Magnitude then
+			return nil, v_raycast.Position, Vector3.new()
+		else
+			return v_raycast and ({
+				["Instance"] = v_raycast.Instance,
+				["Position"] = v6 or v_raycast.Position,
+				["Material"] = v_raycast.Material,
+				["Normal"] = v_raycast.Normal
+			} or nil) or nil
+		end
+	end
+end
+function v_u10.canPlace(arg1, arg2)
+	-- upvalues: (copy) v_u_collection
+	local v_new = RaycastParams.new()
+	v_new.FilterType = Enum.RaycastFilterType.Blacklist
+	local v1 = { arg1.player.Character, arg1.preview, arg1.previewSkin }
+	local v_charactermodel = v_u_collection:GetTagged("CharacterModel")
+	for _, v2 in pairs(v_charactermodel) do
+		table.insert(v1, v2)
+	end
+	local v_ignoreraycast = v_u_collection:GetTagged("IgnoreRaycast")
+	for _, v3 in pairs(v_ignoreraycast) do
+		table.insert(v1, v3)
+	end
+	local v_toolobject = v_u_collection:GetTagged("ToolObject")
+	for _, v4 in pairs(v_toolobject) do
+		table.insert(v1, v4)
+	end
+	if arg1.data.ignoreTag then
+		local v_gettagged = v_u_collection:GetTagged(arg1.data.ignoreTag)
+		for _, v5 in pairs(v_gettagged) do
+			table.insert(v1, v5)
+		end
+	end
+	v_new.FilterDescendantsInstances = v1
+	if not arg1.previewSkin then
+		arg1.previewSkin = Instance.new("Part")
+		arg1.previewSkin.Anchored = true
+		arg1.previewSkin.CanCollide = false
+		arg1.previewSkin.Transparency = 1
+		arg1.previewSkin.Size = arg1.data.propSize
+		arg1.previewSkin.Parent = workspace
+		arg1.previewSkin.Touched:connect(function() end)
+	end
+	local v_previewskin = arg1.previewSkin
+	local v_troweloffset = arg1.data.trowelOffset
+	if arg2 and arg2.Instance then
+		v_previewskin.CFrame = CFrame.new(arg2.Position, arg2.Position + arg2.Normal) * v_troweloffset
+		v_previewskin.CFrame = v_previewskin.CFrame * CFrame.new(0, v_previewskin.Size.Y / 2, 0)
+		v_previewskin.CFrame = v_previewskin.CFrame * CFrame.Angles(0, arg1.rotation, 0)
+	end
+	if arg1.data.spaceOffset then
+		v_previewskin.CFrame = v_previewskin.CFrame * arg1.data.spaceOffset
+	end
+	if arg2 and arg2.Instance then
+		local v_raycast = workspace:Raycast(arg2.Position - arg2.Normal, arg2.Normal * arg1.sanityCastLength, v_new)
+		if v_raycast and v_raycast.Instance then
+			return false
+		end
+	end
+	local v_gettouchingparts = v_previewskin:GetTouchingParts()
+	local v6 = {}
+	for _, v7 in pairs(v_gettouchingparts) do
+		if v7 ~= arg1.preview and (not v_u_collection:HasTag(v7.Parent, "UserConstruction") and (not v_u_collection:HasTag(v7, "IgnoreRaycast") and (not v7.Parent:FindFirstChild("Humanoid") and (not v7.Parent.Parent:FindFirstChild("Humanoid") and (arg2 and (v7 ~= arg2.Instance and (v7.Transparency ~= 1 and (v7.Anchored == false or v7.CanCollide == false)))))))) and not v_u_collection:HasTag(v7, "CanBuild") then
+			table.insert(v6, v7)
+		end
+	end
+	return #v6 == 0
+end
+function v_u10.activated(self)
+	-- upvalues: (ref) v_u9, (copy) v_u_collection, (copy) v_u2, (copy) v_u8, (copy) v_u_promise
+	if workspace.CurrentCamera.CameraSubject:IsA("Humanoid") then
+		if time() - self.lastPlace < v_u9 then
+			return
+		elseif not self.equipReload or time() - self.lastEquipped >= self.equipReload then
+			local v_getrayresults = self:getRayResults()
+			if v_getrayresults and (v_getrayresults.Instance and self:canPlace(v_getrayresults)) then
+				if v_u_collection:HasTag(v_getrayresults.Instance, "NoBuild") then
+					return
+				end
+				v_u2:sendServer(self.data.constructionMessage, v_getrayresults.Position, v_getrayresults.Normal, self.rotation, v_getrayresults.Instance)
+				v_u8:set("Reload")
+				if self.data.sounds then
+					v_u2:sendServer("PlaySoundServer", self.data.sounds.Use, self.tool.Handle, self.player.Team.Name, 20)
+				end
+				v_u2:send("ToolCooldown", "TROWEL", v_u9)
+				v_u_promise.delay(v_u9):andThen(function()
+					-- upvalues: (ref) v_u2, (copy) self, (ref) v_u8
+					v_u2:send("ToolSparkle", "TROWEL")
+					if self.isEquipped and v_u8:get() == "Reload" then
+						v_u8:set("Aim")
+					end
+				end)
+				self.lastPlace = time()
+			end
+		end
+	else
+		return
+	end
+end
+function v_u10.displayBuilding(arg1)
+	-- upvalues: (ref) v_u9, (copy) v_u_collection, (copy) v_u7
+	if not arg1.preview then
+		arg1.preview = arg1.data.partCreationFunction(game.Players.LocalPlayer)
+		arg1.preview.Size = arg1.data.propSize
+		local v_selectionbox = Instance.new("SelectionBox")
+		v_selectionbox.Adornee = arg1.preview
+		v_selectionbox.Parent = arg1.preview
+		arg1.preview.CanCollide = false
+		arg1.preview.Parent = workspace
+	end
+	arg1.preview.Transparency = 0.2
+	local v_getrayresults = arg1:getRayResults()
+	if time() - arg1.lastPlace < v_u9 or v_getrayresults and v_u_collection:HasTag(v_getrayresults.Instance, "NoBuild") or (not arg1:canPlace(v_getrayresults) or arg1.equipReload and time() - arg1.lastEquipped < arg1.equipReload) then
+		arg1.preview.Color = Color3.new(0, 0, 0)
+		arg1.preview.SelectionBox.Color3 = Color3.fromRGB(81, 81, 81)
+		arg1.preview.Transparency = 0.4
+	else
+		arg1.preview.Color = v_u7[arg1.player.Team.Name].colors.brickcolor
+		arg1.preview.SelectionBox.Color3 = v_u7[arg1.player.Team.Name].colors.uiBasic
+		arg1.preview.Transparency = 0.2
+	end
+	if v_getrayresults and (v_getrayresults.Instance and not (v_getrayresults.Instance.Parent:FindFirstChild("Humanoid") or v_getrayresults.Instance.Parent.Parent:FindFirstChild("Humanoid"))) then
+		local v_preview = arg1.preview
+		v_preview.CFrame = CFrame.new(v_getrayresults.Position, v_getrayresults.Position + v_getrayresults.Normal) * arg1.data.trowelOffset
+		v_preview.CFrame = v_preview.CFrame * CFrame.new(0, v_preview.Size.Y / 2, 0)
+		v_preview.CFrame = v_preview.CFrame * CFrame.Angles(0, arg1.rotation, 0)
+		if arg1.data.spaceOffset then
+			v_preview.CFrame = v_preview.CFrame * arg1.data.spaceOffset
+		end
+	end
+end
+function v_u10.destroyPreview(arg1)
+	if arg1.preview then
+		arg1.preview:Destroy()
+		arg1.preview = nil
+	end
+	if arg1.previewSkin then
+		arg1.previewSkin:Destroy()
+		arg1.previewSkin = nil
+	end
+end
+function v_u10.equipped(arg1, _)
+	-- upvalues: (copy) v_u2, (ref) v_u_trowel_distance, (copy) v_u8, (copy) v_u_run, (copy) v_u_contextaction, (copy) v_u5
+	if not arg1.sanityCastLength then
+		arg1.sanityCastLength = arg1.data.castLength or 2
+	end
+	if arg1.equipSound then
+		local v_equipsound = arg1.equipSound
+		local _ = arg1.player.Team.Name
+		if v_equipsound:IsA("Attachment") then
+			local v_getchildren = v_equipsound:GetChildren()
+			v_equipsound = v_getchildren[math.random(1, #v_getchildren)]
+		end
+		v_u2:sendServer("PlaySoundObjectServer", v_equipsound, 0)
+	end
+	arg1.lastEquipped = time()
+	if arg1.data.equipAnim then
+		v_u2:send("PlayAnimationClient", arg1.data.equipAnim)
+	end
+	v_u_trowel_distance = arg1.data.distance or v_u_trowel_distance
+	arg1.isEquipped = true
+	v_u8:set("Aim")
+	arg1:destroyPreview()
+	arg1.connect = v_u_run.RenderStepped:Connect(function()
+		-- upvalues: (copy) arg1
+		arg1:displayBuilding()
+	end)
+	v_u_contextaction:BindActionAtPriority("rotate", function(_, arg2, arg3)
+		-- upvalues: (ref) v_u5, (copy) arg1
+		if (not v_u5.mouseLock or _G.Data.settings.altSpecial == 0) and arg3.UserInputType == Enum.UserInputType.MouseButton2 then
+			return Enum.ContextActionResult.Pass
+		end
+		if not arg1.rotation then
+			arg1.rotation = 0
+		end
+		if arg2 == Enum.UserInputState.Begin then
+			if arg3.KeyCode == Enum.KeyCode.ButtonR2 or arg3.KeyCode == Enum.KeyCode.R then
+				arg1.rotation = arg1.rotation + 1.5707963267948966
+				return
+			end
+			arg1.rotation = arg1.rotation - 1.5707963267948966
+		end
+	end, false, 1000, Enum.KeyCode.R, Enum.KeyCode.ButtonL2, Enum.UserInputType.MouseButton2)
+	arg1:showRotateUi()
+	v_u2:send("ToolKey", "Rotate", "Rotate")
+end
+function v_u10.unequipped(arg1, _)
+	-- upvalues: (copy) v_u_contextaction, (copy) v_u5, (copy) v_u2, (copy) v_u8
+	arg1:destroyPreview()
+	arg1.connect:disconnect()
+	arg1.isEquipped = false
+	v_u_contextaction:UnbindAction("rotate")
+	if v_u5.inputType ~= "Touch" then
+		local _ = v_u5.inputType == "Gamepad"
+	end
+	arg1:hideRotateUi()
+	v_u2:send("ToolKey", "Rotate", nil)
+	v_u8:set()
+end
+function v_u10.new()
+	-- upvalues: (copy) v_u10
+	return setmetatable({}, v_u10)
+end
+return v_u10

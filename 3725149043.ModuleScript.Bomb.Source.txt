@@ -1,0 +1,79 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+game:GetService("CollectionService")
+local v_u3 = v1("Client/Systems/Character")
+local v_u4 = v1("Shared/Utils/MouseIcon")
+local v_u_contextaction = game:GetService("ContextActionService")
+local v_u5 = v1("Client/Data/InputData")
+local v_u6 = v1("Client/Data/CharacterData")
+local v_u7 = v1("Shared/Data/ToolData")
+local v_u8 = {}
+v_u8.__index = v_u8
+local v_u9 = nil
+function v_u8.plant(arg1)
+	-- upvalues: (copy) v_u2
+	v_u2:sendServer("PerformToolFunction", arg1.tool, "plant")
+end
+function v_u8.instance(arg1, arg2)
+	-- upvalues: (copy) v_u_contextaction, (copy) v_u4, (copy) v_u2, (copy) v_u3, (copy) v_u7
+	arg1.tool = arg2
+	arg1.player = game.Players.LocalPlayer
+	arg2.Equipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:equipped(arg1.player.Character)
+	end)
+	arg2.Unequipped:connect(function()
+		-- upvalues: (copy) arg1, (ref) v_u_contextaction, (ref) v_u4, (ref) v_u2
+		local _ = arg1.player.Character
+		v_u_contextaction:UnbindAction("BombSpecial")
+		v_u4:set()
+		v_u2:send("ToolKey", "SpecialAttack", nil)
+	end)
+	arg2.Activated:connect(function()
+		-- upvalues: (ref) v_u3, (copy) arg1
+		if v_u3.CanAct ~= false then
+			arg1:activated()
+		end
+	end)
+	arg2.RequiresHandle = false
+	arg2.CanBeDropped = false
+	v_u_contextaction:UnbindAction("BombSpecial")
+	arg1.data = v_u7[arg2.Name]
+end
+function v_u8.activated(_) end
+function v_u8.equipped(arg1, _)
+	-- upvalues: (copy) v_u4, (copy) v_u_contextaction, (copy) v_u5, (copy) v_u6, (copy) v_u2, (ref) v_u9
+	v_u4:set("Aim")
+	if not arg1.data.noPlant then
+		v_u_contextaction:BindActionAtPriority("BombSpecial", function(_, arg2, arg3)
+			-- upvalues: (ref) v_u5, (ref) v_u6, (copy) arg1
+			if v_u5.mouseLock and _G.Data.settings.altSpecial ~= 0 or arg3.UserInputType ~= Enum.UserInputType.MouseButton2 then
+				if v_u6.canAct ~= false then
+					if arg2 == Enum.UserInputState.Begin then
+						arg1:plant()
+					end
+				end
+			else
+				return Enum.ContextActionResult.Pass
+			end
+		end, false, 1000, Enum.KeyCode.R, Enum.KeyCode.ButtonL2, Enum.UserInputType.MouseButton2)
+		v_u2:send("ToolKey", "SpecialAttack", "Plant")
+	end
+	local v1 = v_u5.inputType == "Touch" and arg1.player.PlayerScripts:FindFirstChild("TouchAction")
+	if v1 then
+		if v_u9 then
+			v_u9:Disconnect()
+		end
+		v_u9 = v1.Event:Connect(function()
+			-- upvalues: (copy) arg1
+			arg1:plant()
+		end)
+	end
+end
+function v_u8.new()
+	-- upvalues: (copy) v_u8
+	return setmetatable({}, v_u8)
+end
+return v_u8

@@ -1,0 +1,612 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u3 = v1("Shared/Data/ToolData")
+local v_u4 = v1("Client/Data/CharacterData")
+local v5 = v1("Shared/Data/WeaponConstants")
+local v_u_http = game:GetService("HttpService")
+local v_u_run = game:GetService("RunService")
+local v_u_contextaction = game:GetService("ContextActionService")
+local v_u_promise = v1("Promise")
+local v_u6 = v1("Shared/ToolFunctions/SwordFunctions")
+v1("Shared/Utils/GetMouseHit")
+local v_u7 = v1("Shared/Utils/MouseIcon")
+local v_u8 = v1("Client/Data/InputData")
+local v_u9 = v1("Assets/Particles/Sweaty")
+local v_u10 = nil
+local v_u_sword_lunge_debounce = v5.SWORD_LUNGE_DEBOUNCE
+local v_u_sword_spin_debounce = v5.SWORD_SPIN_DEBOUNCE
+local v_u11 = nil
+local v_u12 = nil
+local v_u13 = {}
+v_u13.__index = v_u13
+local v_u14 = nil
+function v_u13.instance(arg1, arg2)
+	-- upvalues: (ref) v_u14, (copy) v_u4, (copy) v_u3
+	arg1.tool = arg2
+	arg1.player = game.Players.LocalPlayer
+	v_u14 = arg1.player:GetMouse()
+	arg2.Equipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:equipped(arg1.player.Character)
+	end)
+	arg2.Unequipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:unequipped(arg1.player.Character)
+	end)
+	arg2.Activated:connect(function()
+		-- upvalues: (ref) v_u4, (copy) arg1
+		if v_u4.canAct ~= false then
+			arg1:activated()
+		end
+	end)
+	arg2.Deactivated:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:deactivated()
+	end)
+	arg1.swingDir = false
+	arg1.lastFire = tick()
+	arg1.lastSwing = tick() - 10
+	arg1.lastSpin = tick()
+	arg1.lastLunge = tick() - 10
+	arg1.lunging = false
+	arg1.spinning = false
+	arg1.striking = false
+	arg1.startC0 = nil
+	arg1.tooldata = v_u3[arg2.Name]
+	arg1.swingSpeedModifier = arg1.tooldata.swingSpeed or 1
+	arg1.midairSpeedModifier = arg1.tooldata.midairSpeedModifier or 1
+	arg1.reloadModifier = arg1.tooldata.reloadModifier or 1
+	arg1.lungeTime = arg1.tooldata.lungeTime or 0.5
+	arg1.sounds = arg1.tooldata.sounds
+	arg1.specialAttack = arg1.tooldata.specialAttack or "Lunge"
+end
+function v_u13.setupAnims(self)
+	-- upvalues: (copy) v_u4
+	self.Anims = {
+		["Slash1"] = v_u4.humanoid:LoadAnimation(self.tool.Slash1),
+		["Slash2"] = v_u4.humanoid:LoadAnimation(self.tool.Slash2),
+		["Spin"] = v_u4.humanoid:LoadAnimation(self.tool.Spin),
+		["Lunge"] = v_u4.humanoid:LoadAnimation(self.tool.Lunge),
+		["Strike"] = v_u4.humanoid:LoadAnimation(self.tool.Strike)
+	}
+	if self.tool:FindFirstChild("LoopSpin") then
+		self.Anims.LoopSpin = v_u4.humanoid:LoadAnimation(self.tool.LoopSpin)
+	end
+	if self.tool:FindFirstChild("LoopSpinEnd") then
+		self.Anims.LoopSpinEnd = v_u4.humanoid:LoadAnimation(self.tool.LoopSpinEnd)
+	end
+	if self.tool:FindFirstChild("Idle") then
+		self.Anims.Idle = v_u4.humanoid:LoadAnimation(self.tool.Idle)
+	end
+	if self.tool:FindFirstChild("LungeFast") then
+		self.Anims.LungeFast = v_u4.humanoid:LoadAnimation(self.tool.LungeFast)
+	end
+	for _, v1 in pairs(self.Anims) do
+		v1:GetMarkerReachedSignal("AnimEvent"):Connect(function(arg1)
+			-- upvalues: (copy) self
+			if arg1 == "SmearOn" then
+				self.funcs.onSwipeStart(self)
+			end
+			if arg1 == "SmearOff" then
+				self.funcs.onSwipeEnd(self)
+			end
+			if arg1 == "PlaySound" then
+				self.tool.Handle.AnimSound:Play()
+			end
+		end)
+	end
+end
+function v_u13.swing(arg1)
+	-- upvalues: (copy) v_u4, (copy) v_u_http, (ref) v_u12, (copy) v_u2
+	if v_u4.canAct == false then
+		return
+	else
+		local v1
+		if v_u4.swordAction == "Brick Smash" or v_u4.swordAction == "UmbrellaHover" then
+			v1 = false
+		else
+			v1 = v_u4.canAct ~= false
+		end
+		if v1 then
+			arg1.funcs.onSwing(arg1)
+			arg1.Anims.Slash1:Stop(0)
+			arg1.Anims.Slash2:Stop(0)
+			arg1.Anims.Slash1:AdjustSpeed(arg1.swingSpeedModifier)
+			arg1.Anims.Slash2:AdjustSpeed(arg1.swingSpeedModifier)
+			if arg1.SwingDir == true and tick() - arg1.lastSwing < 0.7 * arg1.swingSpeedModifier then
+				arg1.Anims.Slash1:Stop()
+				arg1.Anims.Slash2:Play()
+				arg1.SwingDir = false
+			else
+				arg1.Anims.Slash2:Stop()
+				arg1.Anims.Slash1:Play()
+				arg1.SwingDir = true
+			end
+			v_u12 = v_u_http:GenerateGUID()
+			v_u2:sendServer("ActivateHitbox", "Slash")
+			arg1.lastSwing = tick()
+			local v_slash = arg1.tool.Handle.Slash
+			local _ = arg1.player.Team.Name
+			if v_slash:IsA("Attachment") then
+				local v_getchildren = v_slash:GetChildren()
+				v_slash = v_getchildren[math.random(1, #v_getchildren)]
+			end
+			v_u2:sendServer("PlaySoundObjectServer", v_slash, 120)
+		end
+	end
+end
+function v_u13.strike(self)
+	-- upvalues: (copy) v_u4, (copy) v_u_sword_lunge_debounce, (copy) v_u2, (copy) v_u7, (copy) v_u_http, (ref) v_u12, (ref) v_u11
+	if v_u4.canAct == false then
+		return
+	elseif self.tool.Sword == nil then
+		return
+	elseif tick() - self.lastLunge >= v_u_sword_lunge_debounce * self.reloadModifier then
+		self.lastLunge = tick()
+		local v_strike = self.tool.Handle.Strike
+		local _ = self.player.Team.Name
+		if v_strike:IsA("Attachment") then
+			local v_getchildren = v_strike:GetChildren()
+			v_strike = v_getchildren[math.random(1, #v_getchildren)]
+		end
+		v_u2:sendServer("PlaySoundObjectServer", v_strike, 30)
+		self.Anims.Strike:Play(0)
+		self.Anims.Slash1:Stop()
+		self.Anims.Slash2:Stop()
+		v_u7:set("Reload")
+		local v_generateguid = v_u_http:GenerateGUID()
+		v_u2:sendServer("DeactivateHitbox", "Slash")
+		v_u12 = v_generateguid
+		v_u2:sendServer("ActivateHitbox", "Strike")
+		self.striking = true
+		self.funcs.onStrike(self)
+		if v_u11 then
+			v_u11:Disconnect()
+			v_u11 = nil
+		end
+		v_u2:send("ToolCooldown", "SWORD", v_u_sword_lunge_debounce * self.reloadModifier)
+		v_u11 = game:GetService("RunService").Stepped:connect(function()
+			-- upvalues: (ref) v_u11, (copy) self, (ref) v_u_sword_lunge_debounce, (ref) v_u2, (ref) v_u7
+			if v_u11 and (not self.tool or (self.tool.Parent == nil or not self.tool.Sword)) then
+				v_u11:disconnect()
+			elseif tick() - self.lastLunge > v_u_sword_lunge_debounce * self.reloadModifier and (self.tool and self.tool.Sword) then
+				self.funcs.duringStrike(self)
+				if tick() - self.lastLunge > 0.3 and self.striking then
+					self.striking = false
+					self.funcs.onStrikeEnd(self)
+				end
+				v_u2:send("ToolSparkle", "SWORD")
+				if self.isEquipped then
+					v_u2:send("PlaySound", self.sounds.Charged, self.tool.Handle)
+					self.tool.Sword.Base.ChargeSparkle:Emit(1)
+					if v_u7:get() == "Reload" and self.isEquipped then
+						v_u7:set("Aim")
+					end
+					self.funcs.onCharged(self)
+				end
+				v_u11:Disconnect()
+			end
+		end)
+	end
+end
+function v_u13.projectile(self)
+	-- upvalues: (copy) v_u4, (copy) v_u_sword_lunge_debounce, (copy) v_u2, (copy) v_u7, (copy) v_u8, (copy) v_u_http, (ref) v_u11
+	if v_u4.canAct == false then
+		return
+	elseif self.tool.Sword == nil then
+		return
+	elseif tick() - self.lastSpin < 0.5 then
+		return
+	elseif tick() - self.lastLunge >= v_u_sword_lunge_debounce * self.reloadModifier then
+		self.lastLunge = tick()
+		local v_lunge = self.tool.Handle.Lunge
+		local _ = self.player.Team.Name
+		if v_lunge:IsA("Attachment") then
+			local v_getchildren = v_lunge:GetChildren()
+			v_lunge = v_getchildren[math.random(1, #v_getchildren)]
+		end
+		v_u2:sendServer("PlaySoundObjectServer", v_lunge, 40)
+		self.Anims.Lunge:Play(0)
+		self.Anims.Slash1:Stop()
+		self.Anims.Slash2:Stop()
+		v_u7:set("Reload")
+		if v_u4.humanoid.MoveDirection ~= Vector3.new(0, 0, 0) and (v_u8.mouseLock == false and (v_u8.inputType == "PC" or _G.Data.settings.mobileCam ~= 1)) then
+			local v_atan2 = math.atan2(v_u4.humanoid.MoveDirection.X, v_u4.humanoid.MoveDirection.Z)
+			self.player.Character.PrimaryPart.CFrame = CFrame.new(self.player.Character.PrimaryPart.Position) * CFrame.Angles(0, v_atan2 + 3.141592653589793, 0)
+		end
+		self.funcs.onProjectile(self)
+		local v1 = self.player.Character.PrimaryPart.Position + self.player.Character.PrimaryPart.CFrame.lookVector * 10
+		local v_position = self.player.Character.PrimaryPart.Position
+		local v_generateguid = v_u_http:GenerateGUID()
+		local v2 = game.ReplicatedStorage.Assets.Projectiles[self.tooldata.projectile]
+		v_u2:sendServer("HandleBlast", v_generateguid, v_position, v1, v2, self.funcs.Projectile(self))
+		v_u2:send("CreateProjectile", v_generateguid, v_position, v1, v2.Name, self.player, self.funcs.Projectile(self))
+		if v_u11 then
+			v_u11:disconnect()
+			v_u11 = nil
+		end
+		v_u2:send("ToolCooldown", "SWORD", v_u_sword_lunge_debounce * self.reloadModifier)
+		v_u4.sinceLunge = time()
+		v_u11 = game:GetService("RunService").Stepped:connect(function()
+			-- upvalues: (ref) v_u11, (copy) self, (ref) v_u_sword_lunge_debounce, (ref) v_u2, (ref) v_u7
+			if v_u11 and (not self.tool or (self.tool.Parent == nil or not self.tool.Sword)) then
+				v_u11:Disconnect()
+			elseif tick() - self.lastLunge > v_u_sword_lunge_debounce * self.reloadModifier and (self.tool and self.tool.Sword) then
+				v_u2:send("ToolSparkle", "SWORD")
+				if self.isEquipped then
+					v_u2:send("PlaySound", self.sounds.Charged, self.tool.Handle)
+					self.tool.Sword.Base.ChargeSparkle:Emit(1)
+					if v_u7:get() == "Reload" and self.isEquipped then
+						v_u7:set("Aim")
+					end
+					self.funcs.onCharged(self)
+				end
+				v_u11:Disconnect()
+			end
+		end)
+	end
+end
+function v_u13.midairLoopSpin(self)
+	-- upvalues: (copy) v_u4, (copy) v_u_sword_lunge_debounce, (copy) v_u8, (copy) v_u_http, (ref) v_u12, (ref) v_u11, (copy) v_u7, (copy) v_u2
+	if v_u4.canAct == false then
+		return
+	elseif self.tool.Sword == nil then
+		return
+	elseif tick() - self.lastSpin < 0.5 then
+		return
+	elseif tick() - self.lastSwing < 0.3 * self.swingSpeedModifier then
+		return
+	elseif tick() - self.lastLunge < v_u_sword_lunge_debounce * self.reloadModifier then
+		return
+	elseif v_u4.swordAction == nil then
+		if not self.loopspinning then
+			self.loopSpinEnded = tick() + 999
+			v_u4.swordAction = "LoopSpin"
+			self.loopspinning = true
+			self.lastSpin = tick()
+			self.Anims.LoopSpin:Play()
+			self.Anims.Slash1:Stop()
+			self.Anims.Slash2:Stop()
+			if v_u4.humanoid.MoveDirection ~= Vector3.new(0, 0, 0) and (v_u8.mouseLock == false and (v_u8.inputType == "PC" or _G.Data.settings.mobileCam ~= 1)) then
+				local v_atan2 = math.atan2(v_u4.humanoid.MoveDirection.X, v_u4.humanoid.MoveDirection.Z)
+				self.player.Character.PrimaryPart.CFrame = CFrame.new(self.player.Character.PrimaryPart.Position) * CFrame.Angles(0, v_atan2 + 3.141592653589793, 0)
+			end
+			if self.tool.Handle:FindFirstChild("LoopSpinStart") then
+				self.tool.Handle.LoopSpinStart:Play()
+			end
+			if self.tool.Handle:FindFirstChild("LoopSpin") then
+				self.tool.Handle.LoopSpin:Play()
+			end
+			self.loopSpinStarted = tick()
+			self.funcs.onLoopSpin(self)
+			v_u12 = v_u_http:GenerateGUID()
+			if v_u11 then
+				v_u11:Disconnect()
+				v_u11 = nil
+			end
+			v_u4.sinceLunge = time()
+			v_u11 = game:GetService("RunService").Stepped:Connect(function()
+				-- upvalues: (ref) v_u11, (copy) self, (ref) v_u4, (ref) v_u7, (ref) v_u2, (ref) v_u_sword_lunge_debounce
+				if v_u11 and (not self.tool or (self.tool.Parent == nil or not self.tool.Sword)) then
+					v_u11:Disconnect()
+				else
+					self.funcs.duringLoopSpin(self)
+					if self.loopspinning and (v_u4.state == "Running" or v_u4.state == "Landed") then
+						self.Anims.LoopSpin:Stop()
+						self.loopspinning = false
+						v_u7:set("Reload")
+						if self.tool.Handle:FindFirstChild("LoopSpin") then
+							self.tool.Handle.LoopSpin:Stop()
+						end
+						if self.Anims.LoopSpinEnd then
+							self.Anims.LoopSpinEnd:Play()
+						end
+						v_u2:send("ToolCooldown", "SWORD", v_u_sword_lunge_debounce * self.reloadModifier)
+						self.lastLunge = tick()
+						self.loopSpinEnded = tick()
+						self.funcs.onLoopSpinEnd(self)
+					end
+					if tick() - self.loopSpinEnded > v_u_sword_lunge_debounce * self.reloadModifier and (self.tool and (self.tool.Sword and not self.loopspinning)) then
+						v_u2:send("ToolSparkle", "SWORD")
+						if self.isEquipped then
+							v_u2:send("PlaySound", self.sounds.Charged, self.tool.Handle)
+							self.tool.Sword.Base.ChargeSparkle:Emit(1)
+							if v_u7:get() == "Reload" and self.isEquipped then
+								v_u7:set("Aim")
+							end
+							self.funcs.onCharged(self)
+						end
+						v_u11:Disconnect()
+					end
+					if self.loopspinning and (v_u4.state == "Ragdoll" or (v_u4.state == "Dead" or v_u4.state == "Climbing")) then
+						if self.tool.Handle:FindFirstChild("LoopSpin") then
+							self.tool.Handle.LoopSpin:Stop()
+						end
+						if self.Anims.LoopSpinEnd then
+							self.Anims.LoopSpinEnd:Play()
+						end
+						self.lastLunge = tick()
+						self.loopSpinEnded = tick()
+						v_u7:set("Reload")
+						v_u2:send("ToolCooldown", "SWORD", v_u_sword_lunge_debounce * self.reloadModifier)
+						self.funcs.onLoopSpinEnd(self)
+						self.Anims.LoopSpin:Stop()
+						self.loopspinning = false
+					end
+				end
+			end)
+		end
+	else
+		return
+	end
+end
+function v_u13.lunge(self)
+	-- upvalues: (copy) v_u4, (copy) v_u_sword_lunge_debounce, (copy) v_u2, (copy) v_u7, (copy) v_u8, (copy) v_u_http, (ref) v_u12, (ref) v_u11
+	if v_u4.canAct == false then
+		return
+	elseif self.tool.Sword == nil then
+		return
+	elseif tick() - self.lastSpin < 0.5 then
+		return
+	elseif tick() - self.lastSwing < 0.3 * self.swingSpeedModifier then
+		return
+	elseif tick() - self.lastLunge < v_u_sword_lunge_debounce * self.reloadModifier then
+		return
+	elseif not self.loopspinning then
+		self.lastLunge = tick()
+		local v_lunge = self.tool.Handle.Lunge
+		local _ = self.player.Team.Name
+		if v_lunge:IsA("Attachment") then
+			local v_getchildren = v_lunge:GetChildren()
+			v_lunge = v_getchildren[math.random(1, #v_getchildren)]
+		end
+		v_u2:sendServer("PlaySoundObjectServer", v_lunge, 40)
+		self.Anims.Lunge:Play(0)
+		self.Anims.Slash1:Stop()
+		self.Anims.Slash2:Stop()
+		v_u7:set("Reload")
+		if v_u4.humanoid.MoveDirection ~= Vector3.new(0, 0, 0) and (v_u8.mouseLock == false and (v_u8.inputType == "PC" or _G.Data.settings.mobileCam ~= 1)) then
+			local v_atan2 = math.atan2(v_u4.humanoid.MoveDirection.X, v_u4.humanoid.MoveDirection.Z)
+			self.player.Character.PrimaryPart.CFrame = CFrame.new(self.player.Character.PrimaryPart.Position) * CFrame.Angles(0, v_atan2 + 3.141592653589793, 0)
+		end
+		self.lunging = true
+		v_u2:send("ToolCooldown", "SWORD", v_u_sword_lunge_debounce * self.reloadModifier)
+		self.funcs.onLunge(self)
+		v_u12 = v_u_http:GenerateGUID()
+		if v_u11 then
+			v_u11:Disconnect()
+			v_u11 = nil
+		end
+		v_u4.sinceLunge = time()
+		v_u11 = game:GetService("RunService").Stepped:Connect(function()
+			-- upvalues: (ref) v_u11, (copy) self, (ref) v_u_sword_lunge_debounce, (ref) v_u2, (ref) v_u7
+			if v_u11 and (not self.tool or (self.tool.Parent == nil or not self.tool.Sword)) then
+				v_u11:Disconnect()
+			else
+				self.funcs.duringLunge(self)
+				if tick() - self.lastLunge > self.lungeTime and self.lunging then
+					self.lunging = false
+					self.funcs.onLungeEnd(self)
+				end
+				if tick() - self.lastLunge > v_u_sword_lunge_debounce * self.reloadModifier and (self.tool and self.tool.Sword) then
+					v_u2:send("ToolSparkle", "SWORD")
+					if self.isEquipped then
+						v_u2:send("PlaySound", self.sounds.Charged, self.tool.Handle)
+						self.tool.Sword.Base.ChargeSparkle:Emit(1)
+						if v_u7:get() == "Reload" and self.isEquipped then
+							v_u7:set("Aim")
+						end
+						self.funcs.onCharged(self)
+					end
+					v_u11:Disconnect()
+				end
+			end
+		end)
+	end
+end
+function v_u13.spinAttack(self)
+	-- upvalues: (copy) v_u4, (copy) v_u_sword_spin_debounce, (copy) v_u2, (copy) v_u_http, (ref) v_u12, (copy) v_u9, (copy) v_u_promise
+	if v_u4.canAct == false then
+		return
+	elseif tick() - self.lastSpin < v_u_sword_spin_debounce then
+		return
+	elseif tick() - self.lastLunge < 0.5 then
+		return
+	elseif not self.loopspinning then
+		self.lastSpin = tick()
+		local v_spin = self.tool.Handle.Spin
+		local _ = self.player.Team.Name
+		if v_spin:IsA("Attachment") then
+			local v_getchildren = v_spin:GetChildren()
+			v_spin = v_getchildren[math.random(1, #v_getchildren)]
+		end
+		v_u2:sendServer("PlaySoundObjectServer", v_spin, 30)
+		self.Anims.Spin:Play()
+		self.Anims.Slash1:Stop(0)
+		self.Anims.Slash2:Stop(0)
+		self.funcs.onSpin(self)
+		v_u4.swordAction = "Spin"
+		local v_generateguid = v_u_http:GenerateGUID()
+		v_u2:sendServer("DeactivateHitbox", "Slash")
+		v_u12 = v_generateguid
+		v_u2:sendServer("ActivateHitbox", "Spin")
+		if v_u4.humanoid.MoveDirection ~= Vector3.new(0, 0, 0) then
+			local v_atan2 = math.atan2(v_u4.humanoid.MoveDirection.X, v_u4.humanoid.MoveDirection.Z)
+			self.player.Character.PrimaryPart.CFrame = CFrame.new(self.player.Character.PrimaryPart.Position) * CFrame.Angles(0, v_atan2 + 3.141592653589793, 0)
+		end
+		local v_max = math.max(0, 20 - (v_u4.consecutiveSpins < 3 and 0 or v_u4.consecutiveSpins))
+		local v_max = math.max(0, 0.3 - (v_u4.consecutiveSpins < 3 and 0 or v_u4.consecutiveSpins * 0.025))
+		if v_max > 0.05 then
+			self.player.Character.PrimaryPart.Velocity = Vector3.new(0, v_max, 0)
+			v_u2:send("Knockback", Vector3.new(0, v_max, 0), v_max)
+		end
+		v_u4.consecutiveSpins = v_u4.consecutiveSpins + 1
+		if v_u4.consecutiveSpins > 4 and (v_u4.char:FindFirstChild("Head") and not v_u4.char.Head:FindFirstChild("Sweaty")) then
+			local v_clone = v_u9:Clone()
+			v_clone.Parent = v_u4.char.Head
+			v_u4.sweat = v_clone
+		end
+		self.spinning = true
+		v_u_promise.delay(0.55):andThen(function()
+			-- upvalues: (ref) v_u4, (copy) self
+			if v_u4.swordAction == "Spin" then
+				v_u4.swordAction = nil
+			end
+			if self.spinning then
+				self.spinning = false
+				self.funcs.onSpinEnd(self)
+			end
+		end)
+	end
+end
+function v_u13.fire(arg1)
+	-- upvalues: (copy) v_u_sword_spin_debounce, (copy) v_u4, (copy) v_u_sword_lunge_debounce
+	if arg1.loopspinning then
+		return
+	elseif tick() - arg1.lastSpin < v_u_sword_spin_debounce * arg1.swingSpeedModifier * arg1.midairSpeedModifier then
+		return
+	elseif v_u4.canSlash == false then
+		return
+	elseif tick() - arg1.lastSwing < 0.3 * arg1.swingSpeedModifier then
+		if tick() - arg1.lastLunge > v_u_sword_lunge_debounce * arg1.reloadModifier and not arg1.tooldata.noStrike then
+			arg1:strike()
+		end
+	else
+		if v_u4.midair then
+			if tick() - arg1.lastLunge > 0.55 then
+				arg1:spinAttack()
+				return
+			end
+		elseif tick() - arg1.lastLunge >= 0.5 then
+			arg1:swing()
+		end
+		return
+	end
+end
+function v_u13.activated(arg1)
+	-- upvalues: (copy) v_u4
+	arg1.isHolding = true
+	if arg1.tool.Sword == nil then
+		return
+	elseif v_u4.CanAct ~= false then
+		arg1:fire()
+	end
+end
+function v_u13.deactivated(arg1)
+	arg1.isHolding = false
+end
+function v_u13.equipped(arg1, _)
+	-- upvalues: (copy) v_u6, (copy) v_u2, (copy) v_u_sword_lunge_debounce, (copy) v_u7, (copy) v_u_run, (copy) v_u_contextaction, (copy) v_u8, (copy) v_u4, (ref) v_u10
+	if arg1.player.Character == nil then
+		return
+	elseif arg1.tool.Sword ~= nil then
+		if not arg1.Anims then
+			arg1:setupAnims()
+		end
+		if not arg1.funcs then
+			arg1.funcs = v_u6:getFunctions(arg1.tool.Name or arg1.data.baseTool)
+		end
+		if arg1.Anims.Idle then
+			arg1.Anims.Idle:Play()
+		end
+		arg1.isEquipped = true
+		local v_draw = arg1.tool.Handle.Draw
+		local _ = arg1.player.Team.Name
+		if v_draw:IsA("Attachment") then
+			local v_getchildren = v_draw:GetChildren()
+			v_draw = v_getchildren[math.random(1, #v_getchildren)]
+		end
+		v_u2:sendServer("PlaySoundObjectServer", v_draw, 30)
+		if tick() - arg1.lastLunge < v_u_sword_lunge_debounce * arg1.reloadModifier then
+			v_u7:set("Reload")
+		else
+			v_u7:set("Aim")
+		end
+		arg1.funcs.onEquip(arg1)
+		if arg1.startC0 == nil and arg1.tool.Sword:FindFirstChild("Weld") then
+			arg1.startC0 = arg1.tool.Sword.Weld.C0
+		end
+		if not arg1.holdCheck then
+			arg1.holdCheck = v_u_run.Stepped:Connect(function()
+				-- upvalues: (copy) arg1
+				if tick() - arg1.lastSwing > 0.5 * arg1.swingSpeedModifier and arg1.isHolding then
+					arg1:fire()
+				end
+			end)
+		end
+		v_u_contextaction:BindActionAtPriority("SwordSpecial", function(_, arg2, arg3)
+			-- upvalues: (ref) v_u8, (ref) v_u4, (copy) arg1
+			if v_u8.mouseLock and _G.Data.settings.altSpecial ~= 0 or arg3.UserInputType ~= Enum.UserInputType.MouseButton2 then
+				if v_u4.CanAct ~= false then
+					if arg2 == Enum.UserInputState.Begin then
+						if arg1.tooldata.loopSpinAttack and v_u4.state == "Freefall" then
+							arg1:midairLoopSpin()
+							return
+						end
+						if arg1.tooldata.projectile then
+							arg1:projectile()
+							return
+						end
+						arg1:lunge()
+					end
+				end
+			else
+				return Enum.ContextActionResult.Pass
+			end
+		end, false, 1000, Enum.KeyCode.R, Enum.KeyCode.ButtonL2, Enum.UserInputType.MouseButton2)
+		v_u2:send("ToolKey", "SpecialAttack", arg1.tooldata.specialAttack)
+		local v1 = v_u8.inputType == "Touch" and arg1.player.PlayerScripts:FindFirstChild("TouchAction")
+		if v1 then
+			if v_u10 then
+				v_u10:Disconnect()
+			end
+			v_u10 = v1.Event:Connect(function()
+				-- upvalues: (ref) v_u4, (copy) arg1
+				if v_u4.CanAct == false then
+					return
+				elseif arg1.tooldata.loopSpinAttack and v_u4.state == "Freefall" then
+					arg1:midairLoopSpin()
+					return
+				elseif arg1.tooldata.projectile then
+					arg1:projectile()
+				else
+					arg1:lunge()
+				end
+			end)
+		end
+	end
+end
+function v_u13.unequipped(arg1, _)
+	-- upvalues: (ref) v_u10, (copy) v_u4, (copy) v_u7, (copy) v_u_contextaction, (copy) v_u2
+	arg1.isHolding = false
+	if arg1.holdCheck then
+		arg1.holdCheck:Disconnect()
+		arg1.holdCheck = nil
+	end
+	if arg1.Anims and arg1.Anims.Idle then
+		arg1.Anims.Idle:Stop()
+	end
+	if v_u10 then
+		v_u10:Disconnect()
+	end
+	if arg1.player.Character ~= nil then
+		arg1.hasMesh = arg1.tool.Sword:FindFirstChild("Mesh")
+		arg1.isEquipped = false
+		for _, v1 in pairs(arg1.Anims) do
+			v1:Stop()
+		end
+		v_u4.swordAction = nil
+		arg1.funcs.onUnequip(arg1)
+		v_u7:set()
+		v_u_contextaction:UnbindAction("SwordSpecial")
+		v_u2:send("ToolKey", "SpecialAttack", nil)
+		v_u2:sendServer("DeactivateAllHitboxes")
+	end
+end
+function v_u13.new()
+	-- upvalues: (copy) v_u13
+	return setmetatable({}, v_u13)
+end
+return v_u13

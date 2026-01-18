@@ -1,0 +1,116 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u_collection = game:GetService("CollectionService")
+game:GetService("UserInputService")
+local v_u3 = v1("Client/Data/CharacterData")
+local v_u_run = game:GetService("RunService")
+local v_u4 = v1("Shared/Utils/MakeTruss")
+local v_u_contextaction = game:GetService("ContextActionService")
+local v_u_truss_trowel_distance = v1("Shared/Data/WeaponConstants").TRUSS_TROWEL_DISTANCE
+local v_u5 = {}
+v_u5.__index = v_u5
+function v_u5.instance(arg1, arg2)
+	-- upvalues: (copy) v_u3
+	arg1.player = game.Players.LocalPlayer
+	arg1.rotation = 0
+	arg1.lastPlace = time()
+	arg2.Equipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:equipped(arg1.player.Character)
+	end)
+	arg2.Unequipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:unequipped(arg1.player.Character)
+	end)
+	arg2.Activated:connect(function()
+		-- upvalues: (ref) v_u3, (copy) arg1
+		if v_u3.canAct ~= false then
+			arg1:activated()
+		end
+	end)
+	arg2.RequiresHandle = false
+	arg2.CanBeDropped = false
+end
+function v_u5.activated(arg1)
+	-- upvalues: (copy) v_u_truss_trowel_distance, (copy) v_u_collection, (copy) v_u2
+	if workspace.CurrentCamera.CameraSubject:IsA("Humanoid") then
+		if time() - arg1.lastPlace >= 0.5 then
+			arg1.lastPlace = time()
+			local v_getmouse = arg1.player:GetMouse()
+			local v_new = Ray.new(v_getmouse.UnitRay.Origin, v_getmouse.UnitRay.Direction.unit * v_u_truss_trowel_distance)
+			local v_findpartonraywithignorelist, v1, v2 = workspace:FindPartOnRayWithIgnoreList(v_new, { arg1.player.Character, arg1.preview })
+			if v_findpartonraywithignorelist and not (v_findpartonraywithignorelist.Parent:FindFirstChild("Humanoid") or v_findpartonraywithignorelist.Parent.Parent:FindFirstChild("Humanoid")) then
+				if v_u_collection:HasTag(v_findpartonraywithignorelist, "NoBuild") then
+					return
+				end
+				v_u2:sendServer("MakeTrussConstruction", v1, v2, arg1.rotation, v_findpartonraywithignorelist)
+				arg1.rotation = 0
+			end
+		end
+	else
+		return
+	end
+end
+function v_u5.displayBuilding(arg1)
+	-- upvalues: (copy) v_u4, (copy) v_u_truss_trowel_distance, (copy) v_u_collection
+	if not arg1.preview then
+		arg1.preview = v_u4(game.Players.LocalPlayer)
+		arg1.preview.CanCollide = false
+		arg1.preview.Parent = workspace
+	end
+	arg1.preview.Transparency = 0.5
+	local v_getmouse = arg1.player:GetMouse()
+	local v_new = Ray.new(v_getmouse.UnitRay.Origin, v_getmouse.UnitRay.Direction.unit * v_u_truss_trowel_distance)
+	local v1 = { arg1.player.Character }
+	table.insert(v1, arg1.preview)
+	local v_findpartonraywithignorelist, v2, v3 = workspace:FindPartOnRayWithIgnoreList(v_new, v1)
+	if time() - arg1.lastPlace < 0.5 or v_u_collection:HasTag(v_findpartonraywithignorelist, "NoBuild") then
+		arg1.preview.BrickColor = BrickColor.new("Black")
+		arg1.preview.Transparency = 0.7
+	else
+		arg1.preview.BrickColor = arg1.player.TeamColor
+		arg1.preview.Transparency = 0.5
+	end
+	if v_findpartonraywithignorelist then
+		local v_preview = arg1.preview
+		v_preview.CFrame = CFrame.new(v2, v2 + v3) * CFrame.Angles(-1.5707963267948966, 0, 0)
+		v_preview.CFrame = v_preview.CFrame * CFrame.new(0, v_preview.Size.Y / 2, 0)
+		v_preview.CFrame = v_preview.CFrame * CFrame.Angles(0, arg1.rotation, 0)
+	end
+end
+function v_u5.equipped(arg1, _)
+	-- upvalues: (copy) v_u_run, (copy) v_u_contextaction
+	if arg1.preview then
+		arg1.preview:Destroy()
+		arg1.preview = nil
+	end
+	arg1.connect = v_u_run.RenderStepped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:displayBuilding()
+	end)
+	v_u_contextaction:BindActionAtPriority("rotate", function(_, arg2, _)
+		-- upvalues: (copy) arg1
+		if not arg1.rotation then
+			arg1.rotation = 0
+		end
+		if arg2 == Enum.UserInputState.Begin then
+			arg1.rotation = arg1.rotation + 1.5707963267948966
+		end
+	end, false, 1000, Enum.KeyCode.R, Enum.KeyCode.ButtonL2)
+end
+function v_u5.unequipped(arg1, _)
+	-- upvalues: (copy) v_u_contextaction
+	if arg1.preview then
+		arg1.preview:Destroy()
+		arg1.preview = nil
+	end
+	arg1.connect:disconnect()
+	v_u_contextaction:UnbindAction("rotate")
+end
+function v_u5.new()
+	-- upvalues: (copy) v_u5
+	return setmetatable({}, v_u5)
+end
+return v_u5
