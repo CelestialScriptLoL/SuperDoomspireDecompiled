@@ -1,0 +1,255 @@
+-- Decompiled with Bunni.lol Decompiler
+
+local v1 = require(game.ReplicatedStorage.Shared.Import)
+local v_u2 = v1("Shared/Utils/Messages")
+local v_u_collection = game:GetService("CollectionService")
+game:GetService("UserInputService")
+local v_u3 = v1("Client/Data/CharacterData")
+local v_u_run = game:GetService("RunService")
+local v_u4 = v1("Client/Data/InputData")
+local v_u5 = v1("Shared/Data/ToolData")
+local v_u_contextaction = game:GetService("ContextActionService")
+local v6 = v1("Shared/Data/WeaponConstants")
+local v_u7 = v1("Shared/Data/TeamData")
+local v_u8 = v1("Shared/Utils/MouseIcon")
+local v_u_turret_place_distance = v6.TURRET_PLACE_DISTANCE
+local v_u9 = 5
+local function v_u10(arg1, arg2)
+	-- upvalues: (copy) v_u_collection
+	for _, v1 in pairs(arg1:GetChildren()) do
+		if v1:IsA("BasePart") and not v_u_collection:HasTag(v1, "NotVisible") then
+			v1.Transparency = arg2
+		end
+	end
+end
+local function v_u11(arg1, arg2)
+	for _, v1 in pairs(arg1:GetChildren()) do
+		if v1:IsA("BasePart") then
+			v1.Color = arg2
+		end
+	end
+end
+local v_u12 = {}
+v_u12.__index = v_u12
+function v_u12.showRotateUi(self)
+	-- upvalues: (copy) v_u4
+	if v_u4.inputType == "Touch" then
+		local v_localplayer = game.Players.LocalPlayer
+		v_localplayer.PlayerGui.Rotate.MainFrame:TweenPosition(UDim2.new(0.5, 0, 0.75, 0), "Out", "Quad", 0.3)
+		self.events = {}
+		self.events[1] = v_localplayer.PlayerGui.Rotate.MainFrame.RotateLeft.Activated:connect(function()
+			-- upvalues: (copy) self
+			self.rotation = self.rotation - 1.5707963267948966
+		end)
+		self.events[2] = v_localplayer.PlayerGui.Rotate.MainFrame.RotateRight.Activated:connect(function()
+			-- upvalues: (copy) self
+			self.rotation = self.rotation + 1.5707963267948966
+		end)
+		self.events[3] = v_localplayer.PlayerGui.Rotate.MainFrame.Place.Activated:connect(function()
+			-- upvalues: (copy) self
+			self:activated()
+		end)
+	end
+end
+function v_u12.hideRotateUi(arg1)
+	-- upvalues: (copy) v_u4
+	if v_u4.inputType == "Touch" then
+		game.Players.LocalPlayer.PlayerGui.Rotate.MainFrame:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Quad", 0.3)
+		for _, v1 in pairs(arg1.events) do
+			v1:disconnect()
+		end
+	end
+end
+function v_u12.instance(arg1, arg2)
+	-- upvalues: (copy) v_u3, (ref) v_u9, (copy) v_u5
+	arg1.player = game.Players.LocalPlayer
+	arg1.rotation = 0
+	arg1.lastPlace = time()
+	arg1.tool = arg2
+	arg2.Equipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:equipped(arg1.player.Character)
+	end)
+	arg2.Unequipped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:unequipped(arg1.player.Character)
+	end)
+	arg2.Activated:connect(function()
+		-- upvalues: (ref) v_u3, (copy) arg1
+		if v_u3.canAct ~= false then
+			arg1:activated()
+		end
+	end)
+	arg2.RequiresHandle = false
+	arg2.CanBeDropped = false
+	v_u9 = v_u5[arg1.tool.Name].reloadTime
+end
+function v_u12.getRayResults(arg1)
+	-- upvalues: (copy) v_u4, (copy) v_u5, (copy) v_u_collection, (copy) v_u_turret_place_distance
+	local v_inputtype = v_u4.inputType
+	local v1 = v_u5[arg1.tool.Name]
+	local v_new = RaycastParams.new()
+	v_new.FilterType = Enum.RaycastFilterType.Blacklist
+	local v2 = { arg1.player.Character, arg1.preview, arg1.previewSkin }
+	local v_charactermodel = v_u_collection:GetTagged("CharacterModel")
+	for _, v3 in pairs(v_charactermodel) do
+		table.insert(v2, v3)
+	end
+	local v_ignoreraycast = v_u_collection:GetTagged("IgnoreRaycast")
+	for _, v4 in pairs(v_ignoreraycast) do
+		table.insert(v2, v4)
+	end
+	local v_toolobject = v_u_collection:GetTagged("ToolObject")
+	for _, v5 in pairs(v_toolobject) do
+		table.insert(v2, v5)
+	end
+	if v1.ignoreTag then
+		local v_gettagged = v_u_collection:GetTagged(v1.ignoreTag)
+		for _, v6 in pairs(v_gettagged) do
+			table.insert(v2, v6)
+		end
+	end
+	v_new.FilterDescendantsInstances = v2
+	local v7 = nil
+	if v_inputtype == "Touch" then
+		local v_raycast = workspace:Raycast(workspace.CurrentCamera.CFrame.Position, workspace.CurrentCamera.CFrame.LookVector * 1000, v_new)
+		if v1.snap and (v_raycast and (v_raycast.Instance and v_raycast.Position)) then
+			local v_ceil = math.ceil(v_raycast.Position.X)
+			local v_ceil = math.ceil(v_raycast.Position.Z)
+			v7 = Vector3.new(v_ceil, v_raycast.Position.Y, v_ceil)
+		end
+		local v8 = arg1.player.Character and arg1.player.Character.PrimaryPart
+		if v8 then
+			v8 = arg1.player.Character.PrimaryPart.Position
+		end
+		if v_u_turret_place_distance < (v8 - v_raycast.Position).Magnitude then
+			return nil, v_raycast.Position, Vector3.new()
+		else
+			return v_raycast and ({
+				["Instance"] = v_raycast.Instance,
+				["Position"] = v7 or v_raycast.Position,
+				["Material"] = v_raycast.Material,
+				["Normal"] = v_raycast.Normal
+			} or nil) or nil
+		end
+	else
+		local v_getmouse = arg1.player:GetMouse()
+		local v_raycast = workspace:Raycast(v_getmouse.UnitRay.Origin, v_getmouse.UnitRay.Direction * 1000, v_new)
+		if v1.snap and (v_raycast and (v_raycast.Instance and v_raycast.Position)) then
+			local v_ceil = math.ceil(v_raycast.Position.X)
+			local v_ceil = math.ceil(v_raycast.Position.Z)
+			v7 = Vector3.new(v_ceil, v_raycast.Position.Y, v_ceil)
+		end
+		local v9 = arg1.player.Character and arg1.player.Character.PrimaryPart
+		if v9 then
+			v9 = arg1.player.Character.PrimaryPart.Position
+		end
+		if v_raycast and v_u_turret_place_distance < (v9 - v_raycast.Position).Magnitude then
+			return nil, v_raycast.Position, Vector3.new()
+		else
+			return v_raycast and ({
+				["Instance"] = v_raycast.Instance,
+				["Position"] = v7 or v_raycast.Position,
+				["Material"] = v_raycast.Material,
+				["Normal"] = v_raycast.Normal
+			} or nil) or nil
+		end
+	end
+end
+function v_u12.activated(self)
+	-- upvalues: (ref) v_u9, (copy) v_u_collection, (copy) v_u2, (copy) v_u5, (copy) v_u8
+	if workspace.CurrentCamera.CameraSubject:IsA("Humanoid") then
+		if time() - self.lastPlace >= v_u9 then
+			local v_getrayresults = self:getRayResults()
+			if v_getrayresults and v_getrayresults.Instance then
+				if v_u_collection:HasTag(v_getrayresults.Instance, "NoBuild") then
+					return
+				end
+				v_u2:sendServer(v_u5[self.tool.Name].constructionMessage, v_getrayresults.Position, v_getrayresults.Normal, self.rotation, v_getrayresults.Instance)
+				v_u8:set("Reload")
+				v_u2:send("ToolCooldown", "TROWEL", v_u9)
+				delay(v_u9, function()
+					-- upvalues: (ref) v_u2, (copy) self, (ref) v_u8
+					v_u2:send("ToolSparkle", "TROWEL")
+					if self.isEquipped and v_u8:get() == "Reload" then
+						v_u8:set("Aim")
+					end
+				end)
+				self.rotation = 0
+				self.lastPlace = time()
+			end
+		end
+	else
+		return
+	end
+end
+function v_u12.displayBuilding(arg1)
+	-- upvalues: (copy) v_u5, (ref) v_u9, (copy) v_u_collection, (copy) v_u10, (copy) v_u11, (copy) v_u7
+	if not arg1.preview then
+		arg1.preview = game.ReplicatedStorage.Assets.Prefabs[v_u5[arg1.tool.Name].prefab]:Clone()
+		arg1.preview.Parent = workspace
+		for _, v1 in pairs(arg1.preview:GetChildren()) do
+			if v1:IsA("BasePart") then
+				v1.CanCollide = false
+			end
+		end
+	end
+	local v_getrayresults = arg1:getRayResults()
+	local v_preview = arg1.preview
+	if time() - arg1.lastPlace < v_u9 or v_getrayresults and (v_getrayresults.Instance and v_u_collection:HasTag(v_getrayresults.Instance, "NoBuild")) then
+		v_u10(v_preview, 0.7)
+		v_u11(v_preview, Color3.new(0, 0, 0))
+	else
+		v_u10(v_preview, 0.5)
+		v_u11(v_preview, v_u7[arg1.player.Team.Name].colors.uiBasic)
+	end
+	if v_getrayresults and v_getrayresults.Instance then
+		local v_base = arg1.preview.Base
+		v_base.CFrame = CFrame.new(v_getrayresults.Position, v_getrayresults.Position + v_getrayresults.Normal) * v_u5[arg1.tool.Name].trowelOffset
+		v_base.CFrame = v_base.CFrame * CFrame.new(0, v_base.Size.Y / 2, 0)
+		v_base.CFrame = v_base.CFrame * CFrame.Angles(0, arg1.rotation, 0)
+	end
+end
+function v_u12.equipped(arg1, _)
+	-- upvalues: (copy) v_u_run, (copy) v_u_contextaction, (copy) v_u2, (copy) v_u8
+	if arg1.preview then
+		arg1.preview:Destroy()
+		arg1.preview = nil
+	end
+	arg1.connect = v_u_run.RenderStepped:connect(function()
+		-- upvalues: (copy) arg1
+		arg1:displayBuilding()
+	end)
+	v_u_contextaction:BindActionAtPriority("rotate", function(_, arg2, _)
+		-- upvalues: (copy) arg1
+		if not arg1.rotation then
+			arg1.rotation = 0
+		end
+		if arg2 == Enum.UserInputState.Begin then
+			arg1.rotation = arg1.rotation + 1.5707963267948966
+		end
+	end, false, 1000, Enum.KeyCode.R, Enum.KeyCode.ButtonL2)
+	v_u2:send("ToolKey", "Rotate", "Rotate")
+	arg1:showRotateUi()
+	v_u8:set("Aim")
+end
+function v_u12.unequipped(arg1, _)
+	-- upvalues: (copy) v_u2, (copy) v_u_contextaction, (copy) v_u4, (copy) v_u8
+	v_u2:send("ToolKey", "Rotate", nil)
+	if arg1.preview then
+		arg1.preview:Destroy()
+		arg1.preview = nil
+	end
+	arg1.connect:disconnect()
+	v_u_contextaction:UnbindAction("rotate")
+	if v_u4.inputType ~= "Touch" then
+		local _ = v_u4.inputType == "Gamepad"
+	end
+	arg1:hideRotateUi()
+	v_u8:set()
+end
+function v_u12.new()
+	-- upvalues: (copy) v_u12
+	return setmetatable({}, v_u12)
+end
+return v_u12
